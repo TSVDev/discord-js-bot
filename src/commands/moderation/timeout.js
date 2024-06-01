@@ -13,7 +13,7 @@ module.exports = {
   userPermissions: ["ModerateMembers"],
   command: {
     enabled: true,
-    aliases: ["mute"],
+    aliases: ["t"],
     usage: "<ID|@member> <duration> [reason]",
     minArgsCount: 2,
   },
@@ -49,7 +49,7 @@ module.exports = {
     const ms = ems(args[1]);
     if (!ms) return message.safeReply("Please provide a valid duration. Example: 1d/1h/1m/1s");
 
-    const reason = args.slice(2).join(" ").trim();
+    const reason = `[${message.author.id}] ${args.slice(2).join(" ").trim()}`;
     const response = await timeout(message.member, target, ms, reason);
     await message.safeReply(response);
   },
@@ -62,7 +62,7 @@ module.exports = {
     const ms = ems(duration);
     if (!ms) return interaction.followUp("Please provide a valid duration. Example: 1d/1h/1m/1s");
 
-    const reason = interaction.options.getString("reason");
+    const reason = `[${message.author.id}] ${interaction.options.getString("reason")}`;
     const target = await interaction.guild.members.fetch(user.id);
 
     const response = await timeout(interaction.member, target, ms, reason);

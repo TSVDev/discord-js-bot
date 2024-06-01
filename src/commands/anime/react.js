@@ -21,7 +21,7 @@ module.exports = {
     usage: "[reaction]",
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     options: [
       {
         name: "category",

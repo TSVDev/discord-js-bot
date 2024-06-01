@@ -1,5 +1,5 @@
 const { CommandCategory, BotClient } = require("@src/structures");
-const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
+const { EMBED_COLORS, SUPPORT_SERVER, OWNER_IDS } = require("@root/config.js");
 const {
   EmbedBuilder,
   ActionRowBuilder,
@@ -46,7 +46,7 @@ module.exports = {
     if (!trigger) {
       const response = await getHelpMenu(message);
       const sentMsg = await message.safeReply(response);
-      return waiter(sentMsg, message.author.id, data.prefix);
+      return waiter(sentMsg, message.member, data.prefix);
     }
 
     // check if command help (!help cat)
@@ -67,7 +67,7 @@ module.exports = {
     if (!cmdName) {
       const response = await getHelpMenu(interaction);
       const sentMsg = await interaction.followUp(response);
-      return waiter(sentMsg, interaction.user.id);
+      return waiter(sentMsg, interaction.member);
     }
 
     // check if command help (!help cat)
@@ -85,11 +85,15 @@ module.exports = {
 /**
  * @param {CommandInteraction} interaction
  */
-async function getHelpMenu({ client, guild }) {
+async function getHelpMenu({ client, guild, member }) {
   // Menu Row
   const options = [];
   for (const [k, v] of Object.entries(CommandCategory)) {
     if (v.enabled === false) continue;
+    if ((v.name.includes("Moderation") || v.name.includes("Admin") || v.name.includes("Automod") || v.name.includes("Giveaway")) && !member.permissions.has('ManageGuild')) {
+    continue;
+}
+    if (v.name === 'Owner' && !OWNER_IDS.includes(member.user.id)) continue;
     options.push({
       label: v.name,
       value: k,
@@ -118,11 +122,9 @@ async function getHelpMenu({ client, guild }) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
     .setDescription(
-      "**About Me:**\n" +
         `Hello I am ${guild.members.me.displayName}!\n` +
-        "A cool multipurpose discord bot which can serve all your needs\n\n" +
-        `**Invite Me:** [Here](${client.getInvite()})\n` +
-        `**Support Server:** [Join](${SUPPORT_SERVER})`
+        "I moderate Space Labs, and keep it nice & secure!\n\n" +
+        `**Space Labs:** [Join](${SUPPORT_SERVER})`
     );
 
   return {
@@ -133,12 +135,12 @@ async function getHelpMenu({ client, guild }) {
 
 /**
  * @param {Message} msg
- * @param {string} userId
+ * @param {import('discord.js').GuildMember} member
  * @param {string} prefix
  */
-const waiter = (msg, userId, prefix) => {
+const waiter = (msg, member, prefix) => {
   const collector = msg.channel.createMessageComponentCollector({
-    filter: (reactor) => reactor.user.id === userId && msg.id === reactor.message.id,
+    filter: (reactor) => reactor.user.id === member.id && msg.id === reactor.message.id,
     idle: IDLE_TIMEOUT * 1000,
     dispose: true,
     time: 5 * 60 * 1000,
@@ -156,7 +158,7 @@ const waiter = (msg, userId, prefix) => {
     switch (response.customId) {
       case "help-menu": {
         const cat = response.values[0].toUpperCase();
-        arrEmbeds = prefix ? getMsgCategoryEmbeds(msg.client, cat, prefix) : getSlashCategoryEmbeds(msg.client, cat);
+        arrEmbeds = prefix ? getMsgCategoryEmbeds(msg.client, cat, prefix, member) : getSlashCategoryEmbeds(msg.client, cat);
         currentPage = 0;
 
         // Buttons Row
@@ -248,7 +250,7 @@ function getSlashCategoryEmbeds(client, category) {
     let toAdd = commands.splice(0, commands.length > CMDS_PER_PAGE ? CMDS_PER_PAGE : commands.length);
 
     toAdd = toAdd.map((cmd) => {
-      const subCmds = cmd.slashCommand.options?.filter((opt) => opt.type === ApplicationCommandOptionType.Subcommand);
+      const subCmds = cmd.slashCommand.options?.filter((opt) => opt.type === "SUB_COMMAND");
       const subCmdsString = subCmds?.map((s) => s.name).join(", ");
 
       return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${
@@ -278,7 +280,7 @@ function getSlashCategoryEmbeds(client, category) {
  * @param {string} category
  * @param {string} prefix
  */
-function getMsgCategoryEmbeds(client, category, prefix) {
+function getMsgCategoryEmbeds(client, category, prefix, member) {
   let collector = "";
 
   // For IMAGE Category
@@ -322,10 +324,10 @@ function getMsgCategoryEmbeds(client, category, prefix) {
 
   const arrSplitted = [];
   const arrEmbeds = [];
-
+  
   while (commands.length) {
     let toAdd = commands.splice(0, commands.length > CMDS_PER_PAGE ? CMDS_PER_PAGE : commands.length);
-    toAdd = toAdd.map((cmd) => `\`${prefix}${cmd.name}\`\n ❯ ${cmd.description}\n`);
+    toAdd = toAdd.filter(cmd => cmd.userPermissions ? member.permissions.has(cmd.userPermissions) : true).map((cmd) => `\`${prefix}${cmd.name}\`\n ❯ ${cmd.description}\n`);
     arrSplitted.push(toAdd);
   }
 

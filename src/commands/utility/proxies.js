@@ -13,12 +13,12 @@ module.exports = {
   category: "UTILITY",
   botPermissions: ["EmbedLinks", "AttachFiles"],
   command: {
-    enabled: true,
+    enabled: false,
     usage: "[type]",
     minArgsCount: 1,
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     options: [
       {
         name: "type",

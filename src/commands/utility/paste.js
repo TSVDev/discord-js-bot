@@ -11,12 +11,12 @@ module.exports = {
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
   command: {
-    enabled: true,
+    enabled: false,
     minArgsCount: 2,
     usage: "<title> <content>",
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     options: [
       {
         name: "title",

@@ -33,4 +33,6 @@ module.exports = async (client, message) => {
 
   // if not a command
   if (!isCommand) await automodHandler.performAutomod(message, settings);
+
+  
 };

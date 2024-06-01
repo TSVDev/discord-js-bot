@@ -17,6 +17,7 @@ module.exports = {
   userPermissions: ["BanMembers"],
   command: {
     enabled: true,
+    aliases: ["ub"],
     usage: "<ID|@member> [reason]",
     minArgsCount: 1,
   },
@@ -41,7 +42,7 @@ module.exports = {
 
   async messageRun(message, args) {
     const match = args[0];
-    const reason = message.content.split(args[0])[1].trim();
+    const reason = `[${message.author.id}] ${message.content.split(args[0])[1].trim()}`;
 
     const response = await getMatchingBans(message.guild, match);
     const sent = await message.safeReply(response);
@@ -50,7 +51,7 @@ module.exports = {
 
   async interactionRun(interaction) {
     const match = interaction.options.getString("name");
-    const reason = interaction.options.getString("reason");
+    const reason = `[${message.author.id}] ${interaction.options.getString("reason")}`;
 
     const response = await getMatchingBans(interaction.guild, match);
     const sent = await interaction.followUp(response);

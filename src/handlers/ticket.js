@@ -25,9 +25,9 @@ const CLOSE_PERMS = ["ManageChannels", "ReadMessageHistory"];
 function isTicketChannel(channel) {
   return (
     channel.type === ChannelType.GuildText &&
-    channel.name.startsWith("tіcket-") &&
+    channel.name.startsWith("🎟︱tіcket-") &&
     channel.topic &&
-    channel.topic.startsWith("tіcket|")
+    channel.topic.startsWith("Tіcket |")
   );
 }
 
@@ -146,7 +146,7 @@ async function closeAllTickets(guild, author) {
   let failed = 0;
 
   for (const ch of channels) {
-    const status = await closeTicket(ch[1], author, "Force close all open tickets");
+    const status = await closeTicket(ch[1], author, "Forced close all open tickets by Staff");
     if (status === "SUCCESS") success += 1;
     else failed += 1;
   }
@@ -163,13 +163,24 @@ async function handleTicketOpen(interaction) {
 
   if (!guild.members.me.permissions.has(OPEN_PERMS))
     return interaction.followUp(
-      "Cannot create ticket channel, missing `Manage Channel` permission. Contact server manager for help!"
+      "Cannot create ticket channel, missing `Manage Channel` permission. Contact Staff for help!"
     );
 
   const alreadyExists = getExistingTicketChannel(guild, user.id);
   if (alreadyExists) return interaction.followUp(`You already have an open ticket`);
 
   const settings = await getSettings(guild);
+
+    // Retrieve the category ID from guild settings
+    const categoryId = settings.ticket.category_channel;
+
+     // Get the category channel by ID
+  const categoryChannel = guild.channels.cache.get(categoryId);
+
+  // Ensure that the category channel exists and is a category
+  if (!categoryChannel || categoryChannel.type !== 4) {
+    return interaction.followUp("Invalid category ID set for ticket creation.");
+  }
 
   // limit check
   const existing = getTicketChannels(guild).size;
@@ -205,6 +216,12 @@ async function handleTicketOpen(interaction) {
     catPerms = categories.find((cat) => cat.name === catName)?.staff_roles || [];
   }
 
+   // Retrieve category channel ID from guild settings
+   let catChannel = null;
+   if (categoryId) {
+     catChannel = guild.channels.cache.get(categoryId);
+   }
+
   try {
     const ticketNumber = (existing + 1).toString();
     const permissionOverwrites = [
@@ -234,17 +251,19 @@ async function handleTicketOpen(interaction) {
     }
 
     const tktChannel = await guild.channels.create({
-      name: `tіcket-${ticketNumber}`,
+      name: `🎟︱tіcket-${ticketNumber}`,
       type: ChannelType.GuildText,
-      topic: `tіcket|${user.id}|${catName || "Default"}`,
+      topic: `Tіcket | ${user.id} | ${catName || "Default"}`,
       permissionOverwrites,
+      parent: categoryId,
     });
 
     const embed = new EmbedBuilder()
       .setAuthor({ name: `Ticket #${ticketNumber}` })
       .setDescription(
         `Hello ${user.toString()}
-        Support will be with you shortly
+        Support will be with you shortly.\n
+        In the mean time, please inform us why you opened this ticket.
         ${catName ? `\n**Category:** ${catName}` : ""}
         `
       )
@@ -276,7 +295,7 @@ async function handleTicketOpen(interaction) {
 
     user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => {});
 
-    await interaction.editReply(`Ticket created! 🔥`);
+    await interaction.editReply(`Ticket created! 🚀 You can check it out at <#${tktChannel.id}> `);
   } catch (ex) {
     error("handleTicketOpen", ex);
     return interaction.editReply("Failed to create ticket channel, an error occurred!");
@@ -290,7 +309,7 @@ async function handleTicketClose(interaction) {
   await interaction.deferReply({ ephemeral: true });
   const status = await closeTicket(interaction.channel, interaction.user);
   if (status === "MISSING_PERMISSIONS") {
-    return interaction.followUp("Cannot close the ticket, missing permissions. Contact server manager for help!");
+    return interaction.followUp("Cannot close the ticket, missing permissions. Contact Staff for help!");
   } else if (status == "ERROR") {
     return interaction.followUp("Failed to close the ticket, an error occurred!");
   }

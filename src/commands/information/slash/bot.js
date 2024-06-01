@@ -21,7 +21,7 @@ module.exports = {
     enabled: false,
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     options: [
       {
         name: "invite",

@@ -33,6 +33,7 @@ const Schema = new mongoose.Schema({
         staff_roles: [String],
       },
     ],
+    category_channel: String,
   },
   automod: {
     debug: Boolean,

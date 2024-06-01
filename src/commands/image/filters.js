@@ -52,7 +52,7 @@ module.exports = {
     aliases: availableFilters,
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     options: [
       {
         name: "name",

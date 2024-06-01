@@ -18,7 +18,7 @@ module.exports = {
     minArgsCount: 4,
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     ephemeral: true,
     options: [
       {

@@ -7,6 +7,7 @@ module.exports = {
   name: "emojiinfo",
   description: "shows info about an emoji",
   category: "INFORMATION",
+  userPermissions: ["ManageGuild"],
   botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,

@@ -32,7 +32,8 @@ module.exports = class BotClient extends Client {
       ],
       partials: [Partials.User, Partials.Message, Partials.Reaction],
       allowedMentions: {
-        repliedUser: false,
+        parse: ['users', 'roles', 'everyone'],
+
       },
       restRequestTimeout: 20000,
     });

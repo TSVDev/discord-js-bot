@@ -82,10 +82,10 @@ module.exports = (client) => {
 
   // Buttons
   let components = [];
-  components.push(new ButtonBuilder().setLabel("Invite Link").setURL(client.getInvite()).setStyle(ButtonStyle.Link));
+  //components.push(new ButtonBuilder().setLabel("Invite Link").setURL(client.getInvite()).setStyle(ButtonStyle.Link));
 
   if (SUPPORT_SERVER) {
-    components.push(new ButtonBuilder().setLabel("Support Server").setURL(SUPPORT_SERVER).setStyle(ButtonStyle.Link));
+    components.push(new ButtonBuilder().setLabel("Main Server").setURL(SUPPORT_SERVER).setStyle(ButtonStyle.Link));
   }
 
   if (DASHBOARD.enabled) {

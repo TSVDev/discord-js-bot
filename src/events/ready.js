@@ -6,7 +6,7 @@ const { getSettings } = require("@schemas/Guild");
  * @param {import('@src/structures').BotClient} client
  */
 module.exports = async (client) => {
-  client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
+  client.logger.success(`\nLogged in as ${client.user.tag}! (${client.user.id})\n\nReady to protect The Space Labs.`);
 
   // Initialize Music Manager
   if (client.config.MUSIC.ENABLED) {

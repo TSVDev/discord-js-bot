@@ -12,7 +12,7 @@ function updatePresence(client) {
 
   if (message.includes("{members}")) {
     const members = client.guilds.cache.map((g) => g.memberCount).reduce((partial_sum, a) => partial_sum + a, 0);
-    message = message.replaceAll("{members}", members);
+    message = message.replaceAll("{members}", members - 13);
   }
 
   const getType = (type) => {

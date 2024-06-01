@@ -102,6 +102,8 @@ async function sendWelcome(member, inviterData = {}) {
   const channel = member.guild.channels.cache.get(config.channel);
   if (!channel) return;
 
+  const ping = '1144409591543763025'
+
   // build welcome message
   const response = await buildGreeting(member, "WELCOME", config, inviterData);
 

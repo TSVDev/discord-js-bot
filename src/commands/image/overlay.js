@@ -28,7 +28,7 @@ module.exports = {
     aliases: availableOverlays,
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     options: [
       {
         name: "name",

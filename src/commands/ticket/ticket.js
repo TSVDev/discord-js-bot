@@ -38,7 +38,7 @@ module.exports = {
         description: "set maximum number of concurrent open tickets",
       },
       {
-        trigger: "close",
+        trigger: "close <reason>",
         description: "close the ticket",
       },
       {
@@ -52,6 +52,10 @@ module.exports = {
       {
         trigger: "remove <userId|roleId>",
         description: "remove user/role from the ticket",
+      },
+      {
+        trigger: "category <categoryId>",
+        description: "set the ticket category channel by ID",
       },
     ],
   },
@@ -103,6 +107,14 @@ module.exports = {
         name: "close",
         description: "closes the ticket [used in ticket channel only]",
         type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: "reason",
+            description: "reason for closing the ticket",
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
       },
       {
         name: "closeall",
@@ -135,9 +147,27 @@ module.exports = {
           },
         ],
       },
+      {
+        name: "category",
+        description: "set the ticket category channel by ID",
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: "id",
+            description: "the ID of the category channel to set as the ticket category",
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "remove-c",
+        description: "remove the ticket category channel",
+        type: ApplicationCommandOptionType.Subcommand,
+      },     
     ],
   },
-
+   
   async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
     let response;
@@ -172,7 +202,9 @@ module.exports = {
 
     // Close ticket
     else if (input === "close") {
-      response = await close(message, message.author);
+      if (args.length < 2) return message.safeReply("Please provide a reason");
+      const reason = args.slice(1).join(" ");
+      response = await close(message, message.author, reason);
       if (!response) return;
     }
 
@@ -201,6 +233,12 @@ module.exports = {
       else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
       else inputId = args[1];
       response = await removeFromTicket(message, inputId);
+    }
+
+     // Set ticket category
+     else if (input === "category") {
+      // Call function to set category channel in guild settings
+      response = await setTicketCategory(message.guild, args[1], data.settings);
     }
 
     // Invalid input
@@ -241,7 +279,8 @@ module.exports = {
 
     // Close
     else if (sub === "close") {
-      response = await close(interaction, interaction.user);
+      const reason = interaction.options.getString("reason");
+      response = await close(interaction, interaction.user, reason);
     }
 
     // Close all
@@ -255,15 +294,51 @@ module.exports = {
       response = await addToTicket(interaction, inputId);
     }
 
+    
     // Remove from ticket
     else if (sub === "remove") {
       const user = interaction.options.getUser("user");
       response = await removeFromTicket(interaction, user.id);
     }
 
+      // Set ticket category
+      else if (sub === "category") {
+        const categoryId = interaction.options.getString("id");
+        response = await setTicketCategory(interaction.guild, categoryId, data.settings);
+      }
+      else if (sub === "remove-c") {
+        response = await removeTicketCategory(interaction.guild, data.settings);
+      }
+
     if (response) await interaction.followUp(response);
   },
 };
+
+async function removeTicketCategory(guild, settings) {
+  // Remove the category channel ID from guild settings
+  settings.ticket.category_channel = null;
+  await settings.save();
+
+  return "Ticket category channel removed successfully";
+}
+async function setTicketCategory(guild, categoryId, settings) {
+
+  // Find the category channel by ID
+  const categoryChannel = guild.channels.cache.find(
+    (channel) => channel.type === 4 && channel.id === categoryId
+  );
+
+  // Check if the category channel was found
+  if (!categoryChannel) {
+    return "Invalid category ID provided or it does not refer to a category channel";
+  }
+
+  // Update the category channel ID in guild settings
+  settings.ticket.category_channel = categoryId;
+  await settings.save();
+
+  return "Ticket category channel set successfully";
+}
 
 /**
  * @param {import('discord.js').Message} param0
@@ -355,7 +430,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
 }
 
 async function setupLogChannel(target, settings) {
-  if (!target.canSendEmbeds()) return `Oops! I do have have permission to send embed to ${target}`;
+  if (!target.canSendEmbeds()) return `Oops! I do not have permission to send embed to ${target}`;
 
   settings.ticket.log_channel = target.id;
   await settings.save();
@@ -372,9 +447,9 @@ async function setupLimit(limit, settings) {
   return `Configuration saved. You can now have a maximum of \`${limit}\` open tickets`;
 }
 
-async function close({ channel }, author) {
+async function close({ channel }, author, reason) {
   if (!isTicketChannel(channel)) return "This command can only be used in ticket channels";
-  const status = await closeTicket(channel, author, "Closed by a moderator");
+  const status = await closeTicket(channel, author, reason);
   if (status === "MISSING_PERMISSIONS") return "I do not have permission to close tickets";
   if (status === "ERROR") return "An error occurred while closing the ticket";
   return null;

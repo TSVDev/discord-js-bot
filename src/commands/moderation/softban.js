@@ -12,6 +12,7 @@ module.exports = {
   userPermissions: ["KickMembers"],
   command: {
     enabled: true,
+    aliases: ["sb"],
     usage: "<ID|@member> [reason]",
     minArgsCount: 1,
   },
@@ -36,14 +37,14 @@ module.exports = {
   async messageRun(message, args) {
     const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.safeReply(`No user found matching ${args[0]}`);
-    const reason = message.content.split(args[0])[1].trim();
+    const reason = `[${message.author.id}] ${message.content.split(args[0])[1].trim()}`;
     const response = await softban(message.member, target, reason);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
     const user = interaction.options.getUser("user");
-    const reason = interaction.options.getString("reason");
+    const reason = `[${message.author.id}] ${interaction.options.getString("reason")}`;
     const target = await interaction.guild.members.fetch(user.id);
 
     const response = await softban(interaction.member, target, reason);

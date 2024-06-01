@@ -19,6 +19,7 @@ module.exports = (channel) => {
   if (type === ChannelType.GuildText) {
     const { rateLimitPerUser, nsfw } = channel;
     desc += stripIndent`
+      \n
       ❯ Topic: **${channel.topic || "No topic set"}**
       ❯ Position: **${position}**
       ❯ Slowmode: **${rateLimitPerUser}**
@@ -29,6 +30,7 @@ module.exports = (channel) => {
   if (type === ChannelType.GuildPublicThread || type === ChannelType.GuildPrivateThread) {
     const { ownerId, archived, locked } = channel;
     desc += stripIndent`
+      \n
       ❯ Owner Id: **${ownerId}**
       ❯ Is Archived: **${archived ? "✓" : "✕"}**
       ❯ Is Locked: **${locked ? "✓" : "✕"}**\n
@@ -38,6 +40,7 @@ module.exports = (channel) => {
   if (type === ChannelType.GuildNews || type === ChannelType.GuildNewsThread) {
     const { nsfw } = channel;
     desc += stripIndent`
+      \n
       ❯ isNSFW: **${nsfw ? "✓" : "✕"}**\n
       `;
   }
@@ -45,6 +48,7 @@ module.exports = (channel) => {
   if (type === ChannelType.GuildVoice || type === ChannelType.GuildStageVoice) {
     const { bitrate, userLimit, full } = channel;
     desc += stripIndent`
+      \n
       ❯ Position: **${position}**
       ❯ Bitrate: **${bitrate}**
       ❯ User Limit: **${userLimit}**

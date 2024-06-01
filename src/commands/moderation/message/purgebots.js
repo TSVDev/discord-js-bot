@@ -11,6 +11,7 @@ module.exports = {
   botPermissions: ["ManageMessages", "ReadMessageHistory"],
   command: {
     enabled: true,
+    aliases: ["pb"],
     usage: "[amount]",
     aliases: ["purgebot"],
   },

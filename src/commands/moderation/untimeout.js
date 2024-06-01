@@ -12,7 +12,7 @@ module.exports = {
   userPermissions: ["ModerateMembers"],
   command: {
     enabled: true,
-    aliases: ["unmute"],
+    aliases: ["ut"],
     usage: "<ID|@member> [reason]",
     minArgsCount: 1,
   },
@@ -37,14 +37,14 @@ module.exports = {
   async messageRun(message, args) {
     const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.safeReply(`No user found matching ${args[0]}`);
-    const reason = args.slice(1).join(" ").trim();
+    const reason = `${message.author.id} ${args.slice(1).join(" ").trim()}`;
     const response = await untimeout(message.member, target, reason);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
     const user = interaction.options.getUser("user");
-    const reason = interaction.options.getString("reason");
+    const reason = `[${message.author.id}] ${interaction.options.getString("reason")}`;
     const target = await interaction.guild.members.fetch(user.id);
 
     const response = await untimeout(interaction.member, target, reason);

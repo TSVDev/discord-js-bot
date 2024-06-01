@@ -15,7 +15,7 @@ module.exports = {
     usage: "<on|off>",
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     ephemeral: true,
     options: [
       {

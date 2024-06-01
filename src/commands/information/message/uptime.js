@@ -6,7 +6,7 @@ const { timeformat } = require("@helpers/Utils");
 module.exports = {
   name: "uptime",
   description: "gives you bot uptime",
-  category: "INFORMATION",
+  category: "OWNER",
   botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,

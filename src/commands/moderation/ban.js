@@ -12,8 +12,9 @@ module.exports = {
   userPermissions: ["BanMembers"],
   command: {
     enabled: true,
+    aliases: ["b"],
     usage: "<ID|@member> [reason]",
-    minArgsCount: 1,
+    minArgsCount: 2,
   },
   slashCommand: {
     enabled: true,
@@ -28,7 +29,7 @@ module.exports = {
         name: "reason",
         description: "reason for ban",
         type: ApplicationCommandOptionType.String,
-        required: false,
+        required: true,
       },
     ],
   },
@@ -37,14 +38,17 @@ module.exports = {
     const match = await message.client.resolveUsers(args[0], true);
     const target = match[0];
     if (!target) return message.safeReply(`No user found matching ${args[0]}`);
-    const reason = message.content.split(args[0])[1].trim();
+    const reason = `[${message.author.id}] ${message.content.split(args[0])[1].trim()}`;
     const response = await ban(message.member, target, reason);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
     const target = interaction.options.getUser("user");
-    const reason = interaction.options.getString("reason");
+    const reason = `[${message.author.id}] ${interaction.options.getString("reason")}`;
+
+
+
 
     const response = await ban(interaction.member, target, reason);
     await interaction.followUp(response);

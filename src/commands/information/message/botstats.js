@@ -6,7 +6,7 @@ const botstats = require("../shared/botstats");
 module.exports = {
   name: "botstats",
   description: "shows bot information",
-  category: "INFORMATION",
+  category: "OWNER",
   botPermissions: ["EmbedLinks"],
   cooldown: 5,
   command: {

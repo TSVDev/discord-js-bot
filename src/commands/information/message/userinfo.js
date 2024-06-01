@@ -7,11 +7,12 @@ module.exports = {
   name: "userinfo",
   description: "shows information about the user",
   category: "INFORMATION",
+  userPermissions: ["ManageMessages"],
   botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "[@member|id]",
-    aliases: ["uinfo", "memberinfo"],
+    aliases: ["uinfo", "memberinfo", "ui", "whois", "lookup"],
   },
 
   async messageRun(message, args) {

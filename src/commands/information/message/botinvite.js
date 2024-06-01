@@ -6,10 +6,10 @@ const botinvite = require("../shared/botinvite");
 module.exports = {
   name: "botinvite",
   description: "gives you bot invite",
-  category: "INFORMATION",
+  category: "OWNER",
   botPermissions: ["EmbedLinks"],
   command: {
-    enabled: true,
+    enabled: false,
   },
 
   async messageRun(message, args) {

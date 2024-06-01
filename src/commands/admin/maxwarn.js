@@ -23,7 +23,7 @@ module.exports = {
     ],
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     ephemeral: true,
     options: [
       {

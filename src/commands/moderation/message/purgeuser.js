@@ -12,7 +12,7 @@ module.exports = {
   command: {
     enabled: true,
     usage: "<@user|ID> [amount]",
-    aliases: ["purgeusers"],
+    aliases: ["purgeusers", "pu"],
     minArgsCount: 1,
   },
 

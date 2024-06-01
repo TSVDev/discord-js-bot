@@ -11,6 +11,7 @@ module.exports = {
   userPermissions: ["KickMembers"],
   command: {
     enabled: true,
+    aliases: ["w"],
     usage: "<ID|@member> [reason]",
     minArgsCount: 1,
   },

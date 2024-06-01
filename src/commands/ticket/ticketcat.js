@@ -48,7 +48,7 @@ module.exports = {
           },
           {
             name: "staff_roles",
-            description: "the staff roles",
+            description: "the staff roles (need ID)",
             type: ApplicationCommandOptionType.String,
             required: false,
           },

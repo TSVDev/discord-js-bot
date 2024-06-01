@@ -10,10 +10,10 @@ module.exports = {
   name: "urban",
   description: "searches the urban dictionary",
   cooldown: 5,
-  category: "UTILITY",
+  category: "MODERATION",
   botPermissions: ["EmbedLinks"],
   command: {
-    enabled: true,
+    enabled: false,
     usage: "<word>",
     minArgsCount: 1,
   },

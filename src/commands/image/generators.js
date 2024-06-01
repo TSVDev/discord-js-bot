@@ -45,7 +45,7 @@ module.exports = {
     aliases: availableGenerators,
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     options: [
       {
         name: "name",

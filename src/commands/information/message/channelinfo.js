@@ -7,11 +7,12 @@ module.exports = {
   name: "channelinfo",
   description: "shows information about a channel",
   category: "INFORMATION",
+  userPermissions: ["ManageGuild"],
   botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "[#channel|id]",
-    aliases: ["chinfo"],
+    aliases: ["chinfo","ci"],
   },
 
   async messageRun(message, args) {
