@@ -19,6 +19,7 @@ module.exports = {
   },
   slashCommand: {
     enabled: false,
+    ephemeral: false,
     options: [
       {
         name: "user",

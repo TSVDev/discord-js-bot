@@ -13,13 +13,14 @@ module.exports = {
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
   command: {
-    enabled: false,
+    enabled: true,
     aliases: ["git"],
     usage: "<username>",
     minArgsCount: 1,
   },
   slashCommand: {
-    enabled: false,
+    enabled: true,
+    ephemeral: false,
     options: [
       {
         name: "username",

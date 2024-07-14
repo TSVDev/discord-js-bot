@@ -27,6 +27,7 @@ module.exports = {
   },
   slashCommand: {
     enabled: true,
+    ephemeral: false,
     options: [
       {
         name: "list",

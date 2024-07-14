@@ -49,7 +49,7 @@ module.exports = {
     ],
   },
   slashCommand: {
-    enabled: false,
+    enabled: true,
     ephemeral: true,
     options: [
       {

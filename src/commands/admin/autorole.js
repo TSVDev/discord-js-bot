@@ -1,4 +1,5 @@
 const { ApplicationCommandOptionType } = require("discord.js");
+const { truncate } = require("fs/promises");
 
 /**
  * @type {import("@structures/Command")}
@@ -14,7 +15,7 @@ module.exports = {
     minArgsCount: 1,
   },
   slashCommand: {
-    enabled: false,
+    enabled: true,
     ephemeral: true,
     options: [
       {

@@ -13,6 +13,7 @@ module.exports = {
   },
   slashCommand: {
     enabled: false,
+    ephemeral: false,
   },
 
   async messageRun(message, args, data) {

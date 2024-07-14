@@ -61,6 +61,7 @@ module.exports = {
   },
   slashCommand: {
     enabled: true,
+    ephemeral: true,
     options: [
       {
         name: "setup",
