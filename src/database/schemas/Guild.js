@@ -101,6 +101,13 @@ const Schema = new mongoose.Schema({
       image: String,
     },
   },
+  afk: [{
+    userId: String,
+    status: { type: Boolean, default: false },
+    reason: String,
+    msglink: [String],
+    afktime: Date,
+  }],
   autorole: String,
   suggestions: {
     enabled: Boolean,

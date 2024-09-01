@@ -1,24 +1,78 @@
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+const { EMBED_COLORS } = require("@root/config");
+
 /**
  * @type {import("@structures/Command")}
  */
+
 module.exports = {
   name: "ping",
-  description: "shows the current ping from the bot to the discord servers",
-  category: "INFORMATION",
+  description: "Get the bot's ping",
+  cooldown: 0,
+  category: "UTILITY",
+  botPermissions: ["EmbedLinks"],
+  userPermissions: [],
   command: {
     enabled: true,
+    aliases: ["status"],
+    usage: "",
+    minArgsCount: 0,
   },
   slashCommand: {
     enabled: true,
-    ephemeral: true,
     options: [],
   },
 
   async messageRun(message, args) {
-    await message.safeReply(`🏓 Pong : \`${Math.floor(message.client.ws.ping)}ms\``);
+    const response = await getPingData(message.client);
+    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
-    await interaction.followUp(`🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``);
+    const response = await getPingData(interaction.client);
+    await interaction.followUp(response);
   },
 };
+
+async function getPingData(client) {
+  let circles = {
+    good: '<:High:1279730900170440745>',
+    okay: '<:Mid:1279730885465214987>',
+    bad: '<:Low:1279730871557160991>',
+  };
+
+  // Simulate pinging
+  const ws = client.ws.ping;
+  const msgEdit = Date.now() - (client.lastPing || Date.now());
+
+  // Uptime calculation
+  let days = Math.floor(client.uptime / 86400000);
+  let hours = Math.floor(client.uptime / 3600000) % 24;
+  let minutes = Math.floor(client.uptime / 60000) % 60;
+  let seconds = Math.floor(client.uptime / 1000) % 60;
+
+  const wsEmoji = ws <= 100 ? circles.good : ws <= 200 ? circles.okay : circles.bad;
+  const msgEmoji = msgEdit <= 200 ? circles.good : circles.bad;
+
+  const pingEmbed = new EmbedBuilder()
+    .setThumbnail(client.user.displayAvatarURL({ size: 64 }))
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setTimestamp()
+    .setFooter({ text: `Pinged At` })
+    .addFields(
+      {
+        name: 'Websocket Latency',
+        value: `${wsEmoji} \`${ws}ms\``,
+      },
+      {
+        name: 'API Latency',
+        value: `${msgEmoji} \`${msgEdit}ms\``,
+      },
+      {
+        name: `${client.user.username} Uptime`,
+        value: `<:Timer:1279730845971910719> \`${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds\``,
+      }
+    );
+
+  return { embeds: [pingEmbed] };
+}

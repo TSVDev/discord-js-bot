@@ -8,6 +8,7 @@ const {
   ComponentType,
 } = require("discord.js");
 const { TICKET } = require("@root/config.js");
+const StaffRoles = require('@schemas/StaffRoles');
 
 // schemas
 const { getSettings } = require("@schemas/Guild");
@@ -166,10 +167,12 @@ async function handleTicketOpen(interaction) {
       "Cannot create ticket channel, missing `Manage Channel` permission. Contact Staff for help!"
     );
 
-  const alreadyExists = getExistingTicketChannel(guild, user.id);
-  if (alreadyExists) return interaction.followUp(`You already have an open ticket`);
+    const alreadyExists = getExistingTicketChannel(guild, user.id, user.username);
+    if (alreadyExists) return interaction.followUp(`You already have an open ticket`);
+
 
   const settings = await getSettings(guild);
+  
 
     // Retrieve the category ID from guild settings
     const categoryId = settings.ticket.category_channel;
@@ -210,7 +213,7 @@ async function handleTicketOpen(interaction) {
         if (err.message.includes("time")) return;
       });
 
-    if (!res) return interaction.editReply({ content: "Timed out. Try again", components: [] });
+    if (!res) return interaction.editReply({ content: "⚠️ Timed out. Try again", components: [] });
     await interaction.editReply({ content: "Processing", components: [] });
     catName = res.values[0];
     catPerms = categories.find((cat) => cat.name === catName)?.staff_roles || [];
@@ -226,7 +229,7 @@ async function handleTicketOpen(interaction) {
     const ticketNumber = (existing + 1).toString();
     const permissionOverwrites = [
       {
-        id: guild.roles.everyone,
+        id: guild.roles.everyone.id,
         deny: ["ViewChannel"],
       },
       {
@@ -238,6 +241,22 @@ async function handleTicketOpen(interaction) {
         allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
       },
     ];
+
+        // Retrieve staff roles from the StaffRoles schema
+        const staffRolesEntry = await StaffRoles.findOne({ guildId: guild.id });
+        const staffRoles = staffRolesEntry ? staffRolesEntry.roles : [];
+    
+    
+    // Loop through each staff role ID
+    staffRoles.forEach(roleId => {
+      const role = guild.roles.cache.get(roleId);
+      if (role) {
+        permissionOverwrites.push({
+          id: role.id,
+          allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
+        });
+      }
+    });
 
     if (catPerms?.length > 0) {
       catPerms?.forEach((roleId) => {
@@ -257,9 +276,10 @@ async function handleTicketOpen(interaction) {
       permissionOverwrites,
       parent: categoryId,
     });
-
+    
+    const staffRolesPing = staffRoles.map(roleId => `<@&${roleId}>`).join(' ');
     const embed = new EmbedBuilder()
-      .setAuthor({ name: `Ticket #${ticketNumber}` })
+      .setAuthor({ name: `<:Ticket:1249144390966968352> Ticket #${ticketNumber}` })
       .setDescription(
         `Hello ${user.toString()}
         Support will be with you shortly.\n
@@ -281,7 +301,7 @@ async function handleTicketOpen(interaction) {
 
     const dmEmbed = new EmbedBuilder()
       .setColor(TICKET.CREATE_EMBED)
-      .setAuthor({ name: "Ticket Created" })
+      .setAuthor({ name: "<:Ticket:1249144390966968352> Ticket Created" })
       .setThumbnail(guild.iconURL())
       .setDescription(
         `**Server:** ${guild.name}
@@ -295,10 +315,10 @@ async function handleTicketOpen(interaction) {
 
     user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => {});
 
-    await interaction.editReply(`Ticket created! 🚀 You can check it out at <#${tktChannel.id}> `);
+    await interaction.editReply(`Ticket created! <:Ticket:1249144390966968352> You can check it out at <#${tktChannel.id}> `);
   } catch (ex) {
     error("handleTicketOpen", ex);
-    return interaction.editReply("Failed to create ticket channel, an error occurred!");
+    return interaction.editReply("⚠️ Failed to create ticket channel, an error occurred!");
   }
 }
 
@@ -311,7 +331,7 @@ async function handleTicketClose(interaction) {
   if (status === "MISSING_PERMISSIONS") {
     return interaction.followUp("Cannot close the ticket, missing permissions. Contact Staff for help!");
   } else if (status == "ERROR") {
-    return interaction.followUp("Failed to close the ticket, an error occurred!");
+    return interaction.followUp("⚠️ Failed to close the ticket, an error occurred!");
   }
 }
 
