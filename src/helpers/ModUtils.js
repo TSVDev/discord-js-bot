@@ -283,7 +283,7 @@ module.exports = class ModUtils {
   }
 
   /**
-   * UnTimeouts(aka mutes) the target and logs to the database, channel
+   * Untimeouts(aka unmutes) the target and logs to the database, channel
    * @param {import('discord.js').GuildMember} issuer
    * @param {import('discord.js').GuildMember} target
    * @param {string} reason
@@ -357,7 +357,7 @@ module.exports = class ModUtils {
     if (targetMem && !memberInteract(issuer.guild.members.me, targetMem)) return "BOT_PERM";
 
     try {
-      await issuer.guild.bans.create(target.id, { days: 0, reason });
+      await issuer.guild.bans.create(target.id, { days: 7, reason });
       logModeration(issuer, target, reason, "Ban");
       return true;
     } catch (ex) {
@@ -367,7 +367,7 @@ module.exports = class ModUtils {
   }
 
   /**
-   * Bans the target and logs to the database, channel
+   * Unbans the target and logs to the database, channel
    * @param {import('discord.js').GuildMember} issuer
    * @param {import('discord.js').User} target
    * @param {string} reason
