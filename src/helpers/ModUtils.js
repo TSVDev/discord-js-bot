@@ -334,7 +334,7 @@ module.exports = class ModUtils {
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     try {
-      await target.ban({ deleteMessageDays: 7, reason });
+      await target.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
       await issuer.guild.members.unban(target.user);
       logModeration(issuer, target, reason, "Softban");
       return true;
@@ -357,7 +357,7 @@ module.exports = class ModUtils {
     if (targetMem && !memberInteract(issuer.guild.members.me, targetMem)) return "BOT_PERM";
 
     try {
-      await issuer.guild.bans.create(target.id, { days: 7, reason });
+      await issuer.guild.bans.create(target.id, { deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
       logModeration(issuer, target, reason, "Ban");
       return true;
     } catch (ex) {
