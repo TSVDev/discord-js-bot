@@ -37,7 +37,7 @@ module.exports = {
 
   async messageRun(message, args) {
     const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply(`No user found matching ${args[0]}`);
+    if (!target) return message.safeReply(`<:no:1235502897215836160> No user found matching ${args[0]}`);
     const reason = `${message.author.id} ${args.slice(1).join(" ").trim()}`;
     const response = await untimeout(message.member, target, reason);
     await message.safeReply(response);

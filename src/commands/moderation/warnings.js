@@ -64,14 +64,14 @@ module.exports = {
 
     if (sub === "list") {
       const target = (await message.guild.resolveMember(args[1], true)) || message.member;
-      if (!target) return message.safeReply(`No user found matching ${args[1]}`);
+      if (!target) return message.safeReply(`<:no:1235502897215836160> No user found matching ${args[1]}`);
       response = await listWarnings(target, message);
     }
 
     //
     else if (sub === "clear") {
       const target = await message.guild.resolveMember(args[1], true);
-      if (!target) return message.safeReply(`No user found matching ${args[1]}`);
+      if (!target) return message.safeReply(`<:no:1235502897215836160> No user found matching ${args[1]}`);
       response = await clearWarnings(target, message);
     }
 
@@ -110,7 +110,7 @@ module.exports = {
 };
 
 async function listWarnings(target, { guildId }) {
-  if (!target) return "❔ No user provided";
+  if (!target) return "<:no:1235502897215836160> No user provided";
   if (target.user.bot) return "<:bot:1247839084030722109> Bots don't have warnings";
 
   const warnings = await getWarningLogs(guildId, target.id);
@@ -126,7 +126,7 @@ async function listWarnings(target, { guildId }) {
 }
 
 async function clearWarnings(target, { guildId }) {
-  if (!target) return "❔ No user provided";
+  if (!target) return "<:no:1235502897215836160> No user provided";
   if (target.user.bot) return "<:bot:1247839084030722109> Bots don't have warnings";
 
   const memberDb = await getMember(guildId, target.id);
