@@ -75,7 +75,7 @@ module.exports = {
       if (input === "off") channel = "off";
       else {
         const match = message.guild.findMatchingChannels(input);
-        if (match.length === 0) return message.safeReply("Invalid channel. Please provide a valid channel");
+        if (match.length === 0) return message.safeReply("<:info:1249145380973838478> Invalid channel. Please provide a valid channel");
         channel = match[0];
       }
       response = await setChannel(channel, data.settings);
@@ -99,18 +99,18 @@ module.exports = {
 };
 
 async function setMessage(message, settings) {
-  if (!message) return "Invalid message. Please provide a message";
+  if (!message) return "<:info:1249145380973838478> Invalid message. Please provide a message";
   settings.stats.xp.message = message;
   await settings.save();
-  return `Configuration saved. Level up message updated!`;
+  return `<:yes:1235503385323769877> Configuration saved. Level up message updated!`;
 }
 
 async function setChannel(channel, settings) {
-  if (!channel) return "Invalid channel. Please provide a channel";
+  if (!channel) return "<:info:1249145380973838478> Invalid channel. Please provide a channel";
 
   if (channel === "off") settings.stats.xp.channel = null;
   else settings.stats.xp.channel = channel.id;
 
   await settings.save();
-  return `Configuration saved. Level up channel updated!`;
+  return `<:yes:1235503385323769877> Configuration saved. Level up channel updated!`;
 }

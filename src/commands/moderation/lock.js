@@ -35,7 +35,7 @@ module.exports = {
     const channel = message.mentions.channels.first();
     const reason = args[1] || "No reason provided";
 
-    if (!channel) return message.channel.send("Please specify a channel to lock");
+    if (!channel) return message.channel.send("<:info:1249145380973838478> Please specify a channel to lock");
 
     await channel.permissionOverwrites.edit(message.guild.roles.everyone, {
       'SendMessages': false,

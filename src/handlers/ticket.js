@@ -164,11 +164,11 @@ async function handleTicketOpen(interaction) {
 
   if (!guild.members.me.permissions.has(OPEN_PERMS))
     return interaction.followUp(
-      "Cannot create ticket channel, missing `Manage Channel` permission. Contact Staff for help!"
+      "<:info:1249145380973838478> Cannot create ticket channel, missing `Manage Channel` permission. Contact Staff for help!"
     );
 
     const alreadyExists = getExistingTicketChannel(guild, user.id, user.username);
-    if (alreadyExists) return interaction.followUp(`You already have an open ticket`);
+    if (alreadyExists) return interaction.followUp(`<:no:1235502897215836160> You already have an open ticket`);
 
 
   const settings = await getSettings(guild);
@@ -182,12 +182,12 @@ async function handleTicketOpen(interaction) {
 
   // Ensure that the category channel exists and is a category
   if (!categoryChannel || categoryChannel.type !== 4) {
-    return interaction.followUp("Invalid category ID set for ticket creation.");
+    return interaction.followUp("<:info:1249145380973838478> Invalid category ID set for ticket creation.");
   }
 
   // limit check
   const existing = getTicketChannels(guild).size;
-  if (existing > settings.ticket.limit) return interaction.followUp("There are too many open tickets. Try again later");
+  if (existing > settings.ticket.limit) return interaction.followUp("<:no:1235502897215836160> There are too many open tickets. Try again later");
 
   // check categories
   let catName = null;
@@ -213,7 +213,7 @@ async function handleTicketOpen(interaction) {
         if (err.message.includes("time")) return;
       });
 
-    if (!res) return interaction.editReply({ content: "⚠️ Timed out. Try again", components: [] });
+    if (!res) return interaction.editReply({ content: "<:no:1235502897215836160> Timed out. Try again", components: [] });
     await interaction.editReply({ content: "Processing", components: [] });
     catName = res.values[0];
     catPerms = categories.find((cat) => cat.name === catName)?.staff_roles || [];
@@ -315,10 +315,10 @@ async function handleTicketOpen(interaction) {
 
     user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => {});
 
-    await interaction.editReply(`Ticket created! <:Ticket:1249144390966968352> You can check it out at <#${tktChannel.id}> `);
+    await interaction.editReply(`<:yes:1235503385323769877> Ticket created! <:Ticket:1249144390966968352> You can check it out at <#${tktChannel.id}> `);
   } catch (ex) {
     error("handleTicketOpen", ex);
-    return interaction.editReply("⚠️ Failed to create ticket channel, an error occurred!");
+    return interaction.editReply("<:no:1235502897215836160> Failed to create ticket channel, an error occurred!");
   }
 }
 
@@ -329,9 +329,9 @@ async function handleTicketClose(interaction) {
   await interaction.deferReply({ ephemeral: true });
   const status = await closeTicket(interaction.channel, interaction.user);
   if (status === "MISSING_PERMISSIONS") {
-    return interaction.followUp("Cannot close the ticket, missing permissions. Contact Staff for help!");
+    return interaction.followUp("<:no:1235502897215836160> Cannot close the ticket, missing permissions. Contact Staff for help!");
   } else if (status == "ERROR") {
-    return interaction.followUp("⚠️ Failed to close the ticket, an error occurred!");
+    return interaction.followUp("<:no:1235502897215836160> Failed to close the ticket, an error occurred!");
   }
 }
 

@@ -131,7 +131,7 @@ module.exports = {
 
 function listCategories(data) {
   const categories = data.settings.ticket.categories;
-  if (categories?.length === 0) return "No ticket categories found.";
+  if (categories?.length === 0) return "<:no:1235502897215836160> No ticket categories found.";
 
   const fields = [];
   for (const category of categories) {
@@ -143,11 +143,11 @@ function listCategories(data) {
 }
 
 async function addCategory(guild, data, category, staff_roles) {
-  if (!category) return "Invalid usage! Missing category name.";
+  if (!category) return "<:info:1249145380973838478> Invalid usage! Missing category name.";
 
   // check if category already exists
   if (data.settings.ticket.categories.find((c) => c.name === category)) {
-    return `Category \`${category}\` already exists.`;
+    return `<:no:1235502897215836160> Category \`${category}\` already exists.`;
   }
 
   const staffRoles = (staff_roles?.split(",")?.map((r) => r.trim()) || []).filter((r) => guild.roles.cache.has(r));
@@ -155,18 +155,18 @@ async function addCategory(guild, data, category, staff_roles) {
   data.settings.ticket.categories.push({ name: category, staff_roles: staffRoles });
   await data.settings.save();
 
-  return `Category \`${category}\` added.`;
+  return `<:yes:1235503385323769877> Category \`${category}\` added.`;
 }
 
 async function removeCategory(data, category) {
   const categories = data.settings.ticket.categories;
   // check if category exists
   if (!categories.find((c) => c.name === category)) {
-    return `Category \`${category}\` does not exist.`;
+    return `<:no:1235502897215836160> Category \`${category}\` does not exist.`;
   }
 
   data.settings.ticket.categories = categories.filter((c) => c.name !== category);
   await data.settings.save();
 
-  return `Category \`${category}\` removed.`;
+  return `<:yes:1235503385323769877> Category \`${category}\` removed.`;
 }

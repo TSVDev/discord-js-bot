@@ -126,21 +126,21 @@ module.exports = {
 
     if (sub == "attachments") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
       response = await antiAttachments(settings, status);
     }
 
     //
     else if (sub === "invites") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
       response = await antiInvites(settings, status);
     }
 
     //
     else if (sub == "links") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
       response = await antilinks(settings, status);
     }
 
@@ -148,13 +148,13 @@ module.exports = {
     else if (sub === "maxlines") {
       const max = args[1];
       if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.safeReply("Max Lines must be a valid number greater than 0");
+        return message.safeReply("<:info:1249145380973838478> Max Lines must be a valid number greater than 0");
       }
       response = await maxLines(settings, max);
     }
 
     //
-    else response = "Invalid command usage!";
+    else response = "<:info:1249145380973838478> Invalid command usage!";
     await message.safeReply(response);
   },
 
@@ -168,7 +168,7 @@ module.exports = {
     } else if (sub === "invites") response = await antiInvites(settings, interaction.options.getString("status"));
     else if (sub == "links") response = await antilinks(settings, interaction.options.getString("status"));
     else if (sub === "maxlines") response = await maxLines(settings, interaction.options.getInteger("amount"));
-    else response = "Invalid command usage!";
+    else response = "<:info:1249145380973838478> Invalid command usage!";
 
     await interaction.followUp(response);
   },
@@ -178,7 +178,7 @@ async function antiAttachments(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
   settings.automod.anti_attachments = status;
   await settings.save();
-  return `Messages ${
+  return `<:yes:1235503385323769877> Messages ${
     status ? "with attachments will now be automatically deleted" : "will not be filtered for attachments now"
   }`;
 }
@@ -187,7 +187,7 @@ async function antiInvites(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
   settings.automod.anti_invites = status;
   await settings.save();
-  return `Messages ${
+  return `<:yes:1235503385323769877> Messages ${
     status ? "with discord invites will now be automatically deleted" : "will not be filtered for discord invites now"
   }`;
 }
@@ -196,18 +196,18 @@ async function antilinks(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
   settings.automod.anti_links = status;
   await settings.save();
-  return `Messages ${status ? "with links will now be automatically deleted" : "will not be filtered for links now"}`;
+  return `<:yes:1235503385323769877> Messages ${status ? "with links will now be automatically deleted" : "will not be filtered for links now"}`;
 }
 
 async function maxLines(settings, input) {
   const lines = Number.parseInt(input);
-  if (isNaN(lines)) return "Please enter a valid number input";
+  if (isNaN(lines)) return "<:info:1249145380973838478> Please enter a valid number input";
 
   settings.automod.max_lines = lines;
   await settings.save();
   return `${
     input === 0
-      ? "Maximum line limit is disabled"
-      : `Messages longer than \`${input}\` lines will now be automatically deleted`
+      ? "<:yes:1235503385323769877> Maximum line limit is disabled"
+      : `<:yes:1235503385323769877> Messages longer than \`${input}\` lines will now be automatically deleted`
   }`;
 }

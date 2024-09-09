@@ -48,7 +48,7 @@ async function urban(word) {
   if (!response.success) return MESSAGES.API_ERROR;
 
   const json = response.data;
-  if (!json.list[0]) return `Nothing found matching \`${word}\``;
+  if (!json.list[0]) return `<:no:1235502897215836160> Nothing found matching \`${word}\``;
 
   const data = json.list[0];
   const embed = new EmbedBuilder()

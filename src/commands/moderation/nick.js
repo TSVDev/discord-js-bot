@@ -69,9 +69,9 @@ module.exports = {
 
     if (sub === "set") {
       const target = await message.guild.resolveMember(args[1]);
-      if (!target) return message.safeReply("Could not find matching member");
+      if (!target) return message.safeReply("<:no:1235502897215836160> Could not find matching member");
       const name = args.slice(2).join(" ");
-      if (!name) return message.safeReply("Please specify a nickname");
+      if (!name) return message.safeReply("<:info:1249145380973838478> Please specify a nickname");
 
       const response = await nickname(message, target, name);
       return message.safeReply(response);
@@ -80,7 +80,7 @@ module.exports = {
     //
     else if (sub === "reset") {
       const target = await message.guild.resolveMember(args[1]);
-      if (!target) return message.safeReply("Could not find matching member");
+      if (!target) return message.safeReply("<:no:1235502897215836160> Could not find matching member");
 
       const response = await nickname(message, target);
       return message.safeReply(response);
@@ -98,16 +98,16 @@ module.exports = {
 
 async function nickname({ member, guild }, target, name) {
   if (!canModerate(member, target)) {
-    return `Oops! You cannot manage nickname of ${target.user.username}`;
+    return `<:info:1249145380973838478> Oops! You cannot manage nickname of ${target.user.username}`;
   }
   if (!canModerate(guild.members.me, target)) {
-    return `Oops! I cannot manage nickname of ${target.user.username}`;
+    return `<:info:1249145380973838478> Oops! I cannot manage nickname of ${target.user.username}`;
   }
 
   try {
     await target.setNickname(name);
-    return `Successfully ${name ? "changed" : "reset"} nickname of ${target.user.username}`;
+    return `<:yes:1235503385323769877> Successfully ${name ? "changed" : "reset"} nickname of ${target.user.username}`;
   } catch (ex) {
-    return `Failed to ${name ? "change" : "reset"} nickname for ${target.displayName}. Did you provide a valid name?`;
+    return `<:no:1235502897215836160> Failed to ${name ? "change" : "reset"} nickname for ${target.displayName}. Did you provide a valid name?`;
   }
 }

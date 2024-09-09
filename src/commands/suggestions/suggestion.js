@@ -216,8 +216,8 @@ module.exports = {
     else if (sub == "channel") {
       const input = args[1];
       let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      if (matched.length == 0) response = `<:no:1235502897215836160> No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `<:info:1249145380973838478> Multiple channels found for ${input}. Please be more specific.`;
       else response = await setChannel(data.settings, matched[0]);
     }
 
@@ -225,8 +225,8 @@ module.exports = {
     else if (sub == "appch") {
       const input = args[1];
       let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      if (matched.length == 0) response = `<:no:1235502897215836160> No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `<:info:1249145380973838478> Multiple channels found for ${input}. Please be more specific.`;
       else response = await setApprovedChannel(data.settings, matched[0]);
     }
 
@@ -234,8 +234,8 @@ module.exports = {
     else if (sub == "rejch") {
       const input = args[1];
       let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      if (matched.length == 0) response = `<:no:1235502897215836160> No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `<:info:1249145380973838478> Multiple channels found for ${input}. Please be more specific.`;
       else response = await setRejectedChannel(data.settings, matched[0]);
     }
 
@@ -243,8 +243,8 @@ module.exports = {
     else if (sub == "approve") {
       const input = args[1];
       let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      if (matched.length == 0) response = `<:no:1235502897215836160> No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `<:info:1249145380973838478> Multiple channels found for ${input}. Please be more specific.`;
       else {
         const messageId = args[2];
         const reason = args.slice(3).join(" ");
@@ -256,8 +256,8 @@ module.exports = {
     else if (sub == "reject") {
       const input = args[1];
       let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      if (matched.length == 0) response = `<:no:1235502897215836160> No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `<:info:1249145380973838478> Multiple channels found for ${input}. Please be more specific.`;
       else {
         const messageId = args[2];
         const reason = args.slice(3).join(" ");
@@ -269,8 +269,8 @@ module.exports = {
     else if (sub == "staffadd") {
       const input = args[1];
       let matched = message.guild.findMatchingRoles(input);
-      if (matched.length == 0) response = `No matching roles found for ${input}`;
-      else if (matched.length > 1) response = `Multiple roles found for ${input}. Please be more specific.`;
+      if (matched.length == 0) response = `<:no:1235502897215836160> No matching roles found for ${input}`;
+      else if (matched.length > 1) response = `<:info:1249145380973838478> Multiple roles found for ${input}. Please be more specific.`;
       else response = await addStaffRole(data.settings, matched[0]);
     }
 
@@ -278,8 +278,8 @@ module.exports = {
     else if (sub == "staffremove") {
       const input = args[1];
       let matched = message.guild.findMatchingRoles(input);
-      if (matched.length == 0) response = `No matching roles found for ${input}`;
-      else if (matched.length > 1) response = `Multiple roles found for ${input}. Please be more specific.`;
+      if (matched.length == 0) response = `<:no:1235502897215836160> No matching roles found for ${input}`;
+      else if (matched.length > 1) response = `<:info:1249145380973838478> Multiple roles found for ${input}. Please be more specific.`;
       else response = await removeStaffRole(data.settings, matched[0]);
     }
 
@@ -363,12 +363,12 @@ async function setChannel(settings, channel) {
   }
 
   if (!channel.permissionsFor(channel.guild.members.me).has(CHANNEL_PERMS)) {
-    return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
+    return `<:info:1249145380973838478> I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
   }
 
   settings.suggestions.channel_id = channel.id;
   await settings.save();
-  return `Suggestions will now be sent to ${channel}`;
+  return `<:yes:1235503385323769877> Suggestions will now be sent to ${channel}`;
 }
 
 async function setApprovedChannel(settings, channel) {
@@ -384,7 +384,7 @@ async function setApprovedChannel(settings, channel) {
 
   settings.suggestions.approved_channel = channel.id;
   await settings.save();
-  return `Approved suggestions will now be sent to ${channel}`;
+  return `<:yes:1235503385323769877> Approved suggestions will now be sent to ${channel}`;
 }
 
 async function setRejectedChannel(settings, channel) {
@@ -395,28 +395,28 @@ async function setRejectedChannel(settings, channel) {
   }
 
   if (!channel.permissionsFor(channel.guild.members.me).has(CHANNEL_PERMS)) {
-    return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
+    return `<:info:1249145380973838478> I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
   }
 
   settings.suggestions.rejected_channel = channel.id;
   await settings.save();
-  return `Rejected suggestions will now be sent to ${channel}`;
+  return `<:yes:1235503385323769877> Rejected suggestions will now be sent to ${channel}`;
 }
 
 async function addStaffRole(settings, role) {
   if (settings.suggestions.staff_roles.includes(role.id)) {
-    return `\`${role.name}\` is already a staff role`;
+    return `<:no:1235502897215836160> \`${role.name}\` is already a staff role`;
   }
   settings.suggestions.staff_roles.push(role.id);
   await settings.save();
-  return `\`${role.name}\` is now a staff role`;
+  return `<:yes:1235503385323769877> \`${role.name}\` is now a staff role`;
 }
 
 async function removeStaffRole(settings, role) {
   if (!settings.suggestions.staff_roles.includes(role.id)) {
-    return `${role} is not a staff role`;
+    return `<:no:1235502897215836160> ${role} is not a staff role`;
   }
   settings.suggestions.staff_roles.splice(settings.suggestions.staff_roles.indexOf(role.id), 1);
   await settings.save();
-  return `\`${role.name}\` is no longer a staff role`;
+  return `<:yes:1235503385323769877> \`${role.name}\` is no longer a staff role`;
 }

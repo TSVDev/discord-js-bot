@@ -16,9 +16,9 @@ module.exports = {
     const response = botinvite(message.client);
     try {
       await message.author.send(response);
-      return message.safeReply("Check your DM for my information! :envelope_with_arrow:");
+      return message.safeReply("Check your DM for my information! <:Letter:1249144369433415721>");
     } catch (ex) {
-      return message.safeReply("I cannot send you my information! Is your DM open?");
+      return message.safeReply("<:info:1249145380973838478> I cannot send you my information! Is your DM open?");
     }
   },
 };

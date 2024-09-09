@@ -44,11 +44,11 @@ module.exports = {
 
   async messageRun(message, args) {
     const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply(`No user found matching ${args[0]}`);
+    if (!target) return message.safeReply(`<:no:1235502897215836160> No user found matching ${args[0]}`);
 
     // parse time
     const ms = ems(args[1]);
-    if (!ms) return message.safeReply("Please provide a valid duration. Example: 1d/1h/1m/1s");
+    if (!ms) return message.safeReply("<:info:1249145380973838478> Please provide a valid duration. Example: 1d/1h/1m/1s");
 
     const reason = `[${message.author.id}] ${args.slice(2).join(" ").trim()}`;
     const response = await timeout(message.member, target, ms, reason);
@@ -61,7 +61,7 @@ module.exports = {
     // parse time
     const duration = interaction.options.getString("duration");
     const ms = ems(duration);
-    if (!ms) return interaction.followUp("Please provide a valid duration. Example: 1d/1h/1m/1s");
+    if (!ms) return interaction.followUp("<:info:1249145380973838478> Please provide a valid duration. Example: 1d/1h/1m/1s");
 
     const reason = `[${message.author.id}] ${interaction.options.getString("reason")}`;
     const target = await interaction.guild.members.fetch(user.id);
@@ -72,11 +72,11 @@ module.exports = {
 };
 
 async function timeout(issuer, target, ms, reason) {
-  if (isNaN(ms)) return "Please provide a valid duration. Example: 1d/1h/1m/1s";
+  if (isNaN(ms)) return "<:info:1249145380973838478> Please provide a valid duration. Example: 1d/1h/1m/1s";
   const response = await timeoutTarget(issuer, target, ms, reason);
-  if (typeof response === "boolean") return `${target.user.username} is timed out!`;
-  if (response === "BOT_PERM") return `I do not have permission to timeout ${target.user.username}`;
-  else if (response === "MEMBER_PERM") return `You do not have permission to timeout ${target.user.username}`;
-  else if (response === "ALREADY_TIMEOUT") return `${target.user.username} is already timed out!`;
-  else return `Failed to timeout ${target.user.username}`;
+  if (typeof response === "boolean") return `<:Timeout:1256322177532297309> ${target.user.username} is timed out!`;
+  if (response === "BOT_PERM") return `<:info:1249145380973838478> I do not have permission to timeout ${target.user.username}`;
+  else if (response === "MEMBER_PERM") return `<:info:1249145380973838478> You do not have permission to timeout ${target.user.username}`;
+  else if (response === "ALREADY_TIMEOUT") return `<:no:1235502897215836160> ${target.user.username} is already timed out!`;
+  else return `<:no:1235502897215836160> Failed to timeout ${target.user.username}`;
 }

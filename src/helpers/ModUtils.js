@@ -248,7 +248,7 @@ module.exports = class ModUtils {
 
       // check if max warnings are reached
       if (memberDb.warnings >= settings.max_warn.limit) {
-        await ModUtils.addModAction(issuer.guild.members.me, target, "Max warnings reached", settings.max_warn.action); // moderate
+        await ModUtils.addModAction(issuer.guild.members.me, target, "⚠️ Max warnings reached", settings.max_warn.action); // moderate
         memberDb.warnings = 0; // reset warnings
       }
 
@@ -448,7 +448,7 @@ module.exports = class ModUtils {
       return true;
     } catch (ex) {
       error(`deafenTarget`, ex);
-      return `Failed to deafen ${target.user.tag}`;
+      return `<:no:1235502897215836160> Failed to deafen ${target.user.tag}`;
     }
   }
 

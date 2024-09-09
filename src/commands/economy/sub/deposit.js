@@ -3,10 +3,10 @@ const { getUser } = require("@schemas/User");
 const { ECONOMY, EMBED_COLORS } = require("@root/config");
 
 module.exports = async (user, coins) => {
-  if (isNaN(coins) || coins <= 0) return "Please enter a valid amount of coins to deposit";
+  if (isNaN(coins) || coins <= 0) return "<:info:1249145380973838478> Please enter a valid amount of coins to deposit";
   const userDb = await getUser(user);
 
-  if (coins > userDb.coins) return `You only have ${userDb.coins}${ECONOMY.CURRENCY} coins in your wallet`;
+  if (coins > userDb.coins) return `<:no:1235502897215836160> You only have ${userDb.coins}${ECONOMY.CURRENCY} coins in your wallet`;
 
   userDb.coins -= coins;
   userDb.bank += coins;

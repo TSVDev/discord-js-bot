@@ -55,9 +55,9 @@ module.exports = {
 
 async function untimeout(issuer, target, reason) {
   const response = await unTimeoutTarget(issuer, target, reason);
-  if (typeof response === "boolean") return `Timeout of ${target.user.username} is removed!`;
-  if (response === "BOT_PERM") return `I do not have permission to remove timeout of ${target.user.username}`;
-  else if (response === "MEMBER_PERM") return `You do not have permission to remove timeout of ${target.user.username}`;
-  else if (response === "NO_TIMEOUT") return `${target.user.username} is not timed out!`;
-  else return `Failed to remove timeout of ${target.user.username}`;
+  if (typeof response === "boolean") return `<:untimeout:1249144366329757771> Timeout of ${target.user.username} is removed!`;
+  if (response === "BOT_PERM") return `<:info:1249145380973838478> I do not have permission to remove timeout of ${target.user.username}`;
+  else if (response === "MEMBER_PERM") return `<:info:1249145380973838478> You do not have permission to remove timeout of ${target.user.username}`;
+  else if (response === "NO_TIMEOUT") return `<:no:1235502897215836160> ${target.user.username} is not timed out!`;
+  else return `<:no:1235502897215836160> Failed to remove timeout of ${target.user.username}`;
 }

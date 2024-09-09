@@ -71,14 +71,14 @@ module.exports = {
 
     //
     else if (sub === "text") {
-      if (args.length < 2) return message.channel.send("Please enter a text");
+      if (args.length < 2) return message.channel.send("<:info:1249145380973838478> Please enter a text");
       const input = args.join(" ");
       const response = await flipText(input);
       await message.safeReply(response);
     }
 
     // else
-    else await message.safeReply("Incorrect command usage");
+    else await message.safeReply("<:info:1249145380973838478> Incorrect command usage");
   },
 
   async interactionRun(interaction) {
@@ -107,13 +107,13 @@ module.exports = {
 };
 
 const firstEmbed = (user) =>
-  new EmbedBuilder().setColor(EMBED_COLORS.TRANSPARENT).setDescription(`${user.username}, started a coin toss`);
+  new EmbedBuilder().setColor(EMBED_COLORS.TRANSPARENT).setDescription(`🪙 ${user.username}, started a coin toss`);
 
-const secondEmbed = () => new EmbedBuilder().setDescription("The coin is in the air");
+const secondEmbed = () => new EmbedBuilder().setDescription("🪙 The coin is in the air");
 
 const resultEmbed = (toss) =>
   new EmbedBuilder()
-    .setDescription(`>> **${toss} Wins** <<`)
+    .setDescription(`🪙 >> **${toss} Wins** << 🪙`)
     .setImage(toss === "HEAD" ? "https://i.imgur.com/HavOS7J.png" : "https://i.imgur.com/u1pmQMV.png");
 
 async function flipText(text) {

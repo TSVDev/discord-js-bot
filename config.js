@@ -24,15 +24,15 @@ module.exports = {
     MEMBERS: 10000,
   },
   MESSAGES: {
-    API_ERROR: "Unexpected Backend Error! Try again later or contact support server",
+    API_ERROR: "<a:info:1235502894170505237> Unexpected Backend Error! Try again later or contact support server",
   },
 
   // PLUGINS
 
   AUTOMOD: {
     ENABLED: false,
-    LOG_EMBED: "#36393F",
-    DM_EMBED: "#36393F",
+    LOG_EMBED: "#FFFF00",
+    DM_EMBED: "#FFFF00",
   },
 
   DASHBOARD: {
@@ -87,16 +87,16 @@ module.exports = {
   MODERATION: {
     ENABLED: true,
     EMBED_COLORS: {
-      TIMEOUT: "#102027",
-      UNTIMEOUT: "#4B636E",
-      KICK: "#FF7961",
-      SOFTBAN: "#AF4448",
+      TIMEOUT: "#FFFF00",
+      UNTIMEOUT: "#00C853",
+      KICK: "#FFA500",
+      SOFTBAN: "#FFC0CB",
       BAN: "#D32F2F",
       UNBAN: "#00C853",
-      VMUTE: "#102027",
-      VUNMUTE: "#4B636E",
-      DEAFEN: "#102027",
-      UNDEAFEN: "#4B636E",
+      VMUTE: "#FFFF00",
+      VUNMUTE: "#00C853",
+      DEAFEN: "#FFA500",
+      UNDEAFEN: "#00C853",
       DISCONNECT: "#D32F2F",
       MOVE: "#102027",
     },
@@ -118,8 +118,8 @@ module.exports = {
   SUGGESTIONS: {
     ENABLED: true, // Should the suggestion system be enabled
     EMOJI: {
-      UP_VOTE: "⬆️",
-      DOWN_VOTE: "⬇️",
+      UP_VOTE: "<:yes:1235503385323769877>",
+      DOWN_VOTE: "<:no:1235502897215836160>",
     },
     DEFAULT_EMBED: "#4F545C",
     APPROVED_EMBED: "#43B581",

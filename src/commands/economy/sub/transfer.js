@@ -3,14 +3,14 @@ const { getUser } = require("@schemas/User");
 const { ECONOMY, EMBED_COLORS } = require("@root/config");
 
 module.exports = async (self, target, coins) => {
-  if (isNaN(coins) || coins <= 0) return "Please enter a valid amount of coins to transfer";
-  if (target.bot) return "You cannot transfer coins to bots!";
-  if (target.id === self.id) return "You cannot transfer coins to self!";
+  if (isNaN(coins) || coins <= 0) return "<:info:1249145380973838478> Please enter a valid amount of coins to transfer";
+  if (target.bot) return "<:bot:1247839084030722109> You cannot transfer coins to bots!";
+  if (target.id === self.id) return "<:no:1235502897215836160> You cannot transfer coins to self!";
 
   const userDb = await getUser(self);
 
   if (userDb.bank < coins) {
-    return `Insufficient bank balance! You only have ${userDb.bank}${ECONOMY.CURRENCY} in your bank account.${
+    return `<:no:1235502897215836160> Insufficient bank balance! You only have ${userDb.bank}${ECONOMY.CURRENCY} in your bank account.${
       userDb.coins > 0 && "\nYou must deposit your coins in bank before you can transfer"
     } `;
   }

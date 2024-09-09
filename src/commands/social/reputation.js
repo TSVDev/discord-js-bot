@@ -76,7 +76,7 @@ module.exports = {
     // give
     else if (sub === "give") {
       const target = await message.guild.resolveMember(args[1]);
-      if (!target) return message.safeReply("Please provide a valid user to give reputation to");
+      if (!target) return message.safeReply("<:info:1249145380973838478> Please provide a valid user to give reputation to");
       response = await giveReputation(message.author, target.user);
     }
 
@@ -133,8 +133,8 @@ async function viewReputation(target) {
 }
 
 async function giveReputation(user, target) {
-  if (target.bot) return "You cannot give reputation to bots";
-  if (target.id === user.id) return "You cannot give reputation to yourself";
+  if (target.bot) return "<:bot:1247839084030722109> You cannot give reputation to bots";
+  if (target.id === user.id) return "<:no:1235502897215836160> You cannot give reputation to yourself";
 
   const userData = await getUser(user);
   if (userData && userData.reputation.timestamp) {
@@ -142,7 +142,7 @@ async function giveReputation(user, target) {
     const diff = diffHours(new Date(), lastRep);
     if (diff < 24) {
       const nextUsage = lastRep.setHours(lastRep.getHours() + 24);
-      return `You can again run this command in \`${getRemainingTime(nextUsage)}\``;
+      return `⌚ You can again run this command in \`${getRemainingTime(nextUsage)}\``;
     }
   }
 

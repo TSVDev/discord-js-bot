@@ -14,7 +14,7 @@ module.exports = {
       const remaining = getRemainingCooldown(interaction.user.id, context);
       if (remaining > 0) {
         return interaction.reply({
-          content: `You are on cooldown. You can again use the command after ${timeformat(remaining)}`,
+          content: `⌚ You are on cooldown. You can again use the command after ${timeformat(remaining)}`,
           ephemeral: true,
         });
       }
@@ -24,7 +24,7 @@ module.exports = {
     if (interaction.member && context.userPermissions && context.userPermissions?.length > 0) {
       if (!interaction.member.permissions.has(context.userPermissions)) {
         return interaction.reply({
-          content: `You need ${parsePermissions(context.userPermissions)} for this command`,
+          content: `<:info:1249145380973838478> You need ${parsePermissions(context.userPermissions)} for this command`,
           ephemeral: true,
         });
       }
@@ -34,7 +34,7 @@ module.exports = {
       await interaction.deferReply({ ephemeral: context.ephemeral });
       await context.run(interaction);
     } catch (ex) {
-      interaction.followUp("Oops! An error occurred while running the command");
+      interaction.followUp("<:no:1235502897215836160> Oops! An error occurred while running the command");
       interaction.client.logger.error("contextRun", ex);
     } finally {
       applyCooldown(interaction.user.id, context);

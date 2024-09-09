@@ -3,11 +3,11 @@
  * @param {string} messageId
  */
 module.exports = async (member, messageId) => {
-  if (!messageId) return "You must provide a valid message id.";
+  if (!messageId) return "<:info:1249145380973838478> You must provide a valid message id.";
 
   // Permissions
   if (!member.permissions.has("ManageMessages")) {
-    return "You need to have the manage messages permissions to start giveaways.";
+    return "<:info:1249145380973838478> You need to have the manage messages permissions to start giveaways.";
   }
 
   // Search with messageId
@@ -16,16 +16,16 @@ module.exports = async (member, messageId) => {
   );
 
   // If no giveaway was found
-  if (!giveaway) return `Unable to find a giveaway for messageId: ${messageId}`;
+  if (!giveaway) return `<:no:1235502897215836160> Unable to find a giveaway for messageId: ${messageId}`;
 
   // Check if the giveaway is ended
-  if (!giveaway.ended) return "The giveaway is not ended yet.";
+  if (!giveaway.ended) return "<:no:1235502897215836160> The giveaway is not ended yet.";
 
   try {
     await giveaway.reroll();
-    return "Giveaway rerolled!";
+    return "<:yes:1235503385323769877> Giveaway rerolled!";
   } catch (error) {
     member.client.logger.error("Giveaway Reroll", error);
-    return `An error occurred while rerolling the giveaway: ${error.message}`;
+    return `<:no:1235502897215836160> An error occurred while rerolling the giveaway: ${error.message}`;
   }
 };

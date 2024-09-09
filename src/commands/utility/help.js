@@ -57,7 +57,7 @@ module.exports = {
     }
 
     // No matching command/category found
-    await message.safeReply("No matching command found");
+    await message.safeReply("<:no:1235502897215836160> No matching command found");
   },
 
   async interactionRun(interaction) {
@@ -78,7 +78,7 @@ module.exports = {
     }
 
     // No matching command/category found
-    await interaction.followUp("No matching command found");
+    await interaction.followUp("<:no:1235502897215836160> No matching command found");
   },
 };
 
@@ -238,7 +238,7 @@ function getSlashCategoryEmbeds(client, category) {
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })
-      .setDescription("No commands in this category");
+      .setDescription("<:no:1235502897215836160> No commands in this category");
 
     return [embed];
   }

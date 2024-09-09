@@ -6,7 +6,7 @@ module.exports = (client) => {
     .setAuthor({ name: "Invite" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
-    .setDescription("Hey there! Thanks for considering to invite me\nUse the button below to navigate where you want");
+    .setDescription("<:Letter:1249144369433415721> Hey there! Thanks for considering to invite me\nUse the button below to navigate where you want");
 
   // Buttons
   let components = [];

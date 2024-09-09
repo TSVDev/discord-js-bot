@@ -42,10 +42,10 @@ module.exports = {
 };
 
 async function getInviter({ guild }, user, settings) {
-  if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
+  if (!settings.invite.tracking) return `<:no:1235502897215836160> Invite tracking is disabled in this server`;
 
   const inviteData = (await getMember(guild.id, user.id)).invite_data;
-  if (!inviteData || !inviteData.inviter) return `Cannot track how \`${user.username}\` joined`;
+  if (!inviteData || !inviteData.inviter) return `<:no:1235502897215836160> Cannot track how \`${user.username}\` joined`;
 
   const inviter = await guild.client.users.fetch(inviteData.inviter, false, true);
   const inviterData = (await getMember(guild.id, inviteData.inviter)).invite_data;

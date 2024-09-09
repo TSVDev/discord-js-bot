@@ -39,9 +39,9 @@ module.exports = {
 };
 
 async function setNewPrefix(newPrefix, settings) {
-  if (newPrefix.length > 2) return "Prefix length cannot exceed `2` characters";
+  if (newPrefix.length > 2) return "<:no:1235502897215836160> Prefix length cannot exceed `2` characters";
   settings.prefix = newPrefix;
   await settings.save();
 
-  return `New prefix is set to \`${newPrefix}\``;
+  return `<:yes:1235503385323769877> New prefix is set to \`${newPrefix}\``;
 }

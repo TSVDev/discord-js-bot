@@ -26,7 +26,7 @@ module.exports = {
   },
   async messageRun(message, args) {
     const channel = message.mentions.channels.first();
-    if (!channel) return message.channel.send('Please enter a channel to unlock');
+    if (!channel) return message.channel.send('<:info:1249145380973838478> Please enter a channel to unlock');
 
     await channel.permissionOverwrites.edit(message.guild.roles.everyone, {
         'SendMessages': null,

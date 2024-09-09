@@ -29,7 +29,7 @@ async function updateCounterChannels(client) {
         if (vc.manageable) vc.setName(channelName).catch((err) => vc.client.logger.log("Set Name error: ", err));
       }
     } catch (ex) {
-      client.logger.error(`Error updating counter channels for guildId: ${guildId}`, ex);
+      client.logger.error(`<:no:1235502897215836160> Error updating counter channels for guildId: ${guildId}`, ex);
     } finally {
       // remove guildId from cache
       const i = client.counterUpdateQueue.indexOf(guild.id);

@@ -77,7 +77,7 @@ async function getRank({ guild }, member, settings) {
       Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
     },
   });
-  if (!response.success) return "Failed to generate rank-card";
+  if (!response.success) return "<:no:1235502897215836160> Failed to generate rank-card";
 
   const attachment = new AttachmentBuilder(response.buffer, { name: "rank.png" });
   return { files: [attachment] };

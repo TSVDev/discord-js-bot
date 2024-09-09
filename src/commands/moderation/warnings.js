@@ -77,7 +77,7 @@ module.exports = {
 
     // else
     else {
-      response = `Invalid subcommand ${sub}`;
+      response = `❔ Invalid subcommand ${sub}`;
     }
 
     await message.safeReply(response);
@@ -102,7 +102,7 @@ module.exports = {
 
     // else
     else {
-      response = `Invalid subcommand ${sub}`;
+      response = `❔ Invalid subcommand ${sub}`;
     }
 
     await interaction.followUp(response);
@@ -110,11 +110,11 @@ module.exports = {
 };
 
 async function listWarnings(target, { guildId }) {
-  if (!target) return "No user provided";
-  if (target.user.bot) return "Bots don't have warnings";
+  if (!target) return "❔ No user provided";
+  if (target.user.bot) return "<:bot:1247839084030722109> Bots don't have warnings";
 
   const warnings = await getWarningLogs(guildId, target.id);
-  if (!warnings.length) return `${target.user.username} has no warnings`;
+  if (!warnings.length) return `😇 ${target.user.username} has no warnings`;
 
   const acc = warnings.map((warning, i) => `${i + 1}. ${warning.reason} [By ${warning.admin.username}]`).join("\n");
   const embed = new EmbedBuilder({
@@ -126,13 +126,13 @@ async function listWarnings(target, { guildId }) {
 }
 
 async function clearWarnings(target, { guildId }) {
-  if (!target) return "No user provided";
-  if (target.user.bot) return "Bots don't have warnings";
+  if (!target) return "❔ No user provided";
+  if (target.user.bot) return "<:bot:1247839084030722109> Bots don't have warnings";
 
   const memberDb = await getMember(guildId, target.id);
   memberDb.warnings = 0;
   await memberDb.save();
 
   await clearWarningLogs(guildId, target.id);
-  return `${target.user.username}'s warnings have been cleared`;
+  return `🧼 ${target.user.username}'s warnings record has been cleaned`;
 }

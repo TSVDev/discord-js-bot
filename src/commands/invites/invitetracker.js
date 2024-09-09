@@ -39,7 +39,7 @@ module.exports = {
 
   async messageRun(message, args, data) {
     const status = args[0].toLowerCase();
-    if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
+    if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
     const response = await setStatus(message, status, data.settings);
     await message.safeReply(response);
   },
@@ -56,7 +56,7 @@ async function setStatus({ guild }, input, settings) {
 
   if (status) {
     if (!guild.members.me.permissions.has(["ManageGuild", "ManageChannels"])) {
-      return "Oops! I am missing `Manage Server`, `Manage Channels` permission!\nI cannot track invites";
+      return "<:info:1249145380973838478> Oops! I am missing `Manage Server`, `Manage Channels` permission!\nI cannot track invites";
     }
 
     const channelMissing = guild.channels.cache
@@ -64,7 +64,7 @@ async function setStatus({ guild }, input, settings) {
       .map((ch) => ch.name);
 
     if (channelMissing.length > 1) {
-      return `I may not be able to track invites properly\nI am missing \`Manage Channel\` permission in the following channels \`\`\`${channelMissing.join(
+      return `<:info:1249145380973838478> I may not be able to track invites properly\nI am missing \`Manage Channel\` permission in the following channels \`\`\`${channelMissing.join(
         ", "
       )}\`\`\``;
     }
@@ -77,5 +77,5 @@ async function setStatus({ guild }, input, settings) {
   settings.invite.tracking = status;
   await settings.save();
 
-  return `Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`;
+  return `<:yes:1235503385323769877> Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`;
 }

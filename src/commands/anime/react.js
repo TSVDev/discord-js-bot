@@ -36,7 +36,7 @@ module.exports = {
   async messageRun(message, args) {
     const category = args[0].toLowerCase();
     if (!choices.includes(category)) {
-      return message.safeReply(`Invalid choice: \`${category}\`.\nAvailable reactions: ${choices.join(", ")}`);
+      return message.safeReply(`<:info:1249145380973838478> Invalid choice: \`${category}\`.\nAvailable reactions: ${choices.join(", ")}`);
     }
 
     const embed = await genReaction(category, message.author);
@@ -73,7 +73,7 @@ const genReaction = async (category, user) => {
   } catch (ex) {
     return new EmbedBuilder()
       .setColor(EMBED_COLORS.ERROR)
-      .setDescription("Failed to fetch meme. Try again!")
+      .setDescription("<:no:1235502897215836160> Failed to fetch meme. Try again!")
       .setFooter({ text: `Requested By ${user.tag}` });
   }
 };

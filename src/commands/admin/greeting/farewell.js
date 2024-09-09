@@ -186,7 +186,7 @@ module.exports = {
     else if (type === "status") {
       const status = args[1]?.toUpperCase();
       if (!status || !["ON", "OFF"].includes(status))
-        return message.safeReply("Invalid status. Value must be `on/off`");
+        return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
       response = await setStatus(settings, status);
     }
 
@@ -198,7 +198,7 @@ module.exports = {
 
     // desc
     else if (type === "desc") {
-      if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
+      if (args.length < 2) return message.safeReply("<:info:1249145380973838478> Insufficient arguments! Please provide valid content");
       const desc = args.slice(1).join(" ");
       response = await setDescription(settings, desc);
     }
@@ -207,20 +207,20 @@ module.exports = {
     else if (type === "thumbnail") {
       const status = args[1]?.toUpperCase();
       if (!status || !["ON", "OFF"].includes(status))
-        return message.safeReply("Invalid status. Value must be `on/off`");
+        return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
       response = await setThumbnail(settings, status);
     }
 
     // color
     else if (type === "color") {
       const color = args[1];
-      if (!color || !isHex(color)) return message.safeReply("Invalid color. Value must be a valid hex color");
+      if (!color || !isHex(color)) return message.safeReply("<:info:1249145380973838478> Invalid color. Value must be a valid hex color");
       response = await setColor(settings, color);
     }
 
     // footer
     else if (type === "footer") {
-      if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
+      if (args.length < 2) return message.safeReply("<:info:1249145380973838478> Insufficient arguments! Please provide valid content");
       const content = args.slice(1).join(" ");
       response = await setFooter(settings, content);
     }
@@ -228,12 +228,12 @@ module.exports = {
     // image
     else if (type === "image") {
       const url = args[1];
-      if (!url) return message.safeReply("Invalid image url. Please provide a valid url");
+      if (!url) return message.safeReply("<:info:1249145380973838478> Invalid image url. Please provide a valid url");
       response = await setImage(settings, url);
     }
 
     //
-    else response = "Invalid command usage!";
+    else response = "<:info:1249145380973838478> Invalid command usage!";
     return message.safeReply(response);
   },
 
@@ -276,7 +276,7 @@ module.exports = {
         break;
 
       default:
-        response = "Invalid subcommand";
+        response = "<:info:1249145380973838478> Invalid subcommand";
     }
 
     return interaction.followUp(response);
@@ -284,62 +284,62 @@ module.exports = {
 };
 
 async function sendPreview(settings, member) {
-  if (!settings.farewell?.enabled) return "Farewell message not enabled in this server";
+  if (!settings.farewell?.enabled) return "<:no:1235502897215836160> Farewell message not enabled in this server";
 
   const targetChannel = member.guild.channels.cache.get(settings.farewell.channel);
-  if (!targetChannel) return "No channel is configured to send farewell message";
+  if (!targetChannel) return "<:no:1235502897215836160> No channel is configured to send farewell message";
 
   const response = await buildGreeting(member, "FAREWELL", settings.farewell);
   await targetChannel.safeSend(response);
 
-  return `Sent farewell preview to ${targetChannel.toString()}`;
+  return `<:yes:1235503385323769877> Sent farewell preview to ${targetChannel.toString()}`;
 }
 
 async function setStatus(settings, status) {
   const enabled = status.toUpperCase() === "ON" ? true : false;
   settings.farewell.enabled = enabled;
   await settings.save();
-  return `Configuration saved! Farewell message ${status ? "enabled" : "disabled"}`;
+  return `<:yes:1235503385323769877> Configuration saved! Farewell message ${status ? "enabled" : "disabled"}`;
 }
 
 async function setChannel(settings, channel) {
   if (!channel.canSendEmbeds()) {
     return (
-      "Ugh! I cannot send greeting to that channel? I need the `Write Messages` and `Embed Links` permissions in " +
+      "<:info:1249145380973838478> Ugh! I cannot send greeting to that channel? I need the `Write Messages` and `Embed Links` permissions in " +
       channel.toString()
     );
   }
   settings.farewell.channel = channel.id;
   await settings.save();
-  return `Configuration saved! Farewell message will be sent to ${channel ? channel.toString() : "Not found"}`;
+  return `<:yes:1235503385323769877> Configuration saved! Farewell message will be sent to ${channel ? channel.toString() : "Not found"}`;
 }
 
 async function setDescription(settings, desc) {
   settings.farewell.embed.description = desc;
   await settings.save();
-  return "Configuration saved! Farewell message updated";
+  return "<:yes:1235503385323769877> Configuration saved! Farewell message updated";
 }
 
 async function setThumbnail(settings, status) {
   settings.farewell.embed.thumbnail = status.toUpperCase() === "ON" ? true : false;
   await settings.save();
-  return "Configuration saved! Farewell message updated";
+  return "<:yes:1235503385323769877> Configuration saved! Farewell message updated";
 }
 
 async function setColor(settings, color) {
   settings.farewell.embed.color = color;
   await settings.save();
-  return "Configuration saved! Farewell message updated";
+  return "<:yes:1235503385323769877> Configuration saved! Farewell message updated";
 }
 
 async function setFooter(settings, content) {
   settings.farewell.embed.footer = content;
   await settings.save();
-  return "Configuration saved! Farewell message updated";
+  return "<:yes:1235503385323769877> Configuration saved! Farewell message updated";
 }
 
 async function setImage(settings, url) {
   settings.farewell.embed.image = url;
   await settings.save();
-  return "Configuration saved! Farewell message updated";
+  return "<:yes:1235503385323769877> Configuration saved! Farewell message updated";
 }

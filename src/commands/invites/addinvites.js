@@ -39,8 +39,8 @@ module.exports = {
     const target = await message.guild.resolveMember(args[0], true);
     const amount = parseInt(args[1]);
 
-    if (!target) return message.safeReply("Incorrect syntax. You must mention a target");
-    if (isNaN(amount)) return message.safeReply("Invite amount must be a number");
+    if (!target) return message.safeReply("<:info:1249145380973838478> Incorrect syntax. You must mention a target");
+    if (isNaN(amount)) return message.safeReply("<:info:1249145380973838478> Invite amount must be a number");
 
     const response = await addInvites(message, target.user, parseInt(amount));
     await message.safeReply(response);
@@ -55,7 +55,7 @@ module.exports = {
 };
 
 async function addInvites({ guild }, user, amount) {
-  if (user.bot) return "Oops! You cannot add invites to bots";
+  if (user.bot) return "<:bot:1247839084030722109> Oops! You cannot add invites to bots";
 
   const memberDb = await getMember(guild.id, user.id);
   memberDb.invite_data.added += amount;

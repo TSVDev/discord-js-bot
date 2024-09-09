@@ -63,7 +63,7 @@ module.exports = {
       },
     });
 
-    if (!response.success) return message.safeReply("Failed to generate image");
+    if (!response.success) return message.safeReply("<:no:1235502897215836160> Failed to generate image");
 
     const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
     const embed = new EmbedBuilder()
@@ -92,7 +92,7 @@ module.exports = {
       },
     });
 
-    if (!response.success) return interaction.followUp("Failed to generate image overlay");
+    if (!response.success) return interaction.followUp("<:no:1235502897215836160> Failed to generate image overlay");
 
     const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
     const embed = new EmbedBuilder()

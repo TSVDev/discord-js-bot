@@ -119,12 +119,12 @@ async function getRandomEmbed(choice) {
 
   const response = await getJson(`https://www.reddit.com/r/${rand}/random/.json`);
   if (!response.success) {
-    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
+    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("<:no:1235502897215836160> Failed to fetch meme. Try again!");
   }
 
   const json = response.data;
   if (!Array.isArray(json) || json.length === 0) {
-    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription(`No meme found matching ${choice}`);
+    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription(`<:no:1235502897215836160> No meme found matching ${choice}`);
   }
 
   try {
@@ -141,6 +141,6 @@ async function getRandomEmbed(choice) {
       .setColor("Random")
       .setFooter({ text: `👍 ${memeUpvotes} | 💬 ${memeNumComments}` });
   } catch (error) {
-    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
+    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("<:no:1235502897215836160> Failed to fetch meme. Try again!");
   }
 }

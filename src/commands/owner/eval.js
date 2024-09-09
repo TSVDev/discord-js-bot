@@ -33,7 +33,7 @@ module.exports = {
   async messageRun(message, args) {
     const input = args.join(" ");
 
-    if (!input) return message.safeReply("Please provide code to eval");
+    if (!input) return message.safeReply("<:info:1249145380973838478> Please provide code to eval");
 
     let response;
     try {

@@ -21,7 +21,7 @@ module.exports = {
     const guild = message.client.guilds.cache.get(input);
     if (!guild) {
       return message.safeReply(
-        `No server found. Please provide a valid server id.
+        `<:no:1235502897215836160> No server found. Please provide a valid server id.
         You may use ${data.prefix}findserver/${data.prefix}listservers to find the server id`
       );
     }
@@ -29,10 +29,10 @@ module.exports = {
     const name = guild.name;
     try {
       await guild.leave();
-      return message.safeReply(`Successfully Left \`${name}\``);
+      return message.safeReply(`<:yes:1235503385323769877> Successfully Left \`${name}\``);
     } catch (err) {
       message.client.logger.error("GuildLeave", err);
-      return message.safeReply(`Failed to leave \`${name}\``);
+      return message.safeReply(`<:no:1235502897215836160> Failed to leave \`${name}\``);
     }
   },
 };

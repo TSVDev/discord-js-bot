@@ -51,7 +51,7 @@ module.exports = {
         response = await getRepLeaderboard(message.author);
         break;
       default:
-        response = "Invalid Leaderboard type. Choose either `xp`, `invite`or `rep`";
+        response = "<:info:1249145380973838478> Invalid Leaderboard type. Choose either `xp`, `invite`or `rep`";
     }
 
     await message.safeReply(response);
@@ -72,7 +72,7 @@ module.exports = {
         response = await getRepLeaderboard(interaction.user);
         break;
       default:
-        response = "Invalid Leaderboard type. Choose either `xp`, `invite`or `rep`";
+        response = "<:info:1249145380973838478> Invalid Leaderboard type. Choose either `xp`, `invite`or `rep`";
     }
     await interaction.followUp(response);
   },
@@ -91,10 +91,10 @@ async function getXpLeaderboard({ guild }, author, settings) {
     return cache.get(cacheKey);
   }
 
-  if (!settings.stats.enabled) return "The leaderboard is disabled on this server";
+  if (!settings.stats.enabled) return "<:no:1235502897215836160> The leaderboard is disabled on this server";
 
   const lb = await getXpLb(guild.id, 10);
-  if (lb.length === 0) return "There are no users in the leaderboard";
+  if (lb.length === 0) return "<:no:1235502897215836160> There are no users in the leaderboard";
 
   let collector = "";
   for (let i = 0; i < lb.length; i++) {
@@ -127,10 +127,10 @@ async function getInviteLeaderboard({ guild }, author, settings) {
     return cache.get(cacheKey);
   }
 
-  if (!settings.invite.tracking) return "Invite tracking is disabled on this server";
+  if (!settings.invite.tracking) return "<:no:1235502897215836160> Invite tracking is disabled on this server";
 
   const lb = await getInvitesLb(guild.id, 10);
-  if (lb.length === 0) return "There are no users in the leaderboard";
+  if (lb.length === 0) return "<:no:1235502897215836160> There are no users in the leaderboard";
 
   let collector = "";
   for (let i = 0; i < lb.length; i++) {
@@ -168,7 +168,7 @@ async function getRepLeaderboard(author) {
   }
 
   const lb = await getReputationLb(10);
-  if (lb.length === 0) return "There are no users in the leaderboard";
+  if (lb.length === 0) return "<:no:1235502897215836160> There are no users in the leaderboard";
 
   let collector = "";
   for (let i = 0; i < lb.length; i++) {

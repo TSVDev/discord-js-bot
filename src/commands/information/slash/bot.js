@@ -51,9 +51,9 @@ module.exports = {
       const response = botInvite(interaction.client);
       try {
         await interaction.user.send(response);
-        return interaction.followUp("Check your DM for my information! :envelope_with_arrow:");
+        return interaction.followUp("Check your DM for my information! <:Letter:1249144369433415721>");
       } catch (ex) {
-        return interaction.followUp("I cannot send you my information! Is your DM open?");
+        return interaction.followUp("<:info:1249145380973838478> I cannot send you my information! Is your DM open?");
       }
     }
 
@@ -65,7 +65,7 @@ module.exports = {
 
     // Uptime
     else if (sub === "uptime") {
-      await interaction.followUp(`My Uptime: \`${timeformat(process.uptime())}\``);
+      await interaction.followUp(`⌚ My Uptime: \`${timeformat(process.uptime())}\``);
     }
   },
 };

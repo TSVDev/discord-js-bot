@@ -158,7 +158,7 @@ async function performAutomod(message, settings) {
   if (shouldDelete && message.deletable) {
     message
       .delete()
-      .then(() => channel.safeSend("> Auto-Moderation! Message deleted", 5))
+      .then(() => channel.safeSend("> ⚠️ Auto-Moderation! Message deleted", 5))
       .catch(() => {});
   }
 
@@ -178,7 +178,7 @@ async function performAutomod(message, settings) {
         .setThumbnail(author.displayAvatarURL())
         .setColor(AUTOMOD.LOG_EMBED)
         .addFields(fields)
-        .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
+        .setDescription(`⚠️ **Channel:** ${channel.toString()}\n**Content:**\n${content}`)
         .setFooter({
           text: `By ${author.username} | ${author.id}`,
           iconURL: author.avatarURL(),
@@ -194,7 +194,7 @@ async function performAutomod(message, settings) {
       .setAuthor({ name: "Auto Moderation" })
       .addFields(fields)
       .setDescription(
-        `You have received ${strikesTotal} strikes!\n\n` +
+        `⚠️ You have received ${strikesTotal} strikes!\n\n` +
           `**Guild:** ${guild.name}\n` +
           `**Total Strikes:** ${memberDb.strikes} out of ${automod.strikes}`
       );
@@ -207,7 +207,7 @@ async function performAutomod(message, settings) {
       memberDb.strikes = 0;
 
       // Add Moderation Action
-      await addModAction(guild.members.me, member, "Automod: Max strikes received", automod.action).catch(() => {});
+      await addModAction(guild.members.me, member, "⚠️ Automod: Max strikes received", automod.action).catch(() => {});
     }
 
     await memberDb.save();
