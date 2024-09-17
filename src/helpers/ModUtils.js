@@ -245,6 +245,7 @@ module.exports = class ModUtils {
       const memberDb = await getMember(issuer.guild.id, target.id);
       memberDb.warnings += 1;
       const settings = await getSettings(issuer.guild);
+      await target.user.send(`⚠️ You have been warned!\n Reason: ${reason}`).catch((ex) => {});
 
       // check if max warnings are reached
       if (memberDb.warnings >= settings.max_warn.limit) {
@@ -275,6 +276,7 @@ module.exports = class ModUtils {
     try {
       await target.timeout(ms, reason);
       logModeration(issuer, target, reason, "Timeout");
+      await target.user.send(`<:Timeout:1256322177532297309> You have been timed out!\n Reason: ${reason}\n Time: ${ms}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error("timeoutTarget", ex);
@@ -292,10 +294,11 @@ module.exports = class ModUtils {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
     if (target.communicationDisabledUntilTimestamp - Date.now() < 0) return "NO_TIMEOUT";
-
+    await target.user.send(`<:untimeout:1249144366329757771> You have been untimed out!\n Reason: ${reason}`).catch((ex) => {});
     try {
       await target.timeout(null, reason);
       logModeration(issuer, target, reason, "UnTimeout");
+      
       return true;
     } catch (ex) {
       error("unTimeoutTarget", ex);
@@ -312,10 +315,11 @@ module.exports = class ModUtils {
   static async kickTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
-
+    await target.user.send(`👢 You have been kicked!\n Reason: ${reason}`).catch((ex) => {});
     try {
       await target.kick(reason);
       logModeration(issuer, target, reason, "Kick");
+      
       return true;
     } catch (ex) {
       error("kickTarget", ex);
@@ -337,6 +341,7 @@ module.exports = class ModUtils {
       await target.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
       await issuer.guild.members.unban(target.user);
       logModeration(issuer, target, reason, "Softban");
+      await target.user.send(`<:Ban:1256333889950060554> You have been softbanned!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error("softbanTarget", ex);
@@ -359,6 +364,7 @@ module.exports = class ModUtils {
     try {
       await issuer.guild.bans.create(target.id, { deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
       logModeration(issuer, target, reason, "Ban");
+      await target.user.send(`<:Ban:1256333889950060554> You have been banned!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`banTarget`, ex);
@@ -376,6 +382,7 @@ module.exports = class ModUtils {
     try {
       await issuer.guild.bans.remove(target, reason);
       logModeration(issuer, target, reason, "UnBan");
+      await target.user.send(`😇 You have been unbanned!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`unBanTarget`, ex);
@@ -399,6 +406,7 @@ module.exports = class ModUtils {
     try {
       await target.voice.setMute(true, reason);
       logModeration(issuer, target, reason, "Vmute");
+      await target.user.send(`<a:micmutea:1249144381177466953> You have been VC Muted!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`vMuteTarget`, ex);
@@ -422,6 +430,7 @@ module.exports = class ModUtils {
     try {
       await target.voice.setMute(false, reason);
       logModeration(issuer, target, reason, "Vmute");
+      await target.user.send(`<a:micanimation:1249144379969634334> You have been VC Unmuted!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`vUnmuteTarget`, ex);
@@ -445,6 +454,7 @@ module.exports = class ModUtils {
     try {
       await target.voice.setDeaf(true, reason);
       logModeration(issuer, target, reason, "Deafen");
+      await target.user.send(`<a:soundmutea:1249144368401485835> You have been VC Deafened!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`deafenTarget`, ex);
@@ -468,6 +478,7 @@ module.exports = class ModUtils {
     try {
       await target.voice.setDeaf(false, reason);
       logModeration(issuer, target, reason, "unDeafen");
+      await target.user.send(`<a:soundanimation:1249144382502998071> You have been VC Undeafened!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`unDeafenTarget`, ex);
@@ -490,6 +501,7 @@ module.exports = class ModUtils {
     try {
       await target.voice.disconnect(reason);
       logModeration(issuer, target, reason, "Disconnect");
+      await target.user.send(`🚫 You have been VC Disconnected!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`unDeafenTarget`, ex);
@@ -516,6 +528,7 @@ module.exports = class ModUtils {
     try {
       await target.voice.setChannel(channel, reason);
       logModeration(issuer, target, reason, "Move", { channel });
+      await target.user.send(`📞 You have been VC Moved!\n Reason: ${reason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`moveTarget`, ex);
