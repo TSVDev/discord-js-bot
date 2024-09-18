@@ -245,7 +245,21 @@ module.exports = class ModUtils {
       const memberDb = await getMember(issuer.guild.id, target.id);
       memberDb.warnings += 1;
       const settings = await getSettings(issuer.guild);
-      await target.user.send(`⚠️ You have been warned!\n Reason: ${reason}`).catch((ex) => {});
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Warned!" })
+        .setColor(FFFF00)
+        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`⚠️ You have been warned!\n Reason: ${reason}`).catch((ex) => {});
 
       // check if max warnings are reached
       if (memberDb.warnings >= settings.max_warn.limit) {
@@ -268,6 +282,7 @@ module.exports = class ModUtils {
    * @param {number} ms
    * @param {string} reason
    */
+
   static async timeoutTarget(issuer, target, ms, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
@@ -275,8 +290,30 @@ module.exports = class ModUtils {
 
     try {
       await target.timeout(ms, reason);
-      logModeration(issuer, target, reason, "Timeout");
-      await target.user.send(`<:Timeout:1256322177532297309> You have been timed out!\n Reason: ${reason}\n Time: ${ms}`).catch((ex) => {});
+
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      const tt = `<t:${Math.round(target.communicationDisabledUntilTimestamp / 1000)}:R>`
+
+      logModeration(issuer, target, dmReason, "Timeout");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Timeout!" })
+        .setColor(MODERATION.EMBED_COLORS.TIMEOUT)
+        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+        {name:`Expires:`, value: `${tt}`},
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`<:Timeout:1256322177532297309> You have been timed out!\n Reason: ${dmReason}\n Expires: ${tt}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error("timeoutTarget", ex);
@@ -294,10 +331,30 @@ module.exports = class ModUtils {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
     if (target.communicationDisabledUntilTimestamp - Date.now() < 0) return "NO_TIMEOUT";
-    await target.user.send(`<:untimeout:1249144366329757771> You have been untimed out!\n Reason: ${reason}`).catch((ex) => {});
+    
     try {
       await target.timeout(null, reason);
-      logModeration(issuer, target, reason, "UnTimeout");
+
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "UnTimeout");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Untimedout!" })
+        .setColor(MODERATION.EMBED_COLORS.UNTIMEOUT)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`<:untimeout:1249144366329757771> You have been untimed out!\n Reason: ${dmReason}`).catch((ex) => {});
       
       return true;
     } catch (ex) {
@@ -315,10 +372,30 @@ module.exports = class ModUtils {
   static async kickTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
-    await target.user.send(`👢 You have been kicked!\n Reason: ${reason}`).catch((ex) => {});
+    
     try {
       await target.kick(reason);
-      logModeration(issuer, target, reason, "Kick");
+
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "Kick");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Kicked!" })
+        .setColor(MODERATION.EMBED_COLORS.KICK)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`👢 You have been kicked!\n Reason: ${dmReason}`).catch((ex) => {});
       
       return true;
     } catch (ex) {
@@ -340,8 +417,27 @@ module.exports = class ModUtils {
     try {
       await target.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
       await issuer.guild.members.unban(target.user);
-      logModeration(issuer, target, reason, "Softban");
-      await target.user.send(`<:Ban:1256333889950060554> You have been softbanned!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "Softban");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Softbanned!" })
+        .setColor(MODERATION.EMBED_COLORS.SOFTBAN)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+      
+      //await target.user.send(`<:Ban:1256333889950060554> You have been softbanned!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error("softbanTarget", ex);
@@ -363,8 +459,27 @@ module.exports = class ModUtils {
 
     try {
       await issuer.guild.bans.create(target.id, { deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
-      logModeration(issuer, target, reason, "Ban");
-      await target.user.send(`<:Ban:1256333889950060554> You have been banned!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "Ban");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Banned!" })
+        .setColor(MODERATION.EMBED_COLORS.BAN)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`<:Ban:1256333889950060554> You have been banned!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`banTarget`, ex);
@@ -381,8 +496,27 @@ module.exports = class ModUtils {
   static async unBanTarget(issuer, target, reason) {
     try {
       await issuer.guild.bans.remove(target, reason);
-      logModeration(issuer, target, reason, "UnBan");
-      await target.user.send(`😇 You have been unbanned!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "UnBan");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Unbanned!" })
+        .setColor(MODERATION.EMBED_COLORS.UNBAN)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`😇 You have been unbanned!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`unBanTarget`, ex);
@@ -405,8 +539,28 @@ module.exports = class ModUtils {
 
     try {
       await target.voice.setMute(true, reason);
-      logModeration(issuer, target, reason, "Vmute");
-      await target.user.send(`<a:micmutea:1249144381177466953> You have been VC Muted!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "Vmute");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Muted!" })
+        .setColor(MODERATION.EMBED_COLORS.VMUTE)
+        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`<a:micmutea:1249144381177466953> You have been VC Muted!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`vMuteTarget`, ex);
@@ -429,8 +583,27 @@ module.exports = class ModUtils {
 
     try {
       await target.voice.setMute(false, reason);
-      logModeration(issuer, target, reason, "Vmute");
-      await target.user.send(`<a:micanimation:1249144379969634334> You have been VC Unmuted!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "Vunmute");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Unmuted!" })
+        .setColor(MODERATION.EMBED_COLORS.VUNMUTE)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`<a:micanimation:1249144379969634334> You have been VC Unmuted!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`vUnmuteTarget`, ex);
@@ -453,8 +626,28 @@ module.exports = class ModUtils {
 
     try {
       await target.voice.setDeaf(true, reason);
-      logModeration(issuer, target, reason, "Deafen");
-      await target.user.send(`<a:soundmutea:1249144368401485835> You have been VC Deafened!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "Deafen");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Deafened!" })
+        .setColor(MODERATION.EMBED_COLORS.DEAFEN)
+        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`<a:soundmutea:1249144368401485835> You have been VC Deafened!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`deafenTarget`, ex);
@@ -477,8 +670,27 @@ module.exports = class ModUtils {
 
     try {
       await target.voice.setDeaf(false, reason);
-      logModeration(issuer, target, reason, "unDeafen");
-      await target.user.send(`<a:soundanimation:1249144382502998071> You have been VC Undeafened!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "unDeafen");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Undeafened!" })
+        .setColor(MODERATION.EMBED_COLORS.UNDEAFEN)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`<a:soundanimation:1249144382502998071> You have been VC Undeafened!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`unDeafenTarget`, ex);
@@ -500,8 +712,28 @@ module.exports = class ModUtils {
 
     try {
       await target.voice.disconnect(reason);
-      logModeration(issuer, target, reason, "Disconnect");
-      await target.user.send(`🚫 You have been VC Disconnected!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "Disconnect");
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Disconnected!" })
+        .setColor(MODERATION.EMBED_COLORS.DISCONNECT)
+        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`🚫 You have been VC Disconnected!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`unDeafenTarget`, ex);
@@ -527,8 +759,27 @@ module.exports = class ModUtils {
 
     try {
       await target.voice.setChannel(channel, reason);
-      logModeration(issuer, target, reason, "Move", { channel });
-      await target.user.send(`📞 You have been VC Moved!\n Reason: ${reason}`).catch((ex) => {});
+      
+      // Remove a section based on a pattern
+      let dmReason = reason.replace(/\[.*\]/, "");
+  
+      console.log(dmReason); // Output: "This is a message ."
+
+      logModeration(issuer, target, dmReason, "Move", { channel });
+
+      const dmEmbed = new EmbedBuilder()
+        .setAuthor({ name: "You Have Been Moved!" })
+        .setColor(MODERATION.EMBED_COLORS.MOVE)
+        .addFields(
+          {name:`Reason:`, value: `${reason}`},
+          {name:`Channel:`, value: `${channel}`},
+        )
+        .setTimestamp()
+        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+
+        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      //await target.user.send(`📞 You have been VC Moved!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`moveTarget`, ex);
