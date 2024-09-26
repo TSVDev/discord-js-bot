@@ -279,11 +279,13 @@ async function handleTicketOpen(interaction) {
     
     const staffRolesPing = staffRoles.map(roleId => `<@&${roleId}>`).join(' ');
     const embed = new EmbedBuilder()
-      .setAuthor({ name: `<:Ticket:1249144390966968352> Ticket #${ticketNumber}` })
+      .setAuthor({ name: `Ticket #${ticketNumber}` })
       .setDescription(
-        `Hello ${user.toString()}
-        Support will be with you shortly.\n
-        In the mean time, please inform us why you opened this ticket.
+        `<:Ticket:1249144390966968352> Hello ${user.toString()}
+        Our Staff will be with you shortly.\n
+        In the mean time, please inform us why you opened this ticket.\n\n
+
+        ${staffRolesPing}
         ${catName ? `\n**Category:** ${catName}` : ""}
         `
       )

@@ -37,7 +37,7 @@ module.exports = {
         name: "reason",
         description: "reason for timeout",
         type: ApplicationCommandOptionType.String,
-        required: false,
+        required: true,
       },
     ],
   },

@@ -248,7 +248,7 @@ module.exports = class ModUtils {
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Warned!" })
-        .setColor(FFFF00)
+        .setColor(MODERATION.EMBED_COLORS.TIMEOUT)
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${reason}`},
@@ -305,7 +305,7 @@ module.exports = class ModUtils {
         .setColor(MODERATION.EMBED_COLORS.TIMEOUT)
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
         {name:`Expires:`, value: `${tt}`},
         )
         .setTimestamp()
@@ -346,7 +346,7 @@ module.exports = class ModUtils {
         .setAuthor({ name: "You Have Been Untimedout!" })
         .setColor(MODERATION.EMBED_COLORS.UNTIMEOUT)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
@@ -374,7 +374,7 @@ module.exports = class ModUtils {
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
     
     try {
-      await target.kick(reason);
+      
 
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
@@ -387,13 +387,15 @@ module.exports = class ModUtils {
         .setAuthor({ name: "You Have Been Kicked!" })
         .setColor(MODERATION.EMBED_COLORS.KICK)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      await target.kick(reason);
 
       //await target.user.send(`👢 You have been kicked!\n Reason: ${dmReason}`).catch((ex) => {});
       
@@ -415,8 +417,7 @@ module.exports = class ModUtils {
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     try {
-      await target.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
-      await issuer.guild.members.unban(target.user);
+      
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
@@ -429,13 +430,16 @@ module.exports = class ModUtils {
         .setAuthor({ name: "You Have Been Softbanned!" })
         .setColor(MODERATION.EMBED_COLORS.SOFTBAN)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+      await target.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
+      await issuer.guild.members.unban(target.user);
       
       //await target.user.send(`<:Ban:1256333889950060554> You have been softbanned!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
@@ -458,7 +462,7 @@ module.exports = class ModUtils {
     if (targetMem && !memberInteract(issuer.guild.members.me, targetMem)) return "BOT_PERM";
 
     try {
-      await issuer.guild.bans.create(target.id, { deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
+     
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
@@ -471,13 +475,15 @@ module.exports = class ModUtils {
         .setAuthor({ name: "You Have Been Banned!" })
         .setColor(MODERATION.EMBED_COLORS.BAN)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+
+        await issuer.guild.bans.create(target.id, { deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
 
       //await target.user.send(`<:Ban:1256333889950060554> You have been banned!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
@@ -508,15 +514,15 @@ module.exports = class ModUtils {
         .setAuthor({ name: "You Have Been Unbanned!" })
         .setColor(MODERATION.EMBED_COLORS.UNBAN)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
-
-      //await target.user.send(`😇 You have been unbanned!\n Reason: ${dmReason}`).catch((ex) => {});
+        //await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+      
+      
       return true;
     } catch (ex) {
       error(`unBanTarget`, ex);
@@ -552,7 +558,7 @@ module.exports = class ModUtils {
         .setColor(MODERATION.EMBED_COLORS.VMUTE)
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
@@ -595,7 +601,7 @@ module.exports = class ModUtils {
         .setAuthor({ name: "You Have Been Unmuted!" })
         .setColor(MODERATION.EMBED_COLORS.VUNMUTE)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
@@ -639,7 +645,7 @@ module.exports = class ModUtils {
         .setColor(MODERATION.EMBED_COLORS.DEAFEN)
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
@@ -682,7 +688,7 @@ module.exports = class ModUtils {
         .setAuthor({ name: "You Have Been Undeafened!" })
         .setColor(MODERATION.EMBED_COLORS.UNDEAFEN)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
@@ -725,7 +731,7 @@ module.exports = class ModUtils {
         .setColor(MODERATION.EMBED_COLORS.DISCONNECT)
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           
         )
         .setTimestamp()
@@ -771,7 +777,7 @@ module.exports = class ModUtils {
         .setAuthor({ name: "You Have Been Moved!" })
         .setColor(MODERATION.EMBED_COLORS.MOVE)
         .addFields(
-          {name:`Reason:`, value: `${reason}`},
+          {name:`Reason:`, value: `${dmReason}`},
           {name:`Channel:`, value: `${channel}`},
         )
         .setTimestamp()

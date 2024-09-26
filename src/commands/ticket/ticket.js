@@ -458,7 +458,7 @@ async function setupLimit(limit, settings) {
 }
 
 async function close({ channel }, author, reason) {
-  if (!isTicketChannel(channel)) return "This command can only be used in ticket channels";
+  if (!isTicketChannel(channel)) return "<:info:1249145380973838478> This command can only be used in ticket channels";
   const status = await closeTicket(channel, author, reason);
   if (status === "MISSING_PERMISSIONS") return "<:info:1249145380973838478> I do not have permission to close tickets";
   if (status === "ERROR") return "<:info:1249145380973838478> An error occurred while closing the ticket";
