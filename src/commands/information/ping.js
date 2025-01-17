@@ -61,15 +61,15 @@ async function getPingData(client) {
     .setFooter({ text: `Pinged At` })
     .addFields(
       {
-        name: 'Websocket Latency',
+        name: 'Websocket Latency:',
         value: `${wsEmoji} \`${ws}ms\``,
       },
       {
-        name: 'API Latency',
+        name: 'API Latency:',
         value: `${msgEmoji} \`${msgEdit}ms\``,
       },
       {
-        name: `${client.user.username} Uptime`,
+        name: `${client.user.username} Uptime:`,
         value: `<:Timer:1279730845971910719> \`${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds\``,
       }
     );

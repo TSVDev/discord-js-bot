@@ -43,7 +43,7 @@ module.exports = {
   async messageRun(message, args) {
     const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]);
     if (!channel) return message.reply("<:info:1249145380973838478> Please provide a valid channel");
-    if (channel.type !== ChannelType.GuildText) return message.reply("<:info:1249145380973838478> Please provide a valid channel");
+    if (channel.type !== ChannelType.GuildText) return message.reply("<:info:1249145380973838478> Please provide a valid channel.");
     if (!channel.canSendEmbeds()) {
       return message.reply("<:info:1249145380973838478> I don't have permission to send embeds in that channel");
     }

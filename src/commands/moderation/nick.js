@@ -69,7 +69,7 @@ module.exports = {
 
     if (sub === "set") {
       const target = await message.guild.resolveMember(args[1]);
-      if (!target) return message.safeReply("<:no:1235502897215836160> Could not find matching member");
+      if (!target) return message.safeReply("<:no:1235502897215836160> Could not find matching member. Make sure you input a valid user ID or mention.");
       const name = args.slice(2).join(" ");
       if (!name) return message.safeReply("<:info:1249145380973838478> Please specify a nickname");
 
@@ -80,7 +80,7 @@ module.exports = {
     //
     else if (sub === "reset") {
       const target = await message.guild.resolveMember(args[1]);
-      if (!target) return message.safeReply("<:no:1235502897215836160> Could not find matching member");
+      if (!target) return message.safeReply("<:no:1235502897215836160> Could not find matching member. Make sure you input a valid user ID or mention.");
 
       const response = await nickname(message, target);
       return message.safeReply(response);

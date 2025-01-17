@@ -184,14 +184,14 @@ module.exports = {
     // whitelist add
     else if (input === "whitelistadd") {
       const match = message.guild.findMatchingChannels(args[1]);
-      if (!match.length) return message.safeReply(`<:no:1235502897215836160> No channel found matching ${args[1]}`);
+      if (!match.length) return message.safeReply(`<:no:1235502897215836160> No channel found matching " ${args[1]} ". Make sure you input a valid channel ID or mention.`);
       response = await whiteListAdd(settings, match[0].id);
     }
 
     // whitelist remove
     else if (input === "whitelistremove") {
       const match = message.guild.findMatchingChannels(args[1]);
-      if (!match.length) return message.safeReply(`<:no:1235502897215836160> No channel found matching ${args[1]}`);
+      if (!match.length) return message.safeReply(`<:no:1235502897215836160> No channel found matching " ${args[1]}:". Make sure you input a valid channel ID or mention.`);
       response = await whiteListRemove(settings, match[0].id);
     }
 

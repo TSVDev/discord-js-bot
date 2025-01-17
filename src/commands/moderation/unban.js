@@ -82,7 +82,7 @@ async function getMatchingBans(guild, match) {
     }
   }
 
-  if (matched.length === 0) return `<:no:1235502897215836160> No user found matching ${match}`;
+  if (matched.length === 0) return `<:no:1235502897215836160> No user found matching " ${match} ". Make sure you input a valid user ID or mention.`;
 
   const options = [];
   for (const user of matched) {

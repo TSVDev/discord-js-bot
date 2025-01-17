@@ -162,7 +162,7 @@ async function removeCategory(data, category) {
   const categories = data.settings.ticket.categories;
   // check if category exists
   if (!categories.find((c) => c.name === category)) {
-    return `<:no:1235502897215836160> Category \`${category}\` does not exist.`;
+    return `<:no:1235502897215836160> Category \`${category}\` does not exist. Make sure you input a valid catagory ID.`;
   }
 
   data.settings.ticket.categories = categories.filter((c) => c.name !== category);

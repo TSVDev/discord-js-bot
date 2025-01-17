@@ -18,7 +18,7 @@ module.exports = {
 
   async messageRun(message, args) {
     const target = await message.guild.resolveMember(args[0]);
-    if (!target) return message.safeReply(`<:no:1235502897215836160> No users found matching ${args[0]}`);
+    if (!target) return message.safeReply(`<:no:1235502897215836160> No users found matching " ${args[0]} ". Make sure you input a valid user ID or mention.`);
     const amount = (args.length > 1 && args[1]) || 99;
 
     if (amount) {

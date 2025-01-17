@@ -51,12 +51,12 @@ module.exports = {
 
   async messageRun(message, args) {
     const targetChannel = message.guild.findMatchingChannels(args[0]);
-    if (targetChannel.length === 0) return message.safeReply(`No channels found matching ${args[0]}`);
+    if (targetChannel.length === 0) return message.safeReply(`No channels found matching " ${args[0]}". Make sure you input a valid channel ID or mention.`);
 
     const targetMessage = args[1];
 
     const role = message.guild.findMatchingRoles(args[3])[0];
-    if (!role) return message.safeReply(`No roles found matching ${args[3]}`);
+    if (!role) return message.safeReply(`No roles found matching " ${args[3]} ". Make sure you input a valid role ID or mention.`);
 
     const reaction = args[2];
 

@@ -39,7 +39,7 @@ module.exports = {
 
   async messageRun(message, args) {
     const targetChannel = message.guild.findMatchingChannels(args[0]);
-    if (targetChannel.length === 0) return message.safeReply(`<:no:1235502897215836160> No channels found matching ${args[0]}`);
+    if (targetChannel.length === 0) return message.safeReply(`<:no:1235502897215836160> No channels found matching " ${args[0]}" Make sure you input a valid channel ID or mention.`);
 
     const targetMessage = args[1];
     const response = await removeRR(message.guild, targetChannel[0], targetMessage);

@@ -26,9 +26,9 @@ const CLOSE_PERMS = ["ManageChannels", "ReadMessageHistory"];
 function isTicketChannel(channel) {
   return (
     channel.type === ChannelType.GuildText &&
-    channel.name.startsWith("🎟︱tіcket-") &&
+    channel.name.startsWith("<:Ticket:1328782536800735304>︱tіcket-") &&
     channel.topic &&
-    channel.topic.startsWith("Tіcket |")
+    channel.topic.startsWith("Tіcket|")
   );
 }
 
@@ -97,19 +97,20 @@ async function closeTicket(channel, closedBy, reason) {
 
     if (channel.deletable) await channel.delete();
 
-    const embed = new EmbedBuilder().setAuthor({ name: "Ticket Closed" }).setColor(TICKET.CLOSE_EMBED);
+    const embed = new EmbedBuilder().setAuthor({ name: "<:Ticket:1328782536800735304> Ticket Closed" }).setColor(TICKET.CLOSE_EMBED);
     const fields = [];
 
     if (reason) fields.push({ name: "Reason", value: reason, inline: false });
     fields.push(
       {
         name: "Opened By",
-        value: ticketDetails.user ? ticketDetails.user.username : "Unknown",
+        value: ticketDetails.user ? ticketDetails.user.username + "\n" + `<@${ticketDetails.user.id}>` + "\n" + `${ticketDetails.user.id}` : "Unknown",
         inline: true,
       },
       {
         name: "Closed By",
-        value: closedBy ? closedBy.username : "Unknown",
+        value: closedBy ? closedBy.username + "\n" + `<@${closedBy.id}>` + "\n" + `${closedBy.id}` : "Unknown",
+
         inline: true,
       }
     );
@@ -270,7 +271,7 @@ async function handleTicketOpen(interaction) {
     }
 
     const tktChannel = await guild.channels.create({
-      name: `🎟︱tіcket-${ticketNumber}`,
+      name: `<:Ticket:1328782536800735304>︱tіcket-${ticketNumber}`,
       type: ChannelType.GuildText,
       topic: `Tіcket | ${user.id} | ${catName || "Default"}`,
       permissionOverwrites,
@@ -281,12 +282,11 @@ async function handleTicketOpen(interaction) {
     const embed = new EmbedBuilder()
       .setAuthor({ name: `Ticket #${ticketNumber}` })
       .setDescription(
-        `<:Ticket:1249144390966968352> Hello ${user.toString()}
-        Our Staff will be with you shortly.\n
+        `<:Ticket:1328782536800735304> Hello ${user.toString()}
+        Our staff will be with you shortly.\n
         In the mean time, please inform us why you opened this ticket.\n\n
-
-        ${staffRolesPing}
         ${catName ? `\n**Category:** ${catName}` : ""}
+        ${staffRolesPing}
         `
       )
       .setFooter({ text: "You may close your ticket anytime by clicking the button below" });
@@ -303,7 +303,7 @@ async function handleTicketOpen(interaction) {
 
     const dmEmbed = new EmbedBuilder()
       .setColor(TICKET.CREATE_EMBED)
-      .setAuthor({ name: "<:Ticket:1249144390966968352> Ticket Created" })
+      .setAuthor({ name: "<:Ticket:1328782536800735304> Ticket Created" })
       .setThumbnail(guild.iconURL())
       .setDescription(
         `**Server:** ${guild.name}

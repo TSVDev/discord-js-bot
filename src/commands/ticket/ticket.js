@@ -180,7 +180,7 @@ module.exports = {
       }
       const targetChannel = message.guild.findMatchingChannels(args[1])[0];
       if (!targetChannel) {
-        return message.safeReply("<:info:1249145380973838478> I could not find channel with that name");
+        return message.safeReply("<:info:1249145380973838478> I could not find channel with that name. Make sure you input a valid channel ID or mention");
       }
       return ticketModalSetup(message, targetChannel, data.settings);
     }
@@ -189,7 +189,7 @@ module.exports = {
     else if (input === "log") {
       if (args.length < 2) return message.safeReply("<:info:1249145380973838478> Please provide a channel where ticket logs must be sent");
       const target = message.guild.findMatchingChannels(args[1]);
-      if (target.length === 0) return message.safeReply("<:info:1249145380973838478> Could not find any matching channel");
+      if (target.length === 0) return message.safeReply("<:info:1249145380973838478> Could not find any matching channel. Make sure you input a valid channel ID or mention");
       response = await setupLogChannel(target[0], data.settings);
     }
 

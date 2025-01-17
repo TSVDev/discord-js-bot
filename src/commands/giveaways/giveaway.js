@@ -179,7 +179,7 @@ module.exports = {
     if (sub === "start") {
       if (!args[1]) return message.safeReply("<:info:1249145380973838478> Incorrect usage! Please provide a channel to start the giveaway in");
       const match = message.guild.findMatchingChannels(args[1]);
-      if (!match.length) return message.safeReply(`<:no:1235502897215836160> No channel found matching ${args[1]}`);
+      if (!match.length) return message.safeReply(`<:no:1235502897215836160> No channel found matching " ${args[1]} ". Make sure you input a valid channel ID or mention.`);
       return await runModalSetup(message, match[0]);
     }
 

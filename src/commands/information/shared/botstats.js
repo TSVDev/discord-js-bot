@@ -36,13 +36,13 @@ module.exports = (client) => {
   desc += "\n";
 
   const embed = new EmbedBuilder()
-    .setTitle("Bot Information")
+    .setTitle("Bot Information:")
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
     .setDescription(desc)
     .addFields(
       {
-        name: "CPU",
+        name: "CPU:",
         value: stripIndent`
         ❯ **OS:** ${platform} [${architecture}]
         ❯ **Cores:** ${cores}
@@ -51,7 +51,7 @@ module.exports = (client) => {
         inline: true,
       },
       {
-        name: "Bot's RAM",
+        name: "Bot's RAM:",
         value: stripIndent`
         ❯ **Used:** ${botUsed}
         ❯ **Available:** ${botAvailable}
@@ -60,7 +60,7 @@ module.exports = (client) => {
         inline: true,
       },
       {
-        name: "Overall RAM",
+        name: "Overall RAM:",
         value: stripIndent`
         ❯ **Used:** ${overallUsed}
         ❯ **Available:** ${overallAvailable}
@@ -69,12 +69,12 @@ module.exports = (client) => {
         inline: true,
       },
       {
-        name: "Node Js version",
+        name: "Node Js version:",
         value: process.versions.node,
         inline: false,
       },
       {
-        name: "Uptime",
+        name: "Uptime:",
         value: "```" + timeformat(process.uptime()) + "```",
         inline: false,
       }
