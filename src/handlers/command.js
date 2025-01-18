@@ -41,14 +41,14 @@ module.exports = {
     // check user permissions
     if (cmd.userPermissions && cmd.userPermissions?.length > 0) {
       if (!message.channel.permissionsFor(message.member).has(cmd.userPermissions)) {
-        return message.safeReply(`<:info:1249145380973838478> You need ${parsePermissions(cmd.userPermissions)} for this command`);
+        return message.safeReply(`<:Info:1330256387959164928> You need ${parsePermissions(cmd.userPermissions)} for this command`);
       }
     }
 
     // check bot permissions
     if (cmd.botPermissions && cmd.botPermissions.length > 0) {
       if (!message.channel.permissionsFor(message.guild.members.me).has(cmd.botPermissions)) {
-        return message.safeReply(`<:info:1249145380973838478> I need ${parsePermissions(cmd.botPermissions)} for this command`);
+        return message.safeReply(`<:Info:1330256387959164928> I need ${parsePermissions(cmd.botPermissions)} for this command`);
       }
     }
 
@@ -70,7 +70,7 @@ module.exports = {
       await cmd.messageRun(message, args, data);
     } catch (ex) {
       message.client.logger.error("messageRun", ex);
-      message.safeReply("<:no:1235502897215836160> An error occurred while running this command");
+      message.safeReply("<:No:1330253494447243355> An error occurred while running this command");
     } finally {
       if (cmd.cooldown > 0) applyCooldown(message.author.id, cmd);
     }
@@ -81,7 +81,7 @@ module.exports = {
    */
   handleSlashCommand: async function (interaction) {
     const cmd = interaction.client.slashCommands.get(interaction.commandName);
-    if (!cmd) return interaction.reply({ content: "<:no:1235502897215836160> An error has occurred", ephemeral: true }).catch(() => {});
+    if (!cmd) return interaction.reply({ content: "<:No:1330253494447243355> An error has occurred", ephemeral: true }).catch(() => {});
 
     // callback validations
     if (cmd.validations) {
@@ -107,7 +107,7 @@ module.exports = {
     if (interaction.member && cmd.userPermissions?.length > 0) {
       if (!interaction.member.permissions.has(cmd.userPermissions)) {
         return interaction.reply({
-          content: `<:info:1249145380973838478> You need ${parsePermissions(cmd.userPermissions)} for this command`,
+          content: `<:Info:1330256387959164928> You need ${parsePermissions(cmd.userPermissions)} for this command`,
           ephemeral: true,
         });
       }
@@ -117,7 +117,7 @@ module.exports = {
     if (cmd.botPermissions && cmd.botPermissions.length > 0) {
       if (!interaction.guild.members.me.permissions.has(cmd.botPermissions)) {
         return interaction.reply({
-          content: `<:info:1249145380973838478> I need ${parsePermissions(cmd.botPermissions)} for this command`,
+          content: `<:Info:1330256387959164928> I need ${parsePermissions(cmd.botPermissions)} for this command`,
           ephemeral: true,
         });
       }
@@ -139,7 +139,7 @@ module.exports = {
       const settings = await getSettings(interaction.guild);
       await cmd.interactionRun(interaction, { settings });
     } catch (ex) {
-      await interaction.followUp("<:no:1235502897215836160> Oops! An error occurred while running the command");
+      await interaction.followUp("<:No:1330253494447243355> Oops! An error occurred while running the command");
       interaction.client.logger.error("interactionRun", ex);
     } finally {
       if (cmd.cooldown > 0) applyCooldown(interaction.user.id, cmd);

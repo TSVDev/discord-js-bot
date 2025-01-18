@@ -18,13 +18,13 @@ module.exports = {
 
   async messageRun(message, args) {
     const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply(`<:no:1235502897215836160> No user found matching " ${args[0]} ". Make sure you input a valid user ID or mention.`);
+    if (!target) return message.safeReply(`<:No:1330253494447243355> No user found matching " ${args[0]} ". Make sure you input a valid user ID or mention.`);
 
     const channels = message.guild.findMatchingVoiceChannels(args[1]);
-    if (!channels.length) return message.safeReply("<:no:1235502897215836160> No matching channels found");
+    if (!channels.length) return message.safeReply("<:No:1330253494447243355> No matching channels found");
     const targetChannel = channels.pop();
     if (!targetChannel.type === ChannelType.GuildVoice && !targetChannel.type === ChannelType.GuildStageVoice) {
-      return message.safeReply("<:no:1235502897215836160> Target channel is not a voice channel");
+      return message.safeReply("<:No:1330253494447243355> Target channel is not a voice channel");
     }
 
     const reason = args.slice(2).join(" ");

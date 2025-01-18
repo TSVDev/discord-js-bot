@@ -51,13 +51,13 @@ module.exports = {
       embed
         .setColor(EMBED_COLORS.WARNING)
         .setDescription(
-          "<:info:1249145380973838478> Invalid translation code. Visit [here](https://cloud.google.com/translate/docs/languages) to see list of supported translation codes"
+          "<:Info:1330256387959164928> Invalid translation code. Visit [here](https://cloud.google.com/translate/docs/languages) to see list of supported translation codes"
         );
       return message.safeReply({ embeds: [embed] });
     }
 
     const input = args.join(" ");
-    if (!input) message.safeReply("<:info:1249145380973838478> Provide some valid translation text");
+    if (!input) message.safeReply("<:Info:1330256387959164928> Provide some valid translation text");
 
     const response = await getTranslation(message.author, input, outputCode);
     await message.safeReply(response);
@@ -73,7 +73,7 @@ module.exports = {
 
 async function getTranslation(author, input, outputCode) {
   const data = await translate(input, outputCode);
-  if (!data) return "<:no:1235502897215836160> Failed to translate your text";
+  if (!data) return "<:No:1330253494447243355> Failed to translate your text";
 
   const embed = new EmbedBuilder()
     .setAuthor({

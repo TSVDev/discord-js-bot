@@ -115,14 +115,14 @@ module.exports = {
     let response;
     if (sub == "ghostping") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("<:Info:1330256387959164928> Invalid status. Value must be `on/off`");
       response = await antiGhostPing(settings, status);
     }
 
     //
     else if (sub == "spam") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("<:Info:1330256387959164928> Invalid status. Value must be `on/off`");
       response = await antiSpam(settings, status);
     }
 
@@ -130,7 +130,7 @@ module.exports = {
     else if (sub === "massmention") {
       const status = args[1].toLowerCase();
       const threshold = args[2] || 3;
-      if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("<:Info:1330256387959164928> Invalid status. Value must be `on/off`");
       response = await antiMassMention(settings, status, threshold);
     }
 
@@ -152,7 +152,7 @@ module.exports = {
         interaction.options.getString("status"),
         interaction.options.getInteger("threshold")
       );
-    } else response = "<:info:1249145380973838478> Invalid command usage!";
+    } else response = "<:Info:1330256387959164928> Invalid command usage!";
 
     await interaction.followUp(response);
   },
@@ -162,14 +162,14 @@ async function antiGhostPing(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
   settings.automod.anti_ghostping = status;
   await settings.save();
-  return `<:yes:1235503385323769877> Configuration saved! Anti-Ghostping is now ${status ? "enabled" : "disabled"}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Anti-Ghostping is now ${status ? "enabled" : "disabled"}`;
 }
 
 async function antiSpam(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
   settings.automod.anti_spam = status;
   await settings.save();
-  return `<:yes:1235503385323769877> Antispam detection is now ${status ? "enabled" : "disabled"}`;
+  return `<:Yes:1330253737687781436> Antispam detection is now ${status ? "enabled" : "disabled"}`;
 }
 
 async function antiMassMention(settings, input, threshold) {
@@ -180,5 +180,5 @@ async function antiMassMention(settings, input, threshold) {
     settings.automod.anti_massmention = threshold;
   }
   await settings.save();
-  return `<:yes:1235503385323769877> Mass mention detection is now ${status ? "enabled" : "disabled"}`;
+  return `<:Yes:1330253737687781436> Mass mention detection is now ${status ? "enabled" : "disabled"}`;
 }

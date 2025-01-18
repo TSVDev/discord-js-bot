@@ -28,7 +28,7 @@ module.exports = {
 };
 
 async function getInviteRanks({ guild }, settings) {
-  if (settings.invite.ranks.length === 0) return "<:no:1235502897215836160> No invite ranks configured in this server";
+  if (settings.invite.ranks.length === 0) return "<:No:1330253494447243355> No invite ranks configured in this server";
   let str = "";
 
   settings.invite.ranks.forEach((data) => {
@@ -38,7 +38,7 @@ async function getInviteRanks({ guild }, settings) {
     }
   });
 
-  if (!str) return "<:no:1235502897215836160> No invite ranks configured in this server";
+  if (!str) return "<:No:1330253494447243355> No invite ranks configured in this server";
 
   const embed = new EmbedBuilder()
     .setAuthor({ name: "Invite Ranks" })

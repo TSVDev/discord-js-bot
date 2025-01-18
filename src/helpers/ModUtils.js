@@ -313,7 +313,7 @@ module.exports = class ModUtils {
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
-      //await target.user.send(`<:Timeout:1256322177532297309> You have been timed out!\n Reason: ${dmReason}\n Expires: ${tt}`).catch((ex) => {});
+      //await target.user.send(`<:Timeout:1330256600732008602> You have been timed out!\n Reason: ${dmReason}\n Expires: ${tt}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error("timeoutTarget", ex);
@@ -354,7 +354,7 @@ module.exports = class ModUtils {
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
-      //await target.user.send(`<:untimeout:1249144366329757771> You have been untimed out!\n Reason: ${dmReason}`).catch((ex) => {});
+      //await target.user.send(`<:Untimeout:1330257623748055131> You have been untimed out!\n Reason: ${dmReason}`).catch((ex) => {});
       
       return true;
     } catch (ex) {
@@ -441,7 +441,7 @@ module.exports = class ModUtils {
       await target.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
       await issuer.guild.members.unban(target.user);
       
-      //await target.user.send(`<:Ban:1256333889950060554> You have been softbanned!\n Reason: ${dmReason}`).catch((ex) => {});
+      //await target.user.send(`<:Ban:1330256578682818662> You have been softbanned!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error("softbanTarget", ex);
@@ -485,7 +485,7 @@ module.exports = class ModUtils {
 
         await issuer.guild.bans.create(target.id, { deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
 
-      //await target.user.send(`<:Ban:1256333889950060554> You have been banned!\n Reason: ${dmReason}`).catch((ex) => {});
+      //await target.user.send(`<:Ban:1330256578682818662> You have been banned!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`banTarget`, ex);
@@ -566,7 +566,7 @@ module.exports = class ModUtils {
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
-      //await target.user.send(`<a:micmutea:1249144381177466953> You have been VC Muted!\n Reason: ${dmReason}`).catch((ex) => {});
+      //await target.user.send(`<:MicMute:1330257705964797994> You have been VC Muted!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`vMuteTarget`, ex);
@@ -609,7 +609,7 @@ module.exports = class ModUtils {
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
-      //await target.user.send(`<a:micanimation:1249144379969634334> You have been VC Unmuted!\n Reason: ${dmReason}`).catch((ex) => {});
+      //await target.user.send(`<:MicOn:1330257681306488842> You have been VC Unmuted!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`vUnmuteTarget`, ex);
@@ -653,11 +653,11 @@ module.exports = class ModUtils {
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
-      //await target.user.send(`<a:soundmutea:1249144368401485835> You have been VC Deafened!\n Reason: ${dmReason}`).catch((ex) => {});
+      //await target.user.send(`<:SoundMute:1330257693541269655> You have been VC Deafened!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`deafenTarget`, ex);
-      return `<:no:1235502897215836160> Failed to deafen ${target.user.tag}`;
+      return `<:No:1330253494447243355> Failed to deafen ${target.user.tag}`;
     }
   }
 
@@ -696,7 +696,7 @@ module.exports = class ModUtils {
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
-      //await target.user.send(`<a:soundanimation:1249144382502998071> You have been VC Undeafened!\n Reason: ${dmReason}`).catch((ex) => {});
+      //await target.user.send(`<:SoundOn:1330257670359486484> You have been VC Undeafened!\n Reason: ${dmReason}`).catch((ex) => {});
       return true;
     } catch (ex) {
       error(`unDeafenTarget`, ex);

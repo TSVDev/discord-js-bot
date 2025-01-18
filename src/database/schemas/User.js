@@ -9,6 +9,7 @@ const Schema = new mongoose.Schema(
     _id: String,
     username: String,
     discriminator: String,
+    flags: { type: [String], default: [] }, // New field to store flags
     logged: Boolean,
     coins: { type: Number, default: 0 },
     bank: { type: Number, default: 0 },
@@ -45,7 +46,13 @@ module.exports = {
 
     let userDb = await Model.findById(user.id);
     if (!userDb) {
+
+        // Retrieve flags from the User object and store them in the database
+        const userFlags = user.flags.toArray(); // Get user flags as an array
+
+        
       userDb = new Model({
+
         _id: user.id,
         username: user.username,
         discriminator: user.discriminator,

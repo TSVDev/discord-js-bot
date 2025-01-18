@@ -26,8 +26,8 @@ module.exports = {
     else if (args.length > 0) {
       const search = args.join(" ");
       const tcByName = message.guild.findMatchingChannels(search);
-      if (tcByName.length === 0) return message.safeReply(`<:no:1235502897215836160> No channels found matching \`${search}\`! Make sure you input a valid channel ID or mention.`);
-      if (tcByName.length > 1) return message.safeReply(`<:no:1235502897215836160> Multiple channels found matching \`${search}\`!`);
+      if (tcByName.length === 0) return message.safeReply(`<:No:1330253494447243355> No channels found matching \`${search}\`! Make sure you input a valid channel ID or mention.`);
+      if (tcByName.length > 1) return message.safeReply(`<:No:1330253494447243355> Multiple channels found matching \`${search}\`!`);
       [targetChannel] = tcByName;
     } else {
       targetChannel = message.channel;

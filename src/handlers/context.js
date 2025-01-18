@@ -24,7 +24,7 @@ module.exports = {
     if (interaction.member && context.userPermissions && context.userPermissions?.length > 0) {
       if (!interaction.member.permissions.has(context.userPermissions)) {
         return interaction.reply({
-          content: `<:info:1249145380973838478> You need ${parsePermissions(context.userPermissions)} for this command`,
+          content: `<:Info:1330256387959164928> You need ${parsePermissions(context.userPermissions)} for this command`,
           ephemeral: true,
         });
       }
@@ -34,7 +34,7 @@ module.exports = {
       await interaction.deferReply({ ephemeral: context.ephemeral });
       await context.run(interaction);
     } catch (ex) {
-      interaction.followUp("<:no:1235502897215836160> Oops! An error occurred while running the command");
+      interaction.followUp("<:No:1330253494447243355> Oops! An error occurred while running the command");
       interaction.client.logger.error("contextRun", ex);
     } finally {
       applyCooldown(interaction.user.id, context);

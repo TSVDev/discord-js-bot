@@ -33,7 +33,7 @@ module.exports = {
 
     if (input === "none" || input === "off" || input === "disable") targetChannel = null;
     else {
-      if (message.mentions.channels.size === 0) return message.safeReply("<:info:1249145380973838478> Incorrect command usage");
+      if (message.mentions.channels.size === 0) return message.safeReply("<:Info:1330256387959164928> Incorrect command usage");
       targetChannel = message.mentions.channels.first();
     }
 
@@ -50,14 +50,14 @@ module.exports = {
 
 async function setChannel(targetChannel, settings) {
   if (!targetChannel && !settings.modlog_channel) {
-    return "<:no:1235502897215836160> It is already disabled";
+    return "<:No:1330253494447243355> It is already disabled";
   }
 
   if (targetChannel && !targetChannel.canSendEmbeds()) {
-    return "<:info:1249145380973838478> Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel";
+    return "<:Info:1330256387959164928> Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel";
   }
 
   settings.modlog_channel = targetChannel?.id;
   await settings.save();
-  return `<:yes:1235503385323769877> Configuration saved! Modlog channel ${targetChannel ? "updated" : "removed"}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Modlog channel ${targetChannel ? "updated" : "removed"}`;
 }

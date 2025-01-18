@@ -41,7 +41,7 @@ module.exports = {
 };
 
 async function getInvites({ guild }, user, settings) {
-  if (!settings.invite.tracking) return `<:no:1235502897215836160> Invite tracking is disabled in this server`;
+  if (!settings.invite.tracking) return `<:No:1330253494447243355> Invite tracking is disabled in this server`;
 
   const inviteData = (await getMember(guild.id, user.id)).invite_data;
 

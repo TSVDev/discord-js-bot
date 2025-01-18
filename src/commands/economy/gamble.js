@@ -31,7 +31,7 @@ module.exports = {
 
   async messageRun(message, args) {
     const betAmount = parseInt(args[0]);
-    if (isNaN(betAmount)) return message.safeReply("<:info:1249145380973838478> Bet amount needs to be a valid number input");
+    if (isNaN(betAmount)) return message.safeReply("<:Info:1330256387959164928> Bet amount needs to be a valid number input");
     const response = await gamble(message.author, betAmount);
     await message.safeReply(response);
   },
@@ -76,13 +76,13 @@ function calculateReward(amount, var1, var2, var3) {
 }
 
 async function gamble(user, betAmount) {
-  if (isNaN(betAmount)) return "<:info:1249145380973838478> Bet amount needs to be a valid number input";
-  if (betAmount < 0) return "<:info:1249145380973838478> Bet amount cannot be negative";
-  if (betAmount < 10) return "<:info:1249145380973838478> Bet amount cannot be less than 10";
+  if (isNaN(betAmount)) return "<:Info:1330256387959164928> Bet amount needs to be a valid number input";
+  if (betAmount < 0) return "<:Info:1330256387959164928> Bet amount cannot be negative";
+  if (betAmount < 10) return "<:Info:1330256387959164928> Bet amount cannot be less than 10";
 
   const userDb = await getUser(user);
   if (userDb.coins < betAmount)
-    return `<:no:1235502897215836160> You do not have sufficient coins to gamble!\n**Coin balance:** ${userDb.coins || 0}${ECONOMY.CURRENCY}`;
+    return `<:No:1330253494447243355> You do not have sufficient coins to gamble!\n**Coin balance:** ${userDb.coins || 0}${ECONOMY.CURRENCY}`;
 
   const slot1 = getEmoji();
   const slot2 = getEmoji();

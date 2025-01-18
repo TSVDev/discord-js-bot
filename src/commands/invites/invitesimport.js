@@ -63,5 +63,5 @@ async function importInvites({ guild }, user) {
     await memberDb.save();
   }
 
-  return `<:yes:1235503385323769877> Done! Previous invites added to ${user ? user.username : "all members"}`;
+  return `<:Yes:1330253737687781436> Done! Previous invites added to ${user ? user.username : "all members"}`;
 }

@@ -48,7 +48,7 @@ async function weather(place) {
   if (!response.success) return MESSAGES.API_ERROR;
 
   const json = response.data;
-  if (!json.request) return `<:no:1235502897215836160> No city found matching \`${place}\``;
+  if (!json.request) return `<:No:1330253494447243355> No city found matching \`${place}\``;
 
   const embed = new EmbedBuilder()
     .setTitle("Weather")

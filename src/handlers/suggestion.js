@@ -60,12 +60,12 @@ async function approveSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "<:info:1249145380973838478> You don't have permission to approve suggestions!";
+  if (!hasPerms(member, settings)) return "<:Info:1330256387959164928> You don't have permission to approve suggestions!";
 
   // validate if document exists
   const doc = await findSuggestion(guild.id, messageId);
-  if (!doc) return "<:no:1235502897215836160> Suggestion not found";
-  if (doc.status === "APPROVED") return "<:info:1249145380973838478> Suggestion already approved";
+  if (!doc) return "<:No:1330253494447243355> Suggestion not found";
+  if (doc.status === "APPROVED") return "<:Info:1330256387959164928> Suggestion already approved";
 
   /**
    * @type {import('discord.js').Message}
@@ -74,7 +74,7 @@ async function approveSuggestion(member, channel, messageId, reason) {
   try {
     message = await channel.messages.fetch({ message: messageId, force: true });
   } catch (err) {
-    return "<:no:1235502897215836160> Suggestion message not found";
+    return "<:No:1330253494447243355> Suggestion message not found";
   }
 
   let buttonsRow = new ActionRowBuilder().addComponents(
@@ -136,10 +136,10 @@ async function approveSuggestion(member, channel, messageId, reason) {
     }
 
     await doc.save();
-    return "<:yes:1235503385323769877> Suggestion approved";
+    return "<:Yes:1330253737687781436> Suggestion approved";
   } catch (ex) {
     guild.client.logger.error("approveSuggestion", ex);
-    return "<:no:1235502897215836160> Failed to approve suggestion";
+    return "<:No:1330253494447243355> Failed to approve suggestion";
   }
 }
 
@@ -154,18 +154,18 @@ async function rejectSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "<:info:1249145380973838478> You don't have permission to reject suggestions!";
+  if (!hasPerms(member, settings)) return "<:Info:1330256387959164928> You don't have permission to reject suggestions!";
 
   // validate if document exists
   const doc = await findSuggestion(guild.id, messageId);
-  if (!doc) return "<:no:1235502897215836160> Suggestion not found";
-  if (doc.is_rejected) return "<:info:1249145380973838478> Suggestion already rejected";
+  if (!doc) return "<:No:1330253494447243355> Suggestion not found";
+  if (doc.is_rejected) return "<:Info:1330256387959164928> Suggestion already rejected";
 
   let message;
   try {
     message = await channel.messages.fetch({ message: messageId });
   } catch (err) {
-    return "<:no:1235502897215836160> Suggestion message not found";
+    return "<:No:1330253494447243355> Suggestion message not found";
   }
 
   let buttonsRow = new ActionRowBuilder().addComponents(
@@ -224,10 +224,10 @@ async function rejectSuggestion(member, channel, messageId, reason) {
 
     await doc.save();
 
-    return "<:yes:1235503385323769877> Suggestion rejected";
+    return "<:Yes:1330253737687781436> Suggestion rejected";
   } catch (ex) {
     guild.client.logger.error("rejectSuggestion", ex);
-    return "<:no:1235502897215836160> Failed to reject suggestion";
+    return "<:No:1330253494447243355> Failed to reject suggestion";
   }
 }
 
@@ -242,15 +242,15 @@ async function deleteSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "<:info:1249145380973838478> You don't have permission to delete suggestions!";
+  if (!hasPerms(member, settings)) return "<:Info:1330256387959164928> You don't have permission to delete suggestions!";
 
   try {
     await channel.messages.delete(messageId);
     await deleteSuggestionDb(guild.id, messageId, member.id, reason);
-    return "<:yes:1235503385323769877> Suggestion deleted";
+    return "<:Yes:1330253737687781436> Suggestion deleted";
   } catch (ex) {
     guild.client.logger.error("deleteSuggestion", ex);
-    return "<:no:1235502897215836160> Failed to delete suggestion! Please delete manually";
+    return "<:No:1330253494447243355> Failed to delete suggestion! Please delete manually";
   }
 }
 

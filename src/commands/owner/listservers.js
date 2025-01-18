@@ -43,7 +43,7 @@ module.exports = {
     const maxPerPage = MAX_PER_PAGE;
     const totalPages = Math.ceil(total / maxPerPage);
 
-    if (totalPages === 0) return message.safeReply("<:no:1235502897215836160> No servers found");
+    if (totalPages === 0) return message.safeReply("<:No:1330253494447243355> No servers found");
     let currentPage = 1;
 
     // Buttons Row

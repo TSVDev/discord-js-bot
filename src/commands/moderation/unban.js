@@ -82,7 +82,7 @@ async function getMatchingBans(guild, match) {
     }
   }
 
-  if (matched.length === 0) return `<:no:1235502897215836160> No user found matching " ${match} ". Make sure you input a valid user ID or mention.`;
+  if (matched.length === 0) return `<:No:1330253494447243355> No user found matching " ${match} ". Make sure you input a valid user ID or mention.`;
 
   const options = [];
   for (const user of matched) {
@@ -115,12 +115,12 @@ async function waitForBan(issuer, reason, sent) {
     const user = await issuer.client.users.fetch(userId, { cache: true });
 
     const status = await unBanTarget(issuer, user, reason);
-    if (typeof status === "boolean") return sent.edit({ content: `<:yes:1235503385323769877> ${user.username} is un-banned!`, components: [] });
-    else return sent.edit({ content: `<:no:1235502897215836160> Failed to unban ${user.username}`, components: [] });
+    if (typeof status === "boolean") return sent.edit({ content: `<:Yes:1330253737687781436> ${user.username} is un-banned!`, components: [] });
+    else return sent.edit({ content: `<:No:1330253494447243355> Failed to unban ${user.username}`, components: [] });
   });
 
   // collect user and unban
   collector.on("end", async (collected) => {
-    if (collected.size === 0) return sent.edit("<:no:1235502897215836160> Oops! Timed out. Try again later.");
+    if (collected.size === 0) return sent.edit("<:No:1330253494447243355> Oops! Timed out. Try again later.");
   });
 }

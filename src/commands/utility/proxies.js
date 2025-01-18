@@ -36,7 +36,7 @@ module.exports = {
 
     if (args[0]) {
       if (PROXY_TYPES.includes(args[0].toLowerCase())) type = args[0].toLowerCase();
-      else return message.safeReply("<:info:1249145380973838478> Incorrect proxy type. Available types: `http`, `socks4`, `socks5`");
+      else return message.safeReply("<:Info:1330256387959164928> Incorrect proxy type. Available types: `http`, `socks4`, `socks5`");
     }
 
     const msg = await message.channel.send("Fetching proxies... Please wait");
@@ -58,9 +58,9 @@ async function getProxies(type) {
     `https://api.proxyscrape.com/?request=displayproxies&proxytype=${type}&timeout=10000&country=all&anonymity=all&ssl=all`
   );
 
-  if (!response.success || !response.buffer) return "<:no:1235502897215836160> Failed to fetch proxies";
-  if (response.buffer.length === 0) return "<:no:1235502897215836160> Could not fetch data. Try again later";
+  if (!response.success || !response.buffer) return "<:No:1330253494447243355> Failed to fetch proxies";
+  if (response.buffer.length === 0) return "<:No:1330253494447243355> Could not fetch data. Try again later";
 
   const attachment = new AttachmentBuilder(response.buffer, { name: `${type.toLowerCase()}_proxies.txt` });
-  return { content: `<:yes:1235503385323769877> ${type.toUpperCase()} Proxies fetched`, files: [attachment] };
+  return { content: `<:Yes:1330253737687781436> ${type.toUpperCase()} Proxies fetched`, files: [attachment] };
 }

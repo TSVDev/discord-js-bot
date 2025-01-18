@@ -37,7 +37,7 @@ module.exports = {
   async messageRun(message, args) {
     const match = await message.client.resolveUsers(args[0], true);
     const target = match[0];
-    if (!target) return message.safeReply(`<:no:1235502897215836160> No user found matching " ${args[0]} ". Make sure you input a valid user ID or mention.`);
+    if (!target) return message.safeReply(`<:No:1330253494447243355> No user found matching " ${args[0]} ". Make sure you input a valid user ID or mention.`);
     const reason = `[${message.author.id}] ${message.content.split(args[0])[1].trim()}`;
     const response = await ban(message.member, target, reason);
     await message.safeReply(response);
@@ -62,8 +62,8 @@ module.exports = {
  */
 async function ban(issuer, target, reason) {
   const response = await banTarget(issuer, target, reason);
-  if (typeof response === "boolean") return `<:Ban:1256333889950060554> ${target.username} is banned!`;
-  if (response === "BOT_PERM") return `<:info:1249145380973838478> I do not have permission to ban ${target.username}`;
-  else if (response === "MEMBER_PERM") return `<:info:1249145380973838478> You do not have permission to ban ${target.username}`;
-  else return `<:no:1235502897215836160> Failed to ban ${target.username}`;
+  if (typeof response === "boolean") return `<:Ban:1330256578682818662> ${target.username} is banned!`;
+  if (response === "BOT_PERM") return `<:Info:1330256387959164928> I do not have permission to ban ${target.username}`;
+  else if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to ban ${target.username}`;
+  else return `<:No:1330253494447243355> Failed to ban ${target.username}`;
 }

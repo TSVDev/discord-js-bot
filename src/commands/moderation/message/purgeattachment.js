@@ -20,23 +20,23 @@ module.exports = {
     const amount = args[0] || 99;
 
     if (amount) {
-      if (isNaN(amount)) return message.safeReply("<:info:1249145380973838478> Numbers are only allowed");
-      if (parseInt(amount) > 99) return message.safeReply("<:info:1249145380973838478> The max amount of messages that I can delete is 99");
+      if (isNaN(amount)) return message.safeReply("<:Info:1330256387959164928> Numbers are only allowed");
+      if (parseInt(amount) > 99) return message.safeReply("<:Info:1330256387959164928> The max amount of messages that I can delete is 99");
     }
 
     const { channel } = message;
     const response = await purgeMessages(message.member, message.channel, "ATTACHMENT", amount);
 
     if (typeof response === "number") {
-      return channel.safeSend(`<:yes:1235503385323769877> Successfully deleted ${response} messages`, 5);
+      return channel.safeSend(`<:Yes:1330253737687781436> Successfully deleted ${response} messages`, 5);
     } else if (response === "BOT_PERM") {
-      return message.safeReply("<:info:1249145380973838478> I don't have `Read Message History` & `Manage Messages` to delete messages", 5);
+      return message.safeReply("<:Info:1330256387959164928> I don't have `Read Message History` & `Manage Messages` to delete messages", 5);
     } else if (response === "MEMBER_PERM") {
-      return message.safeReply("<:info:1249145380973838478> You don't have `Read Message History` & `Manage Messages` to delete messages", 5);
+      return message.safeReply("<:Info:1330256387959164928> You don't have `Read Message History` & `Manage Messages` to delete messages", 5);
     } else if (response === "NO_MESSAGES") {
-      return channel.safeSend("<:no:1235502897215836160> No messages found that can be cleaned", 5);
+      return channel.safeSend("<:No:1330253494447243355> No messages found that can be cleaned", 5);
     } else {
-      return message.safeReply(`<:no:1235502897215836160> Error occurred! Failed to delete messages`);
+      return message.safeReply(`<:No:1330253494447243355> Error occurred! Failed to delete messages`);
     }
   },
 };

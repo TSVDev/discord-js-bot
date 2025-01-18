@@ -13,11 +13,11 @@ module.exports = async (member, giveawayChannel, duration, prize, winners, host,
   try {
     if (!host) host = member.user;
     if (!member.permissions.has("ManageMessages")) {
-      return "<:info:1249145380973838478> You need to have the manage messages permissions to start giveaways.";
+      return "<:Info:1330256387959164928> You need to have the manage messages permissions to start giveaways.";
     }
 
     if (!giveawayChannel.type === ChannelType.GuildText) {
-      return "<:info:1249145380973838478> You can only start giveaways in text channels.";
+      return "<:Info:1330256387959164928> You can only start giveaways in text channels.";
     }
 
     /**
@@ -43,9 +43,9 @@ module.exports = async (member, giveawayChannel, duration, prize, winners, host,
     }
 
     await member.client.giveawaysManager.start(giveawayChannel, options);
-    return `<:yes:1235503385323769877> Giveaway started in ${giveawayChannel}`;
+    return `<:Yes:1330253737687781436> Giveaway started in ${giveawayChannel}`;
   } catch (error) {
     member.client.logger.error("Giveaway Start", error);
-    return `<:no:1235502897215836160> An error occurred while starting the giveaway: ${error.message}`;
+    return `<:No:1330253494447243355> An error occurred while starting the giveaway: ${error.message}`;
   }
 };

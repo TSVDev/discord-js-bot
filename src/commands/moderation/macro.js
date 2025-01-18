@@ -30,7 +30,7 @@ module.exports = {
 
     if (input === "volsup") {
       if (!message.member.roles.cache.has(support)) {
-        return message.safeReply("<:info:1249145380973838478> You are missing the 'support' role");
+        return message.safeReply("<:Info:1330256387959164928> You are missing the 'support' role");
       }
       return message.safeReply(
         "# Please remember\!\nAll support given is by volunteers! No one is required to give you support, and no support should be taken as direct medical advice!\nPlease see <#1144357039301214241> & <#1179418441501909123> for resources on how to contact professional support in your area.");
@@ -38,21 +38,21 @@ module.exports = {
 
     else if (input === "assistance"){
       if (!message.member.roles.cache.has(support)) {
-        return message.safeReply("<:info:1249145380973838478> You are missing the 'support' role");
+        return message.safeReply("<:Info:1330256387959164928> You are missing the 'support' role");
       }
       return message.safeReply("Assistance Macro");
     }
     
     else if (input === "sls"){
       if (!message.member.roles.cache.has(sls)) {
-        return message.safeReply("<:info:1249145380973838478> You are missing the 'SLS Handler' role");
+        return message.safeReply("<:Info:1330256387959164928> You are missing the 'SLS Handler' role");
       }
       return message.safeReply("SLS Handler Macro");
     }
 
     else if (input === "staff"){
       if (!message.member.roles.cache.has(staff)) {
-        return message.safeReply("<:info:1249145380973838478> You are missing the 'staff' role");
+        return message.safeReply("<:Info:1330256387959164928> You are missing the 'staff' role");
       }
       return message.safeReply("Staff Macro");
     }
@@ -62,7 +62,7 @@ module.exports = {
     }
 
     else {
-      return message.safeReply("<:no:1235502897215836160> Unknown Macro");
+      return message.safeReply("<:No:1330253494447243355> Unknown Macro");
     }
 
   },

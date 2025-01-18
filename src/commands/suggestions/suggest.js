@@ -38,14 +38,14 @@ module.exports = {
   async messageRun(message, args, data) {
     const suggestion = args.join(" ");
     const response = await suggest(message.member, suggestion, data.settings);
-    if (typeof response === "boolean") return message.channel.safeSend("<:yes:1235503385323769877> Your suggestion has been submitted!", 5);
+    if (typeof response === "boolean") return message.channel.safeSend("<:Yes:1330253737687781436> Your suggestion has been submitted!", 5);
     else await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {
     const suggestion = interaction.options.getString("suggestion");
     const response = await suggest(interaction.member, suggestion, data.settings);
-    if (typeof response === "boolean") interaction.followUp("<:yes:1235503385323769877> Your suggestion has been submitted!");
+    if (typeof response === "boolean") interaction.followUp("<:Yes:1330253737687781436> Your suggestion has been submitted!");
     else await interaction.followUp(response);
   },
 };
@@ -56,10 +56,10 @@ module.exports = {
  * @param {object} settings
  */
 async function suggest(member, suggestion, settings) {
-  if (!settings.suggestions.enabled) return "<:no:1235502897215836160> Suggestion system is disabled.";
-  if (!settings.suggestions.channel_id) return "<:info:1249145380973838478> Suggestion channel not configured!";
+  if (!settings.suggestions.enabled) return "<:No:1330253494447243355> Suggestion system is disabled.";
+  if (!settings.suggestions.channel_id) return "<:Info:1330256387959164928> Suggestion channel not configured!";
   const channel = member.guild.channels.cache.get(settings.suggestions.channel_id);
-  if (!channel) return "<:info:1249145380973838478> Suggestion channel not found!";
+  if (!channel) return "<:Info:1330256387959164928> Suggestion channel not found!";
 
   const embed = new EmbedBuilder()
     .setAuthor({ name: "New Suggestion" })
@@ -95,6 +95,6 @@ async function suggest(member, suggestion, settings) {
     return true;
   } catch (ex) {
     member.client.logger.error("suggest", ex);
-    return "<:no:1235502897215836160> Failed to send message to suggestions channel!";
+    return "<:No:1330253494447243355> Failed to send message to suggestions channel!";
   }
 }

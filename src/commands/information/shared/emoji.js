@@ -3,7 +3,7 @@ const { EMBED_COLORS } = require("@root/config");
 
 module.exports = (emoji) => {
   let custom = parseEmoji(emoji);
-  if (!custom.id) return "<:no:1235502897215836160> This is not a valid guild emoji";
+  if (!custom.id) return "<:No:1330253494447243355> This is not a valid guild emoji";
 
   let url = `https://cdn.discordapp.com/emojis/${custom.id}.${custom.animated ? "gif?v=1" : "png"}`;
 

@@ -69,9 +69,9 @@ module.exports = {
 
     if (sub === "set") {
       const target = await message.guild.resolveMember(args[1]);
-      if (!target) return message.safeReply("<:no:1235502897215836160> Could not find matching member. Make sure you input a valid user ID or mention.");
+      if (!target) return message.safeReply("<:No:1330253494447243355> Could not find matching member. Make sure you input a valid user ID or mention.");
       const name = args.slice(2).join(" ");
-      if (!name) return message.safeReply("<:info:1249145380973838478> Please specify a nickname");
+      if (!name) return message.safeReply("<:Info:1330256387959164928> Please specify a nickname");
 
       const response = await nickname(message, target, name);
       return message.safeReply(response);
@@ -80,7 +80,7 @@ module.exports = {
     //
     else if (sub === "reset") {
       const target = await message.guild.resolveMember(args[1]);
-      if (!target) return message.safeReply("<:no:1235502897215836160> Could not find matching member. Make sure you input a valid user ID or mention.");
+      if (!target) return message.safeReply("<:No:1330253494447243355> Could not find matching member. Make sure you input a valid user ID or mention.");
 
       const response = await nickname(message, target);
       return message.safeReply(response);
@@ -98,16 +98,16 @@ module.exports = {
 
 async function nickname({ member, guild }, target, name) {
   if (!canModerate(member, target)) {
-    return `<:info:1249145380973838478> Oops! You cannot manage nickname of ${target.user.username}`;
+    return `<:Info:1330256387959164928> Oops! You cannot manage nickname of ${target.user.username}`;
   }
   if (!canModerate(guild.members.me, target)) {
-    return `<:info:1249145380973838478> Oops! I cannot manage nickname of ${target.user.username}`;
+    return `<:Info:1330256387959164928> Oops! I cannot manage nickname of ${target.user.username}`;
   }
 
   try {
     await target.setNickname(name);
-    return `<:yes:1235503385323769877> Successfully ${name ? "changed" : "reset"} nickname of ${target.user.username}`;
+    return `<:Yes:1330253737687781436> Successfully ${name ? "changed" : "reset"} nickname of ${target.user.username}`;
   } catch (ex) {
-    return `<:no:1235502897215836160> Failed to ${name ? "change" : "reset"} nickname for ${target.displayName}. Did you provide a valid name?`;
+    return `<:No:1330253494447243355> Failed to ${name ? "change" : "reset"} nickname for ${target.displayName}. Did you provide a valid name?`;
   }
 }

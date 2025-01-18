@@ -39,7 +39,7 @@ module.exports = {
 
   async messageRun(message, args, data) {
     const status = args[0].toLowerCase();
-    if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
+    if (!["on", "off"].includes(status)) return message.safeReply("<:Info:1330256387959164928> Invalid status. Value must be `on/off`");
 
     const response = await setFlagTranslation(status, data.settings);
     await message.safeReply(response);
@@ -57,5 +57,5 @@ async function setFlagTranslation(input, settings) {
   settings.flag_translation.enabled = status;
   await settings.save();
 
-  return `<:yes:1235503385323769877> Configuration saved! Flag translation is now ${status ? "enabled" : "disabled"}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Flag translation is now ${status ? "enabled" : "disabled"}`;
 }

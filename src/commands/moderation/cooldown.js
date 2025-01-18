@@ -15,18 +15,18 @@ module.exports = {
         if (args[0].toLowerCase() === "remove") {
             message.channel.setRateLimitPerUser(0)
                 .then(() => {
-                    message.channel.send("<:yes:1235503385323769877> Cooldown has been removed.");
+                    message.channel.send("<:Yes:1330253737687781436> Cooldown has been removed.");
                 })
                 .catch(error => {
                     console.error("Error removing cooldown:", error);
-                    message.channel.send("<:no:1235502897215836160> An error occurred while removing the cooldown.");
+                    message.channel.send("<:No:1330253494447243355> An error occurred while removing the cooldown.");
                 });
             return;
         }
         const cooldownTime = args[0].toLowerCase();
         const regex = /(\d+)([smhd])/;
         if (!regex.test(cooldownTime)) {
-            return message.channel.send("<:info:1249145380973838478> Please provide a valid cooldown time (e.g., 1s, 5m, 1h, 1d).");
+            return message.channel.send("<:Info:1330256387959164928> Please provide a valid cooldown time (e.g., 1s, 5m, 1h, 1d).");
         }
         const [, time, unit] = cooldownTime.match(regex);
         let duration = 0;
@@ -43,10 +43,10 @@ module.exports = {
         }
         message.channel.setRateLimitPerUser(duration / 1000)
             .then(() => {
-                message.channel.send(`<:yes:1235503385323769877> Cooldown set to ${time}${unit}.`);
+                message.channel.send(`<:Yes:1330253737687781436> Cooldown set to ${time}${unit}.`);
             })
             .catch(error => {
-                message.channel.send("<:no:1235502897215836160> An error occurred while setting the cooldown.");
+                message.channel.send("<:No:1330253494447243355> An error occurred while setting the cooldown.");
             });
             
     },

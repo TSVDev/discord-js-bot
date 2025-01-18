@@ -42,21 +42,21 @@ module.exports = {
 
   async messageRun(message, args) {
     const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]);
-    if (!channel) return message.reply("<:info:1249145380973838478> Please provide a valid channel");
-    if (channel.type !== ChannelType.GuildText) return message.reply("<:info:1249145380973838478> Please provide a valid channel.");
+    if (!channel) return message.reply("<:Info:1330256387959164928> Please provide a valid channel");
+    if (channel.type !== ChannelType.GuildText) return message.reply("<:Info:1330256387959164928> Please provide a valid channel.");
     if (!channel.canSendEmbeds()) {
-      return message.reply("<:info:1249145380973838478> I don't have permission to send embeds in that channel");
+      return message.reply("<:Info:1330256387959164928> I don't have permission to send embeds in that channel");
     }
-    message.reply(`<:yes:1235503385323769877> Embed setup started in ${channel}`);
+    message.reply(`<:Yes:1330253737687781436> Embed setup started in ${channel}`);
     await embedSetup(channel, message.member);
   },
 
   async interactionRun(interaction) {
     const channel = interaction.options.getChannel("channel");
     if (!channel.canSendEmbeds()) {
-      return interaction.followUp("<:info:1249145380973838478> I don't have permission to send embeds in that channel");
+      return interaction.followUp("<:Info:1330256387959164928> I don't have permission to send embeds in that channel");
     }
-    interaction.followUp(`<:yes:1235503385323769877> Embed setup started in ${channel}`);
+    interaction.followUp(`<:Yes:1330253737687781436> Embed setup started in ${channel}`);
     await embedSetup(channel, interaction.member);
   },
 };
@@ -139,7 +139,7 @@ async function embedSetup(channel, member) {
 
   if (!modal) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
 
-  modal.reply({ content: "<:yes:1235503385323769877> Embed sent", ephemeral: true }).catch((ex) => {});
+  modal.reply({ content: "<:Yes:1330253737687781436> Embed sent", ephemeral: true }).catch((ex) => {});
 
   const title = modal.fields.getTextInputValue("title");
   const author = modal.fields.getTextInputValue("author");
@@ -148,7 +148,7 @@ async function embedSetup(channel, member) {
   const color = modal.fields.getTextInputValue("color");
 
   if (!title && !author && !description && !footer)
-    return sentMsg.edit({ content: "<:info:1249145380973838478> You can't send an empty embed!", components: [] });
+    return sentMsg.edit({ content: "<:Info:1330256387959164928> You can't send an empty embed!", components: [] });
 
   const embed = new EmbedBuilder();
   if (title) embed.setTitle(title);
@@ -220,7 +220,7 @@ async function embedSetup(channel, member) {
 
       if (!modal) return sentMsg.edit({ components: [] });
 
-      modal.reply({ content: "<:yes:1235503385323769877> Field added", ephemeral: true }).catch((ex) => {});
+      modal.reply({ content: "<:Yes:1330253737687781436> Field added", ephemeral: true }).catch((ex) => {});
 
       const name = modal.fields.getTextInputValue("name");
       const value = modal.fields.getTextInputValue("value");
@@ -241,9 +241,9 @@ async function embedSetup(channel, member) {
       if (fields) {
         fields.pop();
         embed.setFields(fields);
-        interaction.reply({ content: "<:yes:1235503385323769877> Field removed", ephemeral: true });
+        interaction.reply({ content: "<:Yes:1330253737687781436> Field removed", ephemeral: true });
       } else {
-        interaction.reply({ content: "<:no:1235502897215836160> There are no fields to remove", ephemeral: true });
+        interaction.reply({ content: "<:No:1330253494447243355> There are no fields to remove", ephemeral: true });
       }
     }
 

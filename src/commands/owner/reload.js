@@ -49,7 +49,7 @@ module.exports = {
         return;
       }
       default:
-        await message.safeReply("<:info:1249145380973838478> Invalid option, availabe options:\n- `bot`: reloads the whole bot.\n- `commands`: reloads commands only (including contexts)");
+        await message.safeReply("<:Info:1330256387959164928> Invalid option, availabe options:\n- `bot`: reloads the whole bot.\n- `commands`: reloads commands only (including contexts)");
         break;
     }
   }

@@ -71,14 +71,14 @@ module.exports = {
 
     //
     else if (sub === "text") {
-      if (args.length < 2) return message.channel.send("<:info:1249145380973838478> Please enter a text");
+      if (args.length < 2) return message.channel.send("<:Info:1330256387959164928> Please enter a text");
       const input = args.join(" ");
       const response = await flipText(input);
       await message.safeReply(response);
     }
 
     // else
-    else await message.safeReply("<:info:1249145380973838478> Incorrect command usage");
+    else await message.safeReply("<:Info:1330256387959164928> Incorrect command usage");
   },
 
   async interactionRun(interaction) {

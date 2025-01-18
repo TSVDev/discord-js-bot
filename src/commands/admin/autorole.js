@@ -53,7 +53,7 @@ module.exports = {
       response = await setAutoRole(message, null, data.settings);
     } else {
       const roles = message.guild.findMatchingRoles(input);
-      if (roles.length === 0) response = "<:no:1235502897215836160> No matching roles found matching your query";
+      if (roles.length === 0) response = "<:No:1330253494447243355> No matching roles found matching your query";
       else response = await setAutoRole(message, roles[0], data.settings);
     }
 
@@ -69,10 +69,10 @@ module.exports = {
       let role = interaction.options.getRole("role");
       if (!role) {
         const role_id = interaction.options.getString("role_id");
-        if (!role_id) return interaction.followUp("<:info:1249145380973838478> Please provide a role or role id");
+        if (!role_id) return interaction.followUp("<:Info:1330256387959164928> Please provide a role or role id");
 
         const roles = interaction.guild.findMatchingRoles(role_id);
-        if (roles.length === 0) return interaction.followUp("<:no:1235502897215836160> No matching roles found matching your query");
+        if (roles.length === 0) return interaction.followUp("<:No:1330253494447243355> No matching roles found matching your query");
         role = roles[0];
       }
 
@@ -85,7 +85,7 @@ module.exports = {
     }
 
     // default
-    else response = "<:info:1249145380973838478> Invalid subcommand";
+    else response = "<:Info:1330256387959164928> Invalid subcommand";
 
     await interaction.followUp(response);
   },
@@ -98,16 +98,16 @@ module.exports = {
  */
 async function setAutoRole({ guild }, role, settings) {
   if (role) {
-    if (role.id === guild.roles.everyone.id) return "<:no:1235502897215836160> You cannot set `@everyone` as the autorole";
-    if (!guild.members.me.permissions.has("ManageRoles")) return "<:info:1249145380973838478> I don't have the `ManageRoles` permission";
+    if (role.id === guild.roles.everyone.id) return "<:No:1330253494447243355> You cannot set `@everyone` as the autorole";
+    if (!guild.members.me.permissions.has("ManageRoles")) return "<:Info:1330256387959164928> I don't have the `ManageRoles` permission";
     if (guild.members.me.roles.highest.position < role.position)
-      return "<:info:1249145380973838478> I don't have the permissions to assign this role";
-    if (role.managed) return "<:no:1235502897215836160> Oops! This role is managed by an integration";
+      return "<:Info:1330256387959164928> I don't have the permissions to assign this role";
+    if (role.managed) return "<:No:1330253494447243355> Oops! This role is managed by an integration";
   }
 
   if (!role) settings.autorole = null;
   else settings.autorole = role.id;
 
   await settings.save();
-  return `<:yes:1235503385323769877> Configuration saved! Autorole is ${!role ? "disabled" : "setup"}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Autorole is ${!role ? "disabled" : "setup"}`;
 }

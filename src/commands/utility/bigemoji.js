@@ -54,7 +54,7 @@ function getEmoji(user, emoji) {
     return { embeds: [embed] };
   }
   const parsed = parse(emoji, { assetType: "png" });
-  if (!parsed[0]) return "<:no:1235502897215836160> Not a valid emoji.";
+  if (!parsed[0]) return "<:No:1330253494447243355> Not a valid emoji.";
 
   embed.setImage(parsed[0].url);
   return { embeds: [embed] };

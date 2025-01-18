@@ -71,19 +71,19 @@ module.exports = {
 
   async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
-    if (!["limit", "action"].includes(input)) return message.safeReply("<:info:1249145380973838478> Invalid command usage");
+    if (!["limit", "action"].includes(input)) return message.safeReply("<:Info:1330256387959164928> Invalid command usage");
 
     let response;
     if (input === "limit") {
       const max = parseInt(args[1]);
-      if (isNaN(max) || max < 1) return message.safeReply("<:info:1249145380973838478> Max Warnings must be a valid number greater than 0");
+      if (isNaN(max) || max < 1) return message.safeReply("<:Info:1330256387959164928> Max Warnings must be a valid number greater than 0");
       response = await setLimit(max, data.settings);
     }
 
     if (input === "action") {
       const action = args[1]?.toUpperCase();
       if (!action || !["TIMEOUT", "KICK", "BAN"].includes(action))
-        return message.safeReply("<:info:1249145380973838478> Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
+        return message.safeReply("<:Info:1330256387959164928> Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
       response = await setAction(message.guild, action, data.settings);
     }
 
@@ -109,29 +109,29 @@ module.exports = {
 async function setLimit(limit, settings) {
   settings.max_warn.limit = limit;
   await settings.save();
-  return `<:yes:1235503385323769877> Configuration saved! Maximum warnings is set to ${limit}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Maximum warnings is set to ${limit}`;
 }
 
 async function setAction(guild, action, settings) {
   if (action === "TIMEOUT") {
     if (!guild.members.me.permissions.has("ModerateMembers")) {
-      return "<:info:1249145380973838478> I do not permission to timeout members";
+      return "<:Info:1330256387959164928> I do not permission to timeout members";
     }
   }
 
   if (action === "KICK") {
     if (!guild.members.me.permissions.has("KickMembers")) {
-      return "<:info:1249145380973838478> I do not have permission to kick members";
+      return "<:Info:1330256387959164928> I do not have permission to kick members";
     }
   }
 
   if (action === "BAN") {
     if (!guild.members.me.permissions.has("BanMembers")) {
-      return "<:info:1249145380973838478> I do not have permission to ban members";
+      return "<:Info:1330256387959164928> I do not have permission to ban members";
     }
   }
 
   settings.max_warn.action = action;
   await settings.save();
-  return `<:yes:1235503385323769877> Configuration saved! Automod action is set to ${action}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Automod action is set to ${action}`;
 }

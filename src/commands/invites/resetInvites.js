@@ -31,7 +31,7 @@ module.exports = {
 
   async messageRun(message, args) {
     const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply("<:info:1249145380973838478> Incorrect syntax. You must mention a target");
+    if (!target) return message.safeReply("<:Info:1330256387959164928> Incorrect syntax. You must mention a target");
     const response = await clearInvites(message, target.user);
     await message.safeReply(response);
   },
@@ -48,5 +48,5 @@ async function clearInvites({ guild }, user) {
   memberDb.invite_data.added = 0;
   await memberDb.save();
   checkInviteRewards(guild, memberDb, false);
-  return `<:yes:1235503385323769877> Done! Invites cleared for \`${user.username}\``;
+  return `<:Yes:1330253737687781436> Done! Invites cleared for \`${user.username}\``;
 }

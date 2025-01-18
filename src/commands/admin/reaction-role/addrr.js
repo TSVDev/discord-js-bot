@@ -77,14 +77,14 @@ module.exports = {
 
 async function addRR(guild, channel, messageId, reaction, role) {
   if (!channel.permissionsFor(guild.members.me).has(channelPerms)) {
-    return `<:info:1249145380973838478> You need the following permissions in ${channel.toString()}\n${parsePermissions(channelPerms)}`;
+    return `<:Info:1330256387959164928> You need the following permissions in ${channel.toString()}\n${parsePermissions(channelPerms)}`;
   }
 
   let targetMessage;
   try {
     targetMessage = await channel.messages.fetch({ message: messageId });
   } catch (ex) {
-    return "<:no:1235502897215836160> Could not fetch message. Did you provide a valid messageId?";
+    return "<:No:1330253494447243355> Could not fetch message. Did you provide a valid messageId?";
   }
 
   if (role.managed) {
@@ -92,30 +92,30 @@ async function addRR(guild, channel, messageId, reaction, role) {
   }
 
   if (guild.roles.everyone.id === role.id) {
-    return "<:no:1235502897215836160> You cannot assign the everyone role.";
+    return "<:No:1330253494447243355> You cannot assign the everyone role.";
   }
 
   if (guild.members.me.roles.highest.position < role.position) {
-    return "<:info:1249145380973838478> Oops! I cannot add/remove members to that role. Is that role higher than mine?";
+    return "<:Info:1330256387959164928> Oops! I cannot add/remove members to that role. Is that role higher than mine?";
   }
 
   const custom = parseEmoji(reaction);
-  if (custom.id && !guild.emojis.cache.has(custom.id)) return "<:no:1235502897215836160> This emoji does not belong to this server";
+  if (custom.id && !guild.emojis.cache.has(custom.id)) return "<:No:1330253494447243355> This emoji does not belong to this server";
   const emoji = custom.id ? custom.id : custom.name;
 
   try {
     await targetMessage.react(emoji);
   } catch (ex) {
-    return `<:no:1235502897215836160> Oops! Failed to react. Is this a valid emoji: ${reaction} ?`;
+    return `<:No:1330253494447243355> Oops! Failed to react. Is this a valid emoji: ${reaction} ?`;
   }
 
   let reply = "";
   const previousRoles = getReactionRoles(guild.id, channel.id, targetMessage.id);
   if (previousRoles.length > 0) {
     const found = previousRoles.find((rr) => rr.emote === emoji);
-    if (found) reply = "<:info:1249145380973838478> A role is already configured for this emoji. Overwriting data,\n";
+    if (found) reply = "<:Info:1330256387959164928> A role is already configured for this emoji. Overwriting data,\n";
   }
 
   await addReactionRole(guild.id, channel.id, targetMessage.id, emoji, role.id);
-  return (reply += "<:yes:1235503385323769877> Done! Configuration saved");
+  return (reply += "<:Yes:1330253737687781436> Done! Configuration saved");
 }

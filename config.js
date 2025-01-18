@@ -24,7 +24,7 @@ module.exports = {
     MEMBERS: 10000,
   },
   MESSAGES: {
-    API_ERROR: "<a:info:1235502894170505237> Unexpected Backend Error! Try again later or contact support server",
+    API_ERROR: "<a:Notice:1330253581491765359> Unexpected Backend Error! Try again later or contact support server",
   },
 
   // PLUGINS
@@ -118,8 +118,8 @@ module.exports = {
   SUGGESTIONS: {
     ENABLED: true, // Should the suggestion system be enabled
     EMOJI: {
-      UP_VOTE: "<:yes:1235503385323769877>",
-      DOWN_VOTE: "<:no:1235502897215836160>",
+      UP_VOTE: "<:Yes:1330253737687781436>",
+      DOWN_VOTE: "<:No:1330253494447243355>",
     },
     DEFAULT_EMBED: "#4F545C",
     APPROVED_EMBED: "#43B581",

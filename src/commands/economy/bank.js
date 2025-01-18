@@ -110,24 +110,24 @@ module.exports = {
     //
     else if (sub === "deposit") {
       const coins = args.length && parseInt(args[1]);
-      if (isNaN(coins)) return message.safeReply("<:info:1249145380973838478> Provide a valid number of coins you wish to deposit");
+      if (isNaN(coins)) return message.safeReply("<:Info:1330256387959164928> Provide a valid number of coins you wish to deposit");
       response = await deposit(message.author, coins);
     }
 
     //
     else if (sub === "withdraw") {
       const coins = args.length && parseInt(args[1]);
-      if (isNaN(coins)) return message.safeReply("<:info:1249145380973838478> Provide a valid number of coins you wish to withdraw");
+      if (isNaN(coins)) return message.safeReply("<:Info:1330256387959164928> Provide a valid number of coins you wish to withdraw");
       response = await withdraw(message.author, coins);
     }
 
     //
     else if (sub === "transfer") {
-      if (args.length < 3) return message.safeReply("<:info:1249145380973838478> Provide a valid user and coins to transfer");
+      if (args.length < 3) return message.safeReply("<:Info:1330256387959164928> Provide a valid user and coins to transfer");
       const target = await message.guild.resolveMember(args[1], true);
-      if (!target) return message.safeReply("<:info:1249145380973838478> Provide a valid user to transfer coins to");
+      if (!target) return message.safeReply("<:Info:1330256387959164928> Provide a valid user to transfer coins to");
       const coins = parseInt(args[2]);
-      if (isNaN(coins)) return message.safeReply("<:info:1249145380973838478> Provide a valid number of coins you wish to transfer");
+      if (isNaN(coins)) return message.safeReply("<:Info:1330256387959164928> Provide a valid number of coins you wish to transfer");
       response = await transfer(message.author, target.user, coins);
     }
 

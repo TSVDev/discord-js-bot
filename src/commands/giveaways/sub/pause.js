@@ -3,11 +3,11 @@
  * @param {string} messageId
  */
 module.exports = async (member, messageId) => {
-  if (!messageId) return "<:info:1249145380973838478> You must provide a valid message id.";
+  if (!messageId) return "<:Info:1330256387959164928> You must provide a valid message id.";
 
   // Permissions
   if (!member.permissions.has("ManageMessages")) {
-    return "<:info:1249145380973838478> You need to have the manage messages permissions to manage giveaways.";
+    return "<:Info:1330256387959164928> You need to have the manage messages permissions to manage giveaways.";
   }
 
   // Search with messageId
@@ -16,16 +16,16 @@ module.exports = async (member, messageId) => {
   );
 
   // If no giveaway was found
-  if (!giveaway) return `<:no:1235502897215836160> Unable to find a giveaway for messageId: ${messageId}`;
+  if (!giveaway) return `<:No:1330253494447243355> Unable to find a giveaway for messageId: ${messageId}`;
 
   // Check if the giveaway is paused
   if (giveaway.pauseOptions.isPaused) return "This giveaway is already paused.";
 
   try {
     await giveaway.pause();
-    return "<:yes:1235503385323769877> Success! Giveaway paused!";
+    return "<:Yes:1330253737687781436> Success! Giveaway paused!";
   } catch (error) {
     member.client.logger.error("Giveaway Pause", error);
-    return `<:no:1235502897215836160> An error occurred while pausing the giveaway: ${error.message}`;
+    return `<:No:1330253494447243355> An error occurred while pausing the giveaway: ${error.message}`;
   }
 };

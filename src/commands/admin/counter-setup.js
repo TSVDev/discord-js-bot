@@ -50,9 +50,9 @@ module.exports = {
   async messageRun(message, args, data) {
     const type = args[0].toUpperCase();
     if (!type || !["USERS", "MEMBERS", "BOTS"].includes(type)) {
-      return message.safeReply("<:info:1249145380973838478> Incorrect arguments are passed! Counter types: `users/members/bots`");
+      return message.safeReply("<:Info:1330256387959164928> Incorrect arguments are passed! Counter types: `users/members/bots`");
     }
-    if (args.length < 2) return message.safeReply("<:info:1249145380973838478> Incorrect Usage! You did not provide name");
+    if (args.length < 2) return message.safeReply("<:Info:1330256387959164928> Incorrect Usage! You did not provide name");
     args.shift();
     let channelName = args.join(" ");
 
@@ -113,5 +113,5 @@ async function setupCounter(guild, type, name, settings) {
   settings.data.bots = stats[1];
   await settings.save();
 
-  return "<:yes:1235503385323769877> Configuration saved! Counter channel created";
+  return "<:Yes:1330253737687781436> Configuration saved! Counter channel created";
 }

@@ -162,17 +162,17 @@ module.exports = {
     } else if (input === "strikes") {
       const strikes = args[1];
       if (isNaN(strikes) || Number.parseInt(strikes) < 1) {
-        return message.safeReply("<:info:1249145380973838478> Strikes must be a valid number greater than 0");
+        return message.safeReply("<:Info:1330256387959164928> Strikes must be a valid number greater than 0");
       }
       response = await setStrikes(settings, strikes);
     } else if (input === "action") {
       const action = args[1].toUpperCase();
       if (!action || !["TIMEOUT", "KICK", "BAN"].includes(action))
-        return message.safeReply("<:info:1249145380973838478> Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
+        return message.safeReply("<:Info:1330256387959164928> Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
       response = await setAction(settings, message.guild, action);
     } else if (input === "debug") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("<:info:1249145380973838478> Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("<:Info:1330256387959164928> Invalid status. Value must be `on/off`");
       response = await setDebug(settings, status);
     }
 
@@ -184,19 +184,19 @@ module.exports = {
     // whitelist add
     else if (input === "whitelistadd") {
       const match = message.guild.findMatchingChannels(args[1]);
-      if (!match.length) return message.safeReply(`<:no:1235502897215836160> No channel found matching " ${args[1]} ". Make sure you input a valid channel ID or mention.`);
+      if (!match.length) return message.safeReply(`<:No:1330253494447243355> No channel found matching " ${args[1]} ". Make sure you input a valid channel ID or mention.`);
       response = await whiteListAdd(settings, match[0].id);
     }
 
     // whitelist remove
     else if (input === "whitelistremove") {
       const match = message.guild.findMatchingChannels(args[1]);
-      if (!match.length) return message.safeReply(`<:no:1235502897215836160> No channel found matching " ${args[1]}:". Make sure you input a valid channel ID or mention.`);
+      if (!match.length) return message.safeReply(`<:No:1330253494447243355> No channel found matching " ${args[1]}:". Make sure you input a valid channel ID or mention.`);
       response = await whiteListRemove(settings, match[0].id);
     }
 
     //
-    else response = "<:info:1249145380973838478> Invalid command usage!";
+    else response = "<:Info:1330256387959164928> Invalid command usage!";
     await message.safeReply(response);
   },
 
@@ -276,38 +276,38 @@ async function getStatus(settings, guild) {
 async function setStrikes(settings, strikes) {
   settings.automod.strikes = strikes;
   await settings.save();
-  return `<:yes:1235503385323769877> Configuration saved! Maximum strikes is set to ${strikes}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Maximum strikes is set to ${strikes}`;
 }
 
 async function setAction(settings, guild, action) {
   if (action === "TIMEOUT") {
     if (!guild.members.me.permissions.has("ModerateMembers")) {
-      return "<:info:1249145380973838478> <:info:1249145380973838478> I do not permission to timeout members";
+      return "<:Info:1330256387959164928> <:Info:1330256387959164928> I do not permission to timeout members";
     }
   }
 
   if (action === "KICK") {
     if (!guild.members.me.permissions.has("KickMembers")) {
-      return "<:info:1249145380973838478> I do not have permission to kick members";
+      return "<:Info:1330256387959164928> I do not have permission to kick members";
     }
   }
 
   if (action === "BAN") {
     if (!guild.members.me.permissions.has("BanMembers")) {
-      return "<:info:1249145380973838478> I do not have permission to ban members";
+      return "<:Info:1330256387959164928> I do not have permission to ban members";
     }
   }
 
   settings.automod.action = action;
   await settings.save();
-  return `<:yes:1235503385323769877> Configuration saved! Automod action is set to ${action}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Automod action is set to ${action}`;
 }
 
 async function setDebug(settings, input) {
   const status = input.toLowerCase() === "on" ? true : false;
   settings.automod.debug = status;
   await settings.save();
-  return `<:yes:1235503385323769877> Configuration saved! Automod debug is now ${status ? "enabled" : "disabled"}`;
+  return `<:Yes:1330253737687781436> Configuration saved! Automod debug is now ${status ? "enabled" : "disabled"}`;
 }
 
 function getWhitelist(guild, settings) {
@@ -321,19 +321,19 @@ function getWhitelist(guild, settings) {
     if (channel) channels.push(channel.toString());
   }
 
-  return `<:yes:1235503385323769877> Whitelisted channels: ${channels.join(", ")}`;
+  return `<:Yes:1330253737687781436> Whitelisted channels: ${channels.join(", ")}`;
 }
 
 async function whiteListAdd(settings, channelId) {
   if (settings.automod.wh_channels.includes(channelId)) return "Channel is already whitelisted";
   settings.automod.wh_channels.push(channelId);
   await settings.save();
-  return `<:yes:1235503385323769877> Channel whitelisted!`;
+  return `<:Yes:1330253737687781436> Channel whitelisted!`;
 }
 
 async function whiteListRemove(settings, channelId) {
   if (!settings.automod.wh_channels.includes(channelId)) return "Channel is not whitelisted";
   settings.automod.wh_channels.splice(settings.automod.wh_channels.indexOf(channelId), 1);
   await settings.save();
-  return `<:yes:1235503385323769877> Channel removed from whitelist!`;
+  return `<:Yes:1330253737687781436> Channel removed from whitelist!`;
 }
