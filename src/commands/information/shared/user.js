@@ -135,23 +135,26 @@ module.exports = async (member, message) => {
 
     const botOwnerGuildId = "1254188178030727248";
     const botOwnerRoleId = "1259329386289565727";
-    const botManagerRoleId = "528821806556250122";
+    const botManagerRoleId = "1259329242148114463";
     const botOwnerUserId = "528821806556250122";
 
-    if (
-      isGuildMember &&
-      (member.roles.cache.has(botOwnerRoleId) || user.id === botOwnerUserId) &&
-      member.guild.id === botOwnerGuildId
-    ) {
-      dynamicFlags.push(`${flagNames.BotOwner.emoji} ${flagNames.BotOwner.name}`);
-    }
+    // Fetch the TSV Dev guild
+    const tsvDevGuild = member.client.guilds.cache.get(botOwnerGuildId);
 
-    if (
-      isGuildMember &&
-      member.roles.cache.has(botManagerRoleId) &&
-      member.guild.id === botOwnerGuildId
-    ) {
-      dynamicFlags.push(`${flagNames.BotManager.emoji} ${flagNames.BotManager.name}`);
+    // Check if the user has the Bot Owner or Bot Manager role in the TSV Dev guild
+    const hasBotOwnerRoleInTsvDev = tsvDevGuild?.members.cache.get(user.id)?.roles.cache.has(botOwnerRoleId);
+    const hasBotManagerRoleInTsvDev = tsvDevGuild?.members.cache.get(user.id)?.roles.cache.has(botManagerRoleId);
+    
+    if (isGuildMember) {
+      // Bot Owner Flag
+      if ((member.roles.cache.has(botOwnerRoleId) || user.id === botOwnerUserId) || hasBotOwnerRoleInTsvDev) {
+        dynamicFlags.push(`${flagNames.BotOwner.emoji} ${flagNames.BotOwner.name}`);
+      }
+    
+      // Bot Manager Flag
+      if (hasBotManagerRoleInTsvDev) {
+        dynamicFlags.push(`${flagNames.BotManager.emoji} ${flagNames.BotManager.name}`);
+      }
     }
 
     if (isGuildMember && member.communicationDisabledUntil) {
