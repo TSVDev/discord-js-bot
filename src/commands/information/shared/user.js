@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
+const { PermissionsBitField } = require('discord.js');
 
 /**
  * @param {import('discord.js').GuildMember | import('discord.js').User} member
@@ -38,40 +39,148 @@ module.exports = async (member, message) => {
 
     let topRole = isGuildMember ? member.roles.highest : null;
     let isBooster = isGuildMember && member.premiumSince !== null ? "<:Freeboost:1330059256166092822>" : "<:No:1330253494447243355>";
-    let isHuman = user.bot ? "<:No:1330253494447243355>" : "<:Yes:1330253737687781436>";
-    let isServerOwner = isGuildMember && member.guild.ownerId === member.id ? "<:Yes:1330253737687781436>" : "<:No:1330253494447243355>";
-
-    let roleId = "1259329242148114463"; // Replace with the actual role ID
-    let isBotHandler = isGuildMember && member.roles.cache.has(roleId) ? "<:Yes:1330253737687781436>" : "<:No:1330253494447243355>";
 
     const flagNames = {
       Staff: { name: "Discord Employee", emoji: "<:Discordstaff:1330059346821906493>" },
       Partner: { name: "Discord Partner", emoji: "<:Discord_Partner:1330059092026458112>" },
-      HypeSquad: { name: "HypeSquad Events Member", emoji: "<a:Notice:1330253581491765359>" },
-      HypeSquadOnlineHouse1: { name: "House Bravery Member", emoji: "<:hypesquad:123456789012345678>" },
+      Hypesquad: { name: "HypeSquad Events Member", emoji: "<:Hypesquadevents:1330393148840480872>" },
+      HypeSquadOnlineHouse1: { name: "House Bravery Member", emoji: "<:Hypesquadbravery:1330393177416532008>" },
       HypeSquadOnlineHouse2: { name: "House Brilliance Member", emoji: "<:Hypesquadbrilliance:1330059167339249705>" },
       HypeSquadOnlineHouse3: { name: "House Balance Member", emoji: "<:Hypesquadbalance:1330059279629029446>" },
       BugHunterLevel1: { name: "Bug Hunter Level 1", emoji: "<:Bughunter:1330059205591175249>" },
-      BugHunterLevel2: { name: "Bug Hunter Level 2", emoji: "<a:Notice:1330253581491765359>" },
+      BugHunterLevel2: { name: "Bug Hunter Level 2", emoji: "<:GoldBughunter:1330393205845393481>" },
       PremiumEarlySupporter: { name: "Early Supporter", emoji: "<:Earlysupporter:1330059312516829244>" },
       TeamPseudoUser: { name: "Team User", emoji: "<a:Notice:1330253581491765359>" },
       VerifiedBot: { name: "Verified Bot", emoji: "<:Verifiedbadge:1330059151774187560>" },
-      VerifiedDeveloper: { name: "Verified Developer", emoji: "<:DiscordEarlyBotDeveloper:1330059105137594380>" },
+      VerifiedDeveloper: { name: "Early Verified Bot Developer", emoji: "<:DiscordEarlyBotDeveloper:1330059105137594380>" },
       ActiveDeveloper: { name: "Active Developer", emoji: "<:DiscordActiveDeveloper:1330059119083786334>" },
       CertifiedModerator: { name: "Moderator Programs Alumni", emoji: "<:Discordmoderator:1330059298017116201>" },
+
+      ServerOwner: { name: "Server Owner", emoji: "<:Crown:1330393191622381568>" },
+      ServerAdmin: { name: "Server Administrator", emoji: "<:DarkAdminShield:1330586167342665838>" },
+      ServerModerator: { name: "Server Moderator", emoji: "<:DarkModShield:1330586188578422945>" },
+      BotUser: { name: "Bot User", emoji: "<:DarkBot:1330586265401430177>" },
+      BotOwner: { name: "Bot Owner", emoji: "<:DarkCrown:1330586276717662268>" },
+      BotManager: { name: "Bot Manager", emoji: ":wrench:" },
+
+      Booster: { name: "Server Booster", emoji: "<:Freeboost:1330059256166092822>" },
+
+      IsTimedout: { name: "Timed Out", emoji: "<:Timeout:1330256600732008602>" },
+      IsBanned: { name: "Banned", emoji: "<:Ban:1330256578682818662>" },
+
+      WarningCount: { name: "Warnings", emoji: "<:Warning:1330256481077166203>" },
+
+      /*
+      Add 
+      
+      */
+
     };
 
-    // Get the flags and map them to their readable names with custom emojis
-    const flags = user.flags.toArray();
-    const readableFlags = flags
+    // Function to get readable boosting duration
+    function getBoostingDuration(member) {
+      if (!member.premiumSince) return null;
+
+      const now = new Date();
+      const boostingStart = member.premiumSince;
+      const durationMs = now - boostingStart;
+
+      const durationDays = Math.floor(durationMs / (1000 * 60 * 60 * 24));
+      const years = Math.floor(durationDays / 365);
+      const months = Math.floor((durationDays % 365) / 30);
+      const days = durationDays % 30;
+
+      const parts = [];
+      if (years > 0) parts.push(`${years} year${years > 1 ? 's' : ''}`);
+      if (months > 0) parts.push(`${months} month${months > 1 ? 's' : ''}`);
+      if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+
+      return parts.join(', ');
+    }
+
+    // Dynamically check conditions for each flag
+    const dynamicFlags = [];
+
+    if (member.premiumSince) {
+      const boostingDuration = getBoostingDuration(member);
+      flags.push(
+        `${flagNames.Booster.emoji} ${flagNames.Booster.name} (${boostingDuration})`
+      );
+    }
+
+    if (isGuildMember && member.guild.ownerId === member.id) {
+      dynamicFlags.push(`${flagNames.ServerOwner.emoji} ${flagNames.ServerOwner.name}`);
+    }
+
+    if (
+      isGuildMember &&
+      (member.permissions.has(PermissionsBitField.Flags.Administrator) || 
+      member.permissions.has(PermissionsBitField.Flags.ManageGuild))
+    ) {
+      dynamicFlags.push(`${flagNames.ServerAdmin.emoji} ${flagNames.ServerAdmin.name}`);
+    }
+
+    if (
+      isGuildMember &&
+      (member.permissions.has(PermissionsBitField.Flags.ModerateMembers) ||
+      member.permissions.has(PermissionsBitField.Flags.KickMembers) ||
+      member.permissions.has(PermissionsBitField.Flags.BanMembers))
+    ) {
+      dynamicFlags.push(`${flagNames.ServerModerator.emoji} ${flagNames.ServerModerator.name}`);
+    }
+
+    if (user.bot) {
+      dynamicFlags.push(`${flagNames.BotUser.emoji} ${flagNames.BotUser.name}`);
+    }
+
+    const botOwnerGuildId = "1254188178030727248";
+    const botOwnerRoleId = "1259329386289565727";
+    const botManagerRoleId = "528821806556250122";
+    const botOwnerUserId = "528821806556250122";
+
+    if (
+      isGuildMember &&
+      (member.roles.cache.has(botOwnerRoleId) || user.id === botOwnerUserId) &&
+      member.guild.id === botOwnerGuildId
+    ) {
+      dynamicFlags.push(`${flagNames.BotOwner.emoji} ${flagNames.BotOwner.name}`);
+    }
+
+    if (
+      isGuildMember &&
+      member.roles.cache.has(botManagerRoleId) &&
+      member.guild.id === botOwnerGuildId
+    ) {
+      dynamicFlags.push(`${flagNames.BotManager.emoji} ${flagNames.BotManager.name}`);
+    }
+
+    if (isGuildMember && member.communicationDisabledUntil) {
+      dynamicFlags.push(`${flagNames.IsTimedout.emoji} ${flagNames.IsTimedout.name}`);
+    }
+
+    // Check if the user is banned
+    try {
+      const ban = await member.guild.bans.fetch(user.id);
+      if (ban) {
+        dynamicFlags.push(`${flagNames.IsBanned.emoji} ${flagNames.IsBanned.name}`);
+      }
+    } catch (error) {
+      if (error.code !== 10026) { // Ignore error if user is not banned
+        console.error(error);
+      }
+    }
+
+
+    // Combine dynamic flags with static user flags
+    const staticFlags = user.flags.toArray();
+    const readableStaticFlags = staticFlags
       .map(flag => {
         const flagData = flagNames[flag];
         return flagData ? `${flagData.emoji} ${flagData.name}` : `${flag}`; // If the flag doesn't exist in the map, just show the raw flag name
-      })
-      .join("\n"); // Join each flag on a new line
+      });
 
-    // If no flags, show "None"
-    const flagsList = readableFlags.length ? readableFlags : "None";
+    const allFlags = [...dynamicFlags, ...readableStaticFlags];
+    const flagsList = allFlags.length ? allFlags.join("\n") : "None";
 
     let statusAndDevice = "<:Offline:1330259872880791695> Offline";  // Default status
     let device = "N/A";      // Default to N/A
@@ -159,7 +268,7 @@ module.exports = async (member, message) => {
           inline: true,
         },
         {
-          name: "Ping:",
+          name: "Mention:",
           value: `<@${user.id}>`,
           inline: true,
         },
@@ -170,24 +279,19 @@ module.exports = async (member, message) => {
         },
         {
           name: "Status:",
-          value: statusAndDevice,
+          value: `**BUGGED** ${statusAndDevice}`,
         },
         {
           name: "Discord Registered:",
-          value: `<t:${Math.floor(user.createdAt.getTime() / 1000)}:F>`, // Converts to UNIX timestamp and uses Discord's local time format
-        },
-        {
-          name: "Human:",
-          value: isHuman,
-          inline: true,
+          value: `<t:${Math.floor(user.createdAt.getTime() / 1000)}:F> (<t:${Math.floor(user.createdAt.getTime() / 1000)}:R>)`, // Converts to UNIX timestamp and uses Discord's local time and relative format
         },
         {
           name: "Nitro Status:",
-          value: nitroStatus,
+          value: `**BUGGED** ${nitroStatus}`,
           inline: true,
         },
         {
-          name: "Discord Flags:",
+          name: "Flags:",
           value: flagsList, // Display the nicely formatted flags list
         },
         {
@@ -201,26 +305,11 @@ module.exports = async (member, message) => {
       embed.addFields(
         {
           name: "Guild Joined:",
-          value: `<t:${Math.floor(member.joinedAt.getTime() / 1000)}:F>`, // Converts to UNIX timestamp and uses Discord's local time format
+          value: `<t:${Math.floor(member.joinedAt.getTime() / 1000)}:F> (<t:${Math.floor(member.joinedAt.getTime() / 1000)}:R>)`, // Converts to UNIX timestamp and includes relative time
         },
         {
           name: "Top Role:",
           value: topRole ? topRole.toString() : "N/A",
-          inline: true,
-        },
-        {
-          name: "Booster:",
-          value: isBooster,
-          inline: true,
-        },
-        {
-          name: "Server Owner:",
-          value: isServerOwner,
-          inline: true,
-        },
-        {
-          name: "Bot Handler:",
-          value: isBotHandler,
           inline: true,
         },
         {

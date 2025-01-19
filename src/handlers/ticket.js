@@ -26,7 +26,7 @@ const CLOSE_PERMS = ["ManageChannels", "ReadMessageHistory"];
 function isTicketChannel(channel) {
   return (
     channel.type === ChannelType.GuildText &&
-    channel.name.startsWith("<:Ticket:1328782536800735304>︱tіcket-") &&
+    channel.name.startsWith("🎟︱tіcket-") &&
     channel.topic &&
     channel.topic.startsWith("Tіcket|")
   );

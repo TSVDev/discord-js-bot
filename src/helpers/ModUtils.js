@@ -301,7 +301,7 @@ module.exports = class ModUtils {
       logModeration(issuer, target, dmReason, "Timeout");
 
       const dmEmbed = new EmbedBuilder()
-        .setAuthor({ name: "You Have Been Timeout!" })
+        .setAuthor({ name: "You Have Been Timedout!" })
         .setColor(MODERATION.EMBED_COLORS.TIMEOUT)
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
