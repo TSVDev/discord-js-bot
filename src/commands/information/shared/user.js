@@ -242,8 +242,11 @@ module.exports = async (member, message) => {
           deviceEmoji = statusDeviceEmojis.web[status] || "<:OfflineWeb:1330271657536782417>";  // Default to Web offline emoji
         }
 
+         // Capitalize status except for DND, which should be uppercase
+        const formattedStatus = status === "dnd" ? "DND" : status.charAt(0).toUpperCase() + status.slice(1);
+
         // Combine status and device emoji into a single string
-        statusAndDevice = `${deviceEmoji} ${status.charAt(0).toUpperCase() + status.slice(1)} on ${device}`;
+        statusAndDevice = `${deviceEmoji} ${formattedStatus} on ${device}`;
       }
 
        // Check for activity and append to status
