@@ -378,8 +378,6 @@ module.exports = class ModUtils {
 
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "Kick");
 
@@ -421,8 +419,6 @@ module.exports = class ModUtils {
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "Softban");
 
@@ -466,8 +462,6 @@ module.exports = class ModUtils {
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "Ban");
 
@@ -505,8 +499,6 @@ module.exports = class ModUtils {
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "UnBan");
 
@@ -548,8 +540,6 @@ module.exports = class ModUtils {
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "Vmute");
 
@@ -592,8 +582,6 @@ module.exports = class ModUtils {
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "Vunmute");
 
@@ -635,8 +623,6 @@ module.exports = class ModUtils {
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "Deafen");
 
@@ -679,8 +665,6 @@ module.exports = class ModUtils {
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "unDeafen");
 
@@ -721,8 +705,6 @@ module.exports = class ModUtils {
       
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
-  
-      console.log(dmReason); // Output: "This is a message ."
 
       logModeration(issuer, target, dmReason, "Disconnect");
 

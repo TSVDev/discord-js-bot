@@ -1,6 +1,7 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, ActivityPlatform } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const { PermissionsBitField } = require('discord.js');
+const { Console } = require("console");
 
 /**
  * @param {import('discord.js').GuildMember | import('discord.js').User} member
@@ -38,7 +39,6 @@ module.exports = async (member, message) => {
     if (rolesMentions.length > 1024) rolesMentions = rolesMentions.substring(0, 1020) + "...";
 
     let topRole = isGuildMember ? member.roles.highest : null;
-    let isBooster = isGuildMember && member.premiumSince !== null ? "<:Freeboost:1330059256166092822>" : "<:No:1330253494447243355>";
 
     const flagNames = {
       Staff: { name: "Discord Employee", emoji: "<:Discordstaff:1330059346821906493>" },
@@ -69,6 +69,8 @@ module.exports = async (member, message) => {
       IsBanned: { name: "Banned", emoji: "<:Ban:1330256578682818662>" },
 
       WarningCount: { name: "Warnings", emoji: "<:Warning:1330256481077166203>" },
+
+      VerifiedEmail: { name: "Verified Email", emoji: "<:VerifiedEmail:1330256436242027520>" },
 
       /*
       Add 
@@ -124,7 +126,8 @@ module.exports = async (member, message) => {
       isGuildMember &&
       (member.permissions.has(PermissionsBitField.Flags.ModerateMembers) ||
       member.permissions.has(PermissionsBitField.Flags.KickMembers) ||
-      member.permissions.has(PermissionsBitField.Flags.BanMembers))
+      member.permissions.has(PermissionsBitField.Flags.BanMembers) ||
+      member.permissions.has(PermissionsBitField.Flags.ManageMessages))
     ) {
       dynamicFlags.push(`${flagNames.ServerModerator.emoji} ${flagNames.ServerModerator.name}`);
     }
@@ -162,15 +165,24 @@ module.exports = async (member, message) => {
     }
 
     // Check if the user is banned
+
+    const guild = message.guild;
+
     try {
-      const ban = await member.guild.bans.fetch(user.id);
-      if (ban) {
-        dynamicFlags.push(`${flagNames.IsBanned.emoji} ${flagNames.IsBanned.name}`);
+
+      if (!guild) {
+        console.error('Guild not found.');
+        return;
+      }
+      const banList = await guild.bans.fetch(); // Fetch the ban list
+      const bannedUser = banList.find(banned => banned.user.id === user.id); // Check if the user is in the ban list
+    
+      if (bannedUser) {
+        dynamicFlags.push(`${flagNames.IsBanned.emoji} ${flagNames.IsBanned.name}`); // Add the "Banned" flag
       }
     } catch (error) {
-      if (error.code !== 10026) { // Ignore error if user is not banned
-        console.error(error);
-      }
+      console.error('Error fetching bans:', error);
+      // Optionally, you can handle this case by adding a default flag or sending an error message
     }
 
 
@@ -185,76 +197,98 @@ module.exports = async (member, message) => {
     const allFlags = [...dynamicFlags, ...readableStaticFlags];
     const flagsList = allFlags.length ? allFlags.join("\n") : "None";
 
-    let statusAndDevice = "<:Offline:1330259872880791695> Offline";  // Default status
-    let device = "N/A";      // Default to N/A
-    let statusEmoji = "<:Offline:1330259872880791695> Offline";  // Default offline emoji
-    let deviceEmoji = "❓ Unknown";  // Default device emoji
-
     // Status and device specific emojis
     const statusDeviceEmojis = {
       mobile: {
-        online: "<:OnlinePhone:1330271678374215802> Online",
-        idle: "<:IdlePhone:1330271727564882052> Idle",
-        dnd: "<:DNDPhone:1330271711811211317> Do Not Disturb",
-        offline: "<:OfflinePhone:1330271740575613018> Offline",
+        online: "<:OnlinePhone:1330271678374215802>",
+        idle: "<:IdlePhone:1330271727564882052>",
+        dnd: "<:DNDPhone:1330271711811211317>",
+        offline: "<:OfflinePhone:1330271740575613018>",
       },
       desktop: {
-        online: "<:OnlineDesktop:1330271765674463407> Online",
-        idle: "<:IdleDesktop:1330271799232954491> Idle",
-        dnd: "<:DNDDesktop:1330271786620944384> Do Not Disturb",
-        offline: "<:OfflineDesktop:1330271812801663109> Offline",
+        online: "<:OnlineDesktop:1330271765674463407>",
+        idle: "<:IdleDesktop:1330271799232954491>",
+        dnd: "<:DNDDesktop:1330271786620944384>",
+        offline: "<:OfflineDesktop:1330271812801663109>",
       },
       web: {
-        online: "<:OnlineWeb:1330271544013754390> Online",
-        idle: "<:IdleWeb:1330271638373138462> Idle",
-        dnd: "<:DNDWeb:1330271601111077006> Do Not Disturb",
-        offline: "<:OfflineWeb:1330271657536782417> Offline",
+        online: "<:OnlineWeb:1330271544013754390>",
+        idle: "<:IdleWeb:1330271638373138462>",
+        dnd: "<:DNDWeb:1330271601111077006>",
+        offline: "<:OfflineWeb:1330271657536782417>",
       },
     };
 
-    // Only check presence if the user is online
-    console.log("Fetched User", fetchedUser);
-    console.log("Member Presence", member.presence);
-    console.log("User Presence", user.presence);
-    if (fetchedUser.presence) {
-      console.log(fetchedUser.presence);
-      const status = fetchedUser.presence.status;
-      console.log("Status: ", status);
+     // Initialize status and device information
+    let statusAndDevice = "<a:Notice:1330253581491765359> No presence data found for the user.";
+
+    // Check for presence
+    if (member.presence) {
+      const status = member.presence.status;
 
       // Device information (mobile, desktop, web)
-      if (fetchedUser.presence.clientStatus) {
-        if (fetchedUser.presence.clientStatus.desktop) {
+      if (member.presence.clientStatus) {
+        let device = "Unknown Device";
+        let deviceEmoji = "<a:Notice:1330253581491765359>";
+
+        if (member.presence.clientStatus.desktop) {
           device = "Desktop";
-          deviceEmoji = statusDeviceEmojis.desktop[status] || "<:OfflineDesktop:1330271812801663109> Offline";  // Default to Desktop offline emoji
-        } else if (fetchedUser.presence.clientStatus.mobile) {
+          deviceEmoji = statusDeviceEmojis.desktop[status] || "<:OfflineDesktop:1330271812801663109>";  // Default to Desktop offline emoji
+        } else if (member.presence.clientStatus.mobile) {
           device = "Mobile";
-          deviceEmoji = statusDeviceEmojis.mobile[status] || "<:OfflinePhone:1330271740575613018> Offline";  // Default to Mobile offline emoji
-        } else if (fetchedUser.presence.clientStatus.web) {
+          deviceEmoji = statusDeviceEmojis.mobile[status] || "<:OfflinePhone:1330271740575613018>";  // Default to Mobile offline emoji
+        } else if (member.presence.clientStatus.web) {
           device = "Web";
-          deviceEmoji = statusDeviceEmojis.web[status] || "<:OfflineWeb:1330271657536782417> Offline";  // Default to Web offline emoji
+          deviceEmoji = statusDeviceEmojis.web[status] || "<:OfflineWeb:1330271657536782417>";  // Default to Web offline emoji
         }
-      } else {
-        // In case clientStatus is not available, fallback to a generic offline status
-        console.log("Client status data is not available.");
+
+        // Combine status and device emoji into a single string
+        statusAndDevice = `${deviceEmoji} ${status.charAt(0).toUpperCase() + status.slice(1)} on ${device}`;
       }
 
-      // Combine status and device emoji into a single string
-      statusAndDevice = `${deviceEmoji}`;
+       // Check for activity and append to status
+     if (member.presence.activities && member.presence.activities.length > 0) {
+      const activities = member.presence.activities
+         .map((activity) => {
+          switch (activity.type) {
+            case 0: // Playing an activity (ActivityType.PLAYING)
+              return `Playing: **${activity.name}**`;
+            case 2: // Listening to an activity (ActivityType.LISTENING)
+              if (activity.name === "Spotify") {
+               // Check if the activity is from Spotify
+               return `Listening to: __${activity.details}__ by __${activity.state}__ on ${activity.name}`;
+              } else {
+               return `Listening to: **${activity.name}**`;
+              }
+            case 3: // Watching an activity (ActivityType.WATCHING)
+              return `Watching: **${activity.name}**`;
+            case 1: // Streaming an activity (ActivityType.STREAMING)
+              return `Streaming: **${activity.name}**`;
+            case 5: // Competing in an activity (ActivityType.COMPETING)
+              return `Competing in: **${activity.name}**`;
+            case 4: // Custom Status (ActivityType.CUSTOM_STATUS)
+              let emojiType = '';
+              let emojiText = '';
+    
+              // Check if the emoji is custom or default
+              if (activity.emoji?.id) {
+                emojiType = "(Custom Emoji)"; // It's a custom emoji
+                emojiText = ''; // Remove the emoji code for custom emojis
+              } else if (activity.emoji) {
+                emojiType = ''; // No special label for default emoji
+                emojiText = activity.emoji.toString(); // Show the default emoji
+              }
 
-    } else {
-      // If there's no presence data available, fallback to "Offline"
-      console.log("No presence data found for the user.");
-
-      // Now you can use `statusAndDevice` to represent both status and device in the embed
-      console.log(statusAndDevice);
+                // Return the custom status with emoji details
+                return `Custom Status: ${emojiText} ${emojiType} **${activity.state}**`;
+            default:
+              return `Extra **${activity.name}**`;
+          }
+        });
+        activityStatus = activities.join("\n");
+        statusAndDevice += ` \n${activityStatus}`;
+      }
     }
-
-    console.log("Final status and device:", statusAndDevice);  // For debugging, print the combined string
-
-    // Nitro status
-    const nitroStatus = fetchedUser.premiumType === 2 ? "<:Yes:1330253737687781436> Nitro 🌟" : fetchedUser.premiumType === 1 ? "<:Yes:1330253737687781436> Nitro Classic ⭐" : "<:No:1330253494447243355> No Nitro";
-
-    console.log("Nitro Status:", nitroStatus);
 
     // Build the embed
     const embed = new EmbedBuilder()
@@ -282,16 +316,11 @@ module.exports = async (member, message) => {
         },
         {
           name: "Status:",
-          value: `**BUGGED** ${statusAndDevice}`,
+          value: statusAndDevice,
         },
         {
           name: "Discord Registered:",
           value: `<t:${Math.floor(user.createdAt.getTime() / 1000)}:F> (<t:${Math.floor(user.createdAt.getTime() / 1000)}:R>)`, // Converts to UNIX timestamp and uses Discord's local time and relative format
-        },
-        {
-          name: "Nitro Status:",
-          value: `**BUGGED** ${nitroStatus}`,
-          inline: true,
         },
         {
           name: "Flags:",
