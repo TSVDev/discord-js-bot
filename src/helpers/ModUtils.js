@@ -255,7 +255,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -309,7 +309,7 @@ module.exports = class ModUtils {
         {name:`Expires:`, value: `${tt}`},
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -350,7 +350,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -389,7 +389,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -430,7 +430,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -473,7 +473,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -510,7 +510,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         //await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
       
@@ -552,7 +552,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -593,7 +593,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -635,7 +635,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -676,7 +676,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -717,7 +717,7 @@ module.exports = class ModUtils {
           
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 
@@ -763,7 +763,7 @@ module.exports = class ModUtils {
           {name:`Channel:`, value: `${channel}`},
         )
         .setTimestamp()
-        .setFooter({text: `This has been sent on behalf of the Space Labs Moderation team`});
+        .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
 

@@ -62,6 +62,9 @@ module.exports = async (member, message) => {
       BotUser: { name: "Bot User", emoji: "<:DarkBot:1330586265401430177>" },
       BotOwner: { name: "Bot Owner", emoji: "<:DarkCrown:1330586276717662268>" },
       BotManager: { name: "Bot Manager", emoji: ":wrench:" },
+      sls: { name: "Space Labs Security", emoji: "<:SpaceLabsSecurity:1331056293867294740>"},
+
+      dangerPerm: { name: "**USER HAS DANGEROUS PERMISSIONS**", emoji: "<:Warning:1330256481077166203>" },
 
       Booster: { name: "Server Booster", emoji: "<:Freeboost:1330059256166092822>" },
 
@@ -78,6 +81,19 @@ module.exports = async (member, message) => {
       */
 
     };
+
+    // Dangerous permissions to check for
+    const dangerousPermissions = [
+      'Administrator',
+      'ManageGuild', // Manage Server
+      'ManageChannels',
+      'ManageRoles',
+      'ManageMessages',
+      'KickMembers',
+      'BanMembers',
+      'MentionEveryone', // Mention @everyone, @here, and all roles
+    ];
+
 
     // Function to get readable boosting duration
     function getBoostingDuration(member) {
@@ -102,6 +118,20 @@ module.exports = async (member, message) => {
 
     // Dynamically check conditions for each flag
     const dynamicFlags = [];
+
+    // Check for dangerous permissions
+  if (member.permissions) {
+    const dangerousFlags = dangerousPermissions.filter((perm) =>
+      member.permissions.has(perm)
+    );
+
+    if (dangerousFlags.length > 0) {
+      const formattedFlags = dangerousFlags.map((perm) => `- ${perm}`).join("\n");
+      dynamicFlags.push(
+        `${flagNames.dangerPerm.emoji} ${flagNames.dangerPerm.name}\n[\n${formattedFlags}\n]`
+      );
+    }
+  }
 
     if (member.premiumSince) {
       const boostingDuration = getBoostingDuration(member);
@@ -158,6 +188,10 @@ module.exports = async (member, message) => {
       if (hasBotManagerRoleInTsvDev) {
         dynamicFlags.push(`${flagNames.BotManager.emoji} ${flagNames.BotManager.name}`);
       }
+    // Check if the searched user is the bot user
+    if (member.user.id === member.client.user.id) {
+      dynamicFlags.push(`${flagNames.sls.emoji} ${flagNames.sls.name}`);
+    }
     }
 
     if (isGuildMember && member.communicationDisabledUntil) {
@@ -296,7 +330,7 @@ module.exports = async (member, message) => {
     // Build the embed
     const embed = new EmbedBuilder()
       .setAuthor({
-        name: `${user.username} Information`,
+        name: `Information for: ${user.username}`,
         iconURL: user.displayAvatarURL(),
       })
       .setThumbnail(user.displayAvatarURL())
