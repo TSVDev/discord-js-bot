@@ -82,7 +82,7 @@ async function getMatchingBans(guild, match) {
     }
   }
 
-  if (matched.length === 0) return `<:No:1330253494447243355> No user found matching " ${match} ". Make sure you input a valid user ID or mention.`;
+  if (matched.length === 0) return `<:No:1330253494447243355> No user found matching " ${match} ". Make sure you input a valid user ID or mention, or that the user is in the ban list`;
 
   const options = [];
   for (const user of matched) {
@@ -115,8 +115,10 @@ async function waitForBan(issuer, reason, sent) {
     const user = await issuer.client.users.fetch(userId, { cache: true });
 
     const status = await unBanTarget(issuer, user, reason);
+
     if (typeof status === "boolean") return sent.edit({ content: `<:Yes:1330253737687781436> ${user.username} is un-banned!`, components: [] });
-    else if (response === "DM_DISABLED") return sent.edit({ content: `<:Info:1330256387959164928> ${user.username} has been unbanned, but could not be notified via DM.`, componets:[] });
+    if (status === "DM_DISABLED") return sent.edit({ content: `<:Info:1330256387959164928> ${user.username} has been unbanned, but could not be notified via DM.`, components:[] });
+    if (status === "NOT_BANNED") return sent.edit({ content: `<:Info:1330256387959164928> ${user.username} cannot be unbanned, as they are not banned.`, components:[] });
     else return sent.edit({ content: `<:No:1330253494447243355> Failed to unban ${user.username}`, components: [] });
   });
 

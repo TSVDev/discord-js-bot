@@ -62,9 +62,45 @@ module.exports = {
  */
 async function ban(issuer, target, reason) {
   const response = await banTarget(issuer, target, reason);
-  if (typeof response === "boolean") return `<:Ban:1330256578682818662> ${target.username} is banned!`;
-  if (response === "BOT_PERM") return `<:Info:1330256387959164928> I do not have permission to ban ${target.username}`;
-  else if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to ban ${target.username}`;
-  else if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been banned, but could not be notified via DM.`;
-  else return `<:No:1330253494447243355> Failed to ban ${target.username}`;
-}
+
+   // Ensure member is a GuildMember or User object
+   const isGuildMember = issuer instanceof require('discord.js').GuildMember;
+   const user = target.user || target; // Always use member.user to access user information
+
+  // Fetch targetMem and use it for detailed info
+  let targetMem;
+  if (!isGuildMember) {
+    try {
+      targetMem = await issuer.client.users.fetch(user.id);
+    } catch (error) {
+      await message.safeReply("<:No:1330253494447243355> Failed to fetch user:", error);
+      return { content: "<:No:1330253494447243355> Could not retrieve user data." };
+    }
+    } else {
+      targetMem = user;
+    }
+
+   //let targetMem = await issuer.client.users.fetch(target.id).catch(() => null);
+
+   if (targetMem) {
+     const username = targetMem.username;
+     const targetID = targetMem.id;
+    // Only GuildMember objects will have a `displayName`
+    const displayName = isGuildMember ? targetMem.displayName : null;
+
+    // Format the display name
+    let displayNameFormatted;
+    if (isGuildMember && displayName) {
+      // If the user is a guild member, show displayName
+      displayNameFormatted = `${username} (${displayName} - ${targetID})`;
+    } else {
+      // If not a guild member, just show the username and ID
+      displayNameFormatted = `${username} (${targetID})`;
+    };
+
+  if (typeof response === "boolean") return `<:Ban:1330256578682818662> ${displayNameFormatted} is banned!`;
+  if (response === "BOT_PERM") return `<:Info:1330256387959164928> I do not have permission to ban ${displayNameFormatted}`;
+  else if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to ban ${displayNameFormatted}`;
+  else if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${displayNameFormatted} has been banned, but could not be notified via DM.`;
+  else return `<:No:1330253494447243355> Failed to ban ${displayNameFormatted}`;
+}}

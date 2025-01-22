@@ -257,6 +257,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -327,6 +328,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -384,6 +386,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -439,7 +442,6 @@ module.exports = class ModUtils {
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
         let dmSent = false;
-
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -496,6 +498,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -529,21 +532,40 @@ module.exports = class ModUtils {
    * @param {import('discord.js').GuildMember} issuer
    * @param {import('discord.js').User} target
    * @param {string} reason
+   * @returns {Promise<EmbedBuilder>}
    */
   static async banTarget(issuer, target, reason) {
-    const targetMem = await issuer.guild.members.fetch(target.id).catch(() => {});
+    let targetMem;
+    try{
+      targetMem = await issuer.client.members.fetch(target.id).catch(() => {});
+    } catch (err) {
+      //User is not a member of the server
+      targetMem = null;
+    }
 
-    if (targetMem && !memberInteract(issuer, targetMem)) return "MEMBER_PERM";
-    if (targetMem && !memberInteract(issuer.guild.members.me, targetMem)) return "BOT_PERM";
+     // Check if the target is a member of the guild
+    let targetGuildMem;
+    try {
+      targetGuildMem = await issuer.guild.members.fetch(target.id).catch(() => {});
+    } catch (err) {
+      targetGuildMem = null;
+    }
+
+    // If target is a member of the guild, check for permissions
+    if (targetGuildMem) {
+      if (!memberInteract(issuer, targetGuildMem)) return "MEMBER_PERM";
+      if (!memberInteract(issuer.guild.members.me, targetGuildMem)) return "BOT_PERM";
+    }
 
     try {
      
-      
-      // Remove a section based on a pattern
+      // Process reason, removing special formatting like brackets
       let dmReason = reason.replace(/\[.*\]/, "");
 
+      // Log the moderation action
       logModeration(issuer, target, dmReason, "Ban");
 
+      // Attempt to send a DM notification
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Banned!" })
         .setColor(MODERATION.EMBED_COLORS.BAN)
@@ -553,9 +575,10 @@ module.exports = class ModUtils {
         )
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
-
+        
+        let dmSent = false;
         try {
-          await target.user.send({ embeds: [dmEmbed] });
+          await target.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
         } catch (ex) {
           if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
@@ -591,6 +614,15 @@ module.exports = class ModUtils {
    */
   static async unBanTarget(issuer, target, reason) {
     try {
+      // Check if the target is banned before attempting to unban
+      const bans = await issuer.guild.bans.fetch({cache: false}); // Fetch all bans
+      const isBanned = bans.has(target.id); // Check if the target is banned
+  
+      if (!isBanned) {
+        return "NOT_BANNED";
+      }
+  
+      // Proceed with unbanning if the user is banned
       await issuer.guild.bans.remove(target, reason);
       
       // Remove a section based on a pattern
@@ -608,8 +640,9 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
-          await target.user.send({ embeds: [dmEmbed] });
+          await target.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
         } catch (ex) {
           if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
@@ -664,6 +697,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -720,6 +754,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -775,6 +810,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -831,6 +867,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -887,6 +924,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully
@@ -948,6 +986,7 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
+        let dmSent = false;
         try {
           await target.user.send({ embeds: [dmEmbed] });
           dmSent = true; // DM sent successfully

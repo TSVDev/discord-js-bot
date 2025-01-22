@@ -208,7 +208,7 @@ module.exports = async (member, message) => {
         console.error('Guild not found.');
         return;
       }
-      const banList = await guild.bans.fetch(); // Fetch the ban list
+      const banList = await guild.bans.fetch({cache: false}); // Fetch the ban list
       const bannedUser = banList.find(banned => banned.user.id === user.id); // Check if the user is in the ban list
     
       if (bannedUser) {
