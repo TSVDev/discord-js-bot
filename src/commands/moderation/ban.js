@@ -65,5 +65,6 @@ async function ban(issuer, target, reason) {
   if (typeof response === "boolean") return `<:Ban:1330256578682818662> ${target.username} is banned!`;
   if (response === "BOT_PERM") return `<:Info:1330256387959164928> I do not have permission to ban ${target.username}`;
   else if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to ban ${target.username}`;
+  else if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been banned, but could not be notified via DM.`;
   else return `<:No:1330253494447243355> Failed to ban ${target.username}`;
 }

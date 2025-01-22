@@ -57,5 +57,6 @@ async function kick(issuer, target, reason) {
   if (typeof response === "boolean") return `👢 ${target.user.username} is kicked!`;
   if (response === "BOT_PERM") return `<:Info:1330256387959164928> I do not have permission to kick ${target.user.username}`;
   else if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to kick ${target.user.username}`;
+  else if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been kicked, but could not be notified via DM.`;
   else return `<:No:1330253494447243355> Failed to kick ${target.user.username}`;
 }

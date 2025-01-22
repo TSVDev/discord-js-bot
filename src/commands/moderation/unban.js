@@ -116,6 +116,7 @@ async function waitForBan(issuer, reason, sent) {
 
     const status = await unBanTarget(issuer, user, reason);
     if (typeof status === "boolean") return sent.edit({ content: `<:Yes:1330253737687781436> ${user.username} is un-banned!`, components: [] });
+    else if (response === "DM_DISABLED") return sent.edit({ content: `<:Info:1330256387959164928> ${user.username} has been unbanned, but could not be notified via DM.`, componets:[] });
     else return sent.edit({ content: `<:No:1330253494447243355> Failed to unban ${user.username}`, components: [] });
   });
 

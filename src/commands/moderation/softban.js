@@ -58,5 +58,6 @@ async function softban(issuer, target, reason) {
   if (typeof response === "boolean") return `<:Ban:1330256578682818662> ${target.user.username} is soft-banned!`;
   if (response === "BOT_PERM") return `<:Info:1330256387959164928> I do not have permission to softban ${target.user.username}`;
   else if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to softban ${target.user.username}`;
+  else if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been softbanned, but could not be notified via DM.`;
   else return `<:No:1330253494447243355> Failed to softban ${target.user.username}`;
 }

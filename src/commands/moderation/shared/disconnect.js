@@ -14,5 +14,6 @@ module.exports = async ({ member }, target, reason) => {
   if (response === "NO_VOICE") {
     return `<:No:1330253494447243355> ${target.user.username} is not in any voice channel`;
   }
+  if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been kicked, but could not be notified via DM.`;
   return `<:No:1330253494447243355> Failed to disconnect ${target.user.username}`;
 };

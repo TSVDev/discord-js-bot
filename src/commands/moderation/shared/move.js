@@ -20,5 +20,6 @@ module.exports = async ({ member }, target, reason, channel) => {
   if (response === "ALREADY_IN_CHANNEL") {
     return `<:No:1330253494447243355> ${target.user.username} is already connected to ${channel}`;
   }
+  if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been kicked, but could not be notified via DM.`;
   return `<:No:1330253494447243355> Failed to move ${target.user.username} to ${channel}`;
 };

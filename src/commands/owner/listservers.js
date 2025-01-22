@@ -58,6 +58,15 @@ module.exports = {
     );
     let buttonsRow = new ActionRowBuilder().addComponents(components);
 
+    // List of allowed guild IDs
+const allowedGuilds = ["1254188178030727248", "1144357037879341148", "1107352562090377367"]; // Replace with actual guild IDs
+
+// Function to get the appropriate emoji for each guild
+function getGuildEmoji(guildID) {
+  return allowedGuilds.includes(guildID) ? "<:Yes:1330253737687781436>" : "<a:Notice:1330253581491765359>"; // "✅" for allowed, "⚠️" for not allowed
+}
+  
+
     // Embed Builder
     const buildEmbed = () => {
       const start = (currentPage - 1) * maxPerPage;
@@ -71,8 +80,9 @@ module.exports = {
       const fields = [];
       for (let i = start; i < end; i++) {
         const server = servers[i];
+        const emoji = getGuildEmoji(server.id); // Get the emoji based on the server ID
         fields.push({
-          name: server.name,
+          name: `${emoji} ${server.name}`,
           value: server.id,
           inline: true,
         });

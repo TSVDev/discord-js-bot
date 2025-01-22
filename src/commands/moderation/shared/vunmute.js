@@ -17,5 +17,6 @@ module.exports = async ({ member }, target, reason) => {
   if (response === "NOT_MUTED") {
     return `<:No:1330253494447243355> ${target.user.username} is not voice muted`;
   }
+  if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been kicked, but could not be notified via DM.`;
   return `<:No:1330253494447243355> Failed to voice unmute ${target.user.username}`;
 };

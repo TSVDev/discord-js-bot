@@ -78,5 +78,6 @@ async function timeout(issuer, target, ms, reason) {
   if (response === "BOT_PERM") return `<:Info:1330256387959164928> I do not have permission to timeout ${target.user.username}`;
   else if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to timeout ${target.user.username}`;
   else if (response === "ALREADY_TIMEOUT") return `<:No:1330253494447243355> ${target.user.username} is already timed out!`;
+  else if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been timed out, but could not be notified via DM.`;
   else return `<:No:1330253494447243355> Failed to timeout ${target.user.username}`;
 }

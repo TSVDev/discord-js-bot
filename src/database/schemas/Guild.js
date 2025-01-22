@@ -16,6 +16,15 @@ const Schema = new mongoose.Schema({
     bots: { type: Number, default: 0 },
   },
   prefix: { type: String, default: PREFIX_COMMANDS.DEFAULT_PREFIX },
+  moderation: {
+    report_channel: String, // Channel for reporting issues
+    rules_channel: String,  // Channel for rules
+    roles: {
+      owner: String,       // Owner role ID
+      admin: String,       // Admin role ID
+      moderator: String,   // Moderator role ID
+    },
+  },
   stats: {
     enabled: Boolean,
     xp: {

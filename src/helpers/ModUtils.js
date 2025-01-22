@@ -257,7 +257,17 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       //await target.user.send(`⚠️ You have been warned!\n Reason: ${reason}`).catch((ex) => {});
 
@@ -268,7 +278,13 @@ module.exports = class ModUtils {
       }
 
       await memberDb.save();
-      return true;
+
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+
     } catch (ex) {
       error("warnTarget", ex);
       return "ERROR";
@@ -311,10 +327,26 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       //await target.user.send(`<:Timeout:1330256600732008602> You have been timed out!\n Reason: ${dmReason}\n Expires: ${tt}`).catch((ex) => {});
-      return true;
+
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+
     } catch (ex) {
       error("timeoutTarget", ex);
       return "ERROR";
@@ -352,11 +384,26 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       //await target.user.send(`<:Untimeout:1330257623748055131> You have been untimed out!\n Reason: ${dmReason}`).catch((ex) => {});
       
-      return true;
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+
     } catch (ex) {
       error("unTimeoutTarget", ex);
       return "ERROR";
@@ -391,13 +438,30 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        let dmSent = false;
 
-      await target.kick(reason);
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
+
+        await target.kick(reason);
 
       //await target.user.send(`👢 You have been kicked!\n Reason: ${dmReason}`).catch((ex) => {});
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
       
-      return true;
+      /*return true;*/
     } catch (ex) {
       error("kickTarget", ex);
       return "ERROR";
@@ -432,13 +496,28 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       await target.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
       await issuer.guild.members.unban(target.user);
       
       //await target.user.send(`<:Ban:1330256578682818662> You have been softbanned!\n Reason: ${dmReason}`).catch((ex) => {});
-      return true;
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+
     } catch (ex) {
       error("softbanTarget", ex);
       return "ERROR";
@@ -475,12 +554,29 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
         await issuer.guild.bans.create(target.id, { deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
 
-      //await target.user.send(`<:Ban:1330256578682818662> You have been banned!\n Reason: ${dmReason}`).catch((ex) => {});
-      return true;
+        
+        //await target.user.send(`<:Ban:1330256578682818662> You have been banned!\n Reason: ${dmReason}`).catch((ex) => {});
+      
+       if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+
     } catch (ex) {
       error(`banTarget`, ex);
       return "ERROR";
@@ -512,10 +608,24 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        //await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
       
-      
-      return true;
+        if (dmSent === true) {
+          return true;
+        } else if (dmSent === false) {
+          return "DM_DISABLED";
+        }
+
     } catch (ex) {
       error(`unBanTarget`, ex);
       return "ERROR";
@@ -554,10 +664,25 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       //await target.user.send(`<:MicMute:1330257705964797994> You have been VC Muted!\n Reason: ${dmReason}`).catch((ex) => {});
-      return true;
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+      
     } catch (ex) {
       error(`vMuteTarget`, ex);
       return "ERROR";
@@ -595,16 +720,29 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
-      //await target.user.send(`<:MicOn:1330257681306488842> You have been VC Unmuted!\n Reason: ${dmReason}`).catch((ex) => {});
-      return true;
-    } catch (ex) {
-      error(`vUnmuteTarget`, ex);
-      return "ERROR";
+        if (dmSent === true) {
+          return true;
+        } else if (dmSent === false) {
+          return "DM_DISABLED";
+        }
+
+      } catch (ex) {
+        error(`vMuteTarget`, ex);
+        return "ERROR";
+      }
     }
-  }
-
   /**
    * Deafens the target and logs to the database, channel
    * @param {import('discord.js').GuildMember} issuer
@@ -637,10 +775,25 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       //await target.user.send(`<:SoundMute:1330257693541269655> You have been VC Deafened!\n Reason: ${dmReason}`).catch((ex) => {});
-      return true;
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+
     } catch (ex) {
       error(`deafenTarget`, ex);
       return `<:No:1330253494447243355> Failed to deafen ${target.user.tag}`;
@@ -678,10 +831,25 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       //await target.user.send(`<:SoundOn:1330257670359486484> You have been VC Undeafened!\n Reason: ${dmReason}`).catch((ex) => {});
-      return true;
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+
     } catch (ex) {
       error(`unDeafenTarget`, ex);
       return "ERROR";
@@ -719,10 +887,25 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       //await target.user.send(`🚫 You have been VC Disconnected!\n Reason: ${dmReason}`).catch((ex) => {});
-      return true;
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+
     } catch (ex) {
       error(`unDeafenTarget`, ex);
       return "ERROR";
@@ -765,10 +948,25 @@ module.exports = class ModUtils {
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
 
-        await target.user.send({ embeds: [dmEmbed] }).catch((ex) => {});
+        try {
+          await target.user.send({ embeds: [dmEmbed] });
+          dmSent = true; // DM sent successfully
+        } catch (ex) {
+          if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            /*return "DM_DISABLED"; // Return early if DM can't be sent*/
+            dmSent = false; // DM can't be sent
+          }
+          /*throw ex; // Unexpected error, rethrow it*/
+          console.error("Error sending DM:", ex);
+        }
 
       //await target.user.send(`📞 You have been VC Moved!\n Reason: ${dmReason}`).catch((ex) => {});
-      return true;
+      if (dmSent === true) {
+        return true;
+      } else if (dmSent === false) {
+        return "DM_DISABLED";
+      }
+      
     } catch (ex) {
       error(`moveTarget`, ex);
       return "ERROR";

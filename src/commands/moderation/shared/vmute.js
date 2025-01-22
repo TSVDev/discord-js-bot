@@ -17,5 +17,8 @@ module.exports = async ({ member }, target, reason) => {
   if (response === "ALREADY_MUTED") {
     return `<:No:1330253494447243355> ${target.user.username} is already muted`;
   }
+  if (response === "DM_DISABLED") {
+    return `<:No:1330253494447243355> Unable to send DM to **${target.user.username}**. They may have DMs disabled.`;
+  }
   return `<:No:1330253494447243355> Failed to voice mute ${target.user.username}`;
 };
