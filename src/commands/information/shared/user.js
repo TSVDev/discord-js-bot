@@ -3,6 +3,23 @@ const { EMBED_COLORS } = require("@root/config");
 const { PermissionsBitField } = require('discord.js');
 const { Console } = require("console");
 
+/*const path = require('path');
+console.log("Resolved ModUtils Path:", path.resolve(__dirname, "@helpers/ModUtils"));
+console.log("Helper resolved path:", require.resolve('@helpers/ModUtils'));
+console.log("Should show: C:\\Users\\damia\\OneDrive\\Desktop\\Bots\\Space Labs Security\\src\\helpers\\ModUtils.js")
+
+delete require.cache[require.resolve('@helpers/ModUtils')]; 
+
+const ModUtils = require('@helpers/ModUtils');
+console.log("Whole Object:", ModUtils); // This should show you the whole object
+console.log("Just ModStats:", ModUtils.getModerationStats); // Check if this logs the function correctly
+
+console.log("Type of ModUtils:", typeof ModUtils); // Should log 'object'
+console.log("Keys of ModUtils:", Object.keys(ModUtils)); // Should list 'incrementCaseCount', 'getModerationStats'
+
+const { getModerationStats } = require("@helpers/ModUtils"); // Adjust the path based on your file structure
+console.log("Imported getModerationStats:", getModerationStats); // Should log the function definition*/
+
 /**
  * @param {import('discord.js').GuildMember | import('discord.js').User} member
  * @param {import('discord.js').Message} message
@@ -32,6 +49,14 @@ module.exports = async (member, message) => {
      return { content: "<:No:1330253494447243355> User not found." };
   }
 
+  const guild = isGuildMember ? member.guild : message.guild;
+    if (!guild) {
+      return { content: "<:No:1330253494447243355> Could not retrieve guild information." };
+    }
+
+  /*const stats = await getModerationStats(user.id, guild.id);
+  console.log("stats", stats);*/
+
     let color = isGuildMember ? member.displayHexColor : EMBED_COLORS.BOT_EMBED;
 
     // Handle roles and other member-specific fields if it's a GuildMember
@@ -41,32 +66,32 @@ module.exports = async (member, message) => {
     let topRole = isGuildMember ? member.roles.highest : null;
 
     const flagNames = {
-      Staff: { name: "Discord Employee", emoji: "<:Discordstaff:1330059346821906493>" },
-      Partner: { name: "Discord Partner", emoji: "<:Discord_Partner:1330059092026458112>" },
-      Hypesquad: { name: "HypeSquad Events Member", emoji: "<:Hypesquadevents:1330393148840480872>" },
-      HypeSquadOnlineHouse1: { name: "House Bravery Member", emoji: "<:Hypesquadbravery:1330393177416532008>" },
-      HypeSquadOnlineHouse2: { name: "House Brilliance Member", emoji: "<:Hypesquadbrilliance:1330059167339249705>" },
-      HypeSquadOnlineHouse3: { name: "House Balance Member", emoji: "<:Hypesquadbalance:1330059279629029446>" },
-      BugHunterLevel1: { name: "Bug Hunter Level 1", emoji: "<:Bughunter:1330059205591175249>" },
-      BugHunterLevel2: { name: "Bug Hunter Level 2", emoji: "<:GoldBughunter:1330393205845393481>" },
-      PremiumEarlySupporter: { name: "Early Supporter", emoji: "<:Earlysupporter:1330059312516829244>" },
+      Staff: { name: "Discord Employee", emoji: "<a:DiscordStaffAnimated:1332469231828340748>" },
+      Partner: { name: "Discord Partner", emoji: "<a:PartneredServerOwnerA:1332472582351618139>" },
+      Hypesquad: { name: "HypeSquad Events Member", emoji: "<a:HypeSquadEventsAnimation:1332468794798637137>" },
+      HypeSquadOnlineHouse1: { name: "House Bravery Member", emoji: "<a:HypeSquadHouseofBravery:1332469502973050980>" },
+      HypeSquadOnlineHouse2: { name: "House Brilliance Member", emoji: "<a:HypeSquadHouseofBrilliance:1332469402418810931>" },
+      HypeSquadOnlineHouse3: { name: "House Balance Member", emoji: "<a:HypeSquadHouseofBalance:1332468702981128223>" },
+      BugHunterLevel1: { name: "Bug Hunter Level 1", emoji: "<a:DiscordBugHunterAnimated:1332469327735296173>" },
+      BugHunterLevel2: { name: "Bug Hunter Level 2", emoji: "<a:DiscordGoldBugHunteranimated:1332469122730037258>" },
+      PremiumEarlySupporter: { name: "Early Supporter", emoji: "<a:EarlySupporter:1332485790848122900>" },
       TeamPseudoUser: { name: "Team User", emoji: "<a:Notice:1330253581491765359>" },
-      VerifiedBot: { name: "Verified Bot", emoji: "<:Verifiedbadge:1330059151774187560>" },
-      VerifiedDeveloper: { name: "Early Verified Bot Developer", emoji: "<:DiscordEarlyBotDeveloper:1330059105137594380>" },
-      ActiveDeveloper: { name: "Active Developer", emoji: "<:DiscordActiveDeveloper:1330059119083786334>" },
-      CertifiedModerator: { name: "Moderator Programs Alumni", emoji: "<:Discordmoderator:1330059298017116201>" },
+      VerifiedBot: { name: "Verified Bot", emoji: "<a:VerifiedAnimated:1332468976998944810>" },
+      VerifiedDeveloper: { name: "Early Verified Bot Developer", emoji: "<a:EarlyVerifiedBotDeveloperA:1332473571359985698>" },
+      ActiveDeveloper: { name: "Active Developer", emoji: "<a:ActiveDeveloperBadgeAnimated:1332472297381957733>" },
+      CertifiedModerator: { name: "Moderator Programs Alumni", emoji: "<a:ModeratorProgramsAlumnia:1332485773894746245>" },
 
       ServerOwner: { name: "Server Owner", emoji: "<:Crown:1330393191622381568>" },
       ServerAdmin: { name: "Server Administrator", emoji: "<:DarkAdminShield:1330586167342665838>" },
       ServerModerator: { name: "Server Moderator", emoji: "<:DarkModShield:1330586188578422945>" },
       BotUser: { name: "Bot User", emoji: "<:DarkBot:1330586265401430177>" },
       BotOwner: { name: "Bot Owner", emoji: "<:DarkCrown:1330586276717662268>" },
-      BotManager: { name: "Bot Manager", emoji: ":wrench:" },
-      sls: { name: "Space Labs Security", emoji: "<:SpaceLabsSecurity:1331056293867294740>"},
+      BotManager: { name: "Bot Manager", emoji: "<:BotManager:1332467608544612432>" },
+      sls: { name: "Space Labs Security", emoji: "<:SLS:1264290736082255986>"},
 
       dangerPerm: { name: "**USER HAS DANGEROUS PERMISSIONS**", emoji: "<:Warning:1330256481077166203>" },
 
-      Booster: { name: "Server Booster", emoji: "<:Freeboost:1330059256166092822>" },
+      Booster: { name: "Server Booster", emoji: "<a:EvolvingBadgeNitroScaling:1332472964204986442>" },
 
       IsTimedout: { name: "Timed Out", emoji: "<:Timeout:1330256600732008602>" },
       IsBanned: { name: "Banned", emoji: "<:Ban:1330256578682818662>" },
@@ -199,8 +224,6 @@ module.exports = async (member, message) => {
     }
 
     // Check if the user is banned
-
-    const guild = message.guild;
 
     try {
 
@@ -393,6 +416,17 @@ module.exports = async (member, message) => {
           value: "<a:Notice:1330253581491765359> This user is not in the guild.",
         }
       );
+
+      /*embed.addFields(
+        {
+          name: "Case Breakdown",
+          value: Object.entries(stats.caseBreakdown)
+          .map(([type, count]) => `${type}: ${count}`)
+          .join("\n") || "No cases",
+          inline: false,
+        });*/
+
+
   }
   embed.setFooter({ text: `Requested by: ${message.author.username}` })
        .setTimestamp(Date.now());

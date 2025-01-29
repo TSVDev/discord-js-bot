@@ -116,7 +116,12 @@ async function listWarnings(target, { guildId }) {
   const warnings = await getWarningLogs(guildId, target.id);
   if (!warnings.length) return `😇 ${target.user.username} has no warnings`;
 
-  const acc = warnings.map((warning, i) => `${i + 1}. ${warning.reason} [By <@${warning.admin.id}> ${warning.admin.id}]`).join("\n");
+  const acc = warnings.map((warning, i) =>{
+     // Format the timestamp for a more user-friendly format (e.g., "Sep 23, 2024, 1:07 AM")
+     const formattedTimestamp = new Date(warning.created_at).toLocaleString();
+  return `**Case #${warning.case_number || 'N/A'}: ${warning.reason}**\nModerator: <@${warning.admin.id}> \nID: (${warning.admin.id}) \nTime: \`${formattedTimestamp}\``;
+}).join("\n");
+
   const embed = new EmbedBuilder({
     author: { name: `${target.user.username}'s warnings:` },
     description: acc,

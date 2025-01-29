@@ -1,4 +1,4 @@
-const { warnTarget } = require("@helpers/ModUtils");
+const { warnTarget, incrementCaseCount } = require("@helpers/ModUtils");
 const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
@@ -56,7 +56,7 @@ async function warn(issuer, target, reason) {
   const response = await warnTarget(issuer, target, reason);
   if (typeof response === "boolean") return `⚠️ ${target.user.username} is warned!`;
   if (response === "BOT_PERM") return `<:Info:1330256387959164928> I do not have permission to warn ${target.user.username}`;
-  else if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to warn ${target.user.username}`;
-  else if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been warned, but could not be notified via DM.`;
+  if (response === "MEMBER_PERM") return `<:Info:1330256387959164928> You do not have permission to warn ${target.user.username}`;
+  if (response === "DM_DISABLED") return `<:Info:1330256387959164928> ${target.user.username} has been warned, but could not be notified via DM.`;
   else return `<:No:1330253494447243355> Failed to warn ${target.user.username}`;
 }

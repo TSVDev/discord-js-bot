@@ -9,6 +9,51 @@ const { error } = require("@helpers/Logger");
 const { getSettings } = require("@schemas/Guild");
 const { getMember } = require("@schemas/Member");
 const { addModLogToDb } = require("@schemas/ModLog");
+/* const ModLog = require('@schemas/ModLog'); // Adjust path to ModLog.js
+
+console.log("ModLog output:", ModLog);*/
+
+  /**
+   * Increment the moderation case count for the guild
+   * @param {import('discord.js').Guild} guild - The guild where the moderation action occurs
+   * @returns {Promise<number>} The new case number
+   */
+  const incrementCaseCount = async(guild) => {
+    try {
+      const settings = await getSettings(guild);
+      settings.moderation_case_count = (settings.moderation_case_count || 0) + 1;
+      await settings.save();
+      return settings.moderation_case_count;
+    } catch (error) {
+      console.error("Error incrementing case count:", error);
+      throw new Error("Failed to increment case count.");
+    }
+  };
+
+  /**
+   * Get moderation stats for a user
+   * @param {string} userId - The user's ID to fetch moderation stats
+   * @param {string} guildId - The guild ID to fetch stats for
+   * @returns {Object} Summary of moderation stats
+   */
+  /*const getModerationStats = async(userId, guildId) => {
+    const modLogs = await ModLog.find({ guild_id: guildId, user_id: userId }).lean();
+
+    if (!modLogs || modLogs.length === 0) {
+      return { totalCases: 0, caseBreakdown: {} };
+    }
+
+    const caseBreakdown = modLogs.reduce((summary, log) => {
+      summary[log.type] = (summary[log.type] || 0) + 1;
+      return summary;
+    }, {});
+
+    return {
+      totalCases: modLogs.length,
+      caseBreakdown,
+    };
+  };
+//};*/
 
 const DEFAULT_TIMEOUT_HOURS = 24; //hours
 
@@ -30,20 +75,50 @@ const memberInteract = (issuer, target) => {
 const logModeration = async (issuer, target, reason, type, data = {}) => {
   if (!type) return;
   const { guild } = issuer;
+
+  // Fetch guild settings and the current moderation case count
   const settings = await getSettings(guild);
+  settings.moderation_case_count = (settings.moderation_case_count || 0) + 1;
+  const caseNumber = settings.moderation_case_count;
+
+  // Save the updated case count to the database
+  await settings.save();
 
   let logChannel;
   if (settings.modlog_channel) logChannel = guild.channels.cache.get(settings.modlog_channel);
 
-  const embed = new EmbedBuilder().setFooter({
+   // Emoji mapping for moderation actions
+   const actionEmojis = {
+    PURGE: "<:Delete:1332467983196491827>",
+    TIMEOUT: "<:Timeout:1330256600732008602>",
+    UNTIMEOUT: "<:Untimeout:1330257623748055131>",
+    KICK: "<:LeaveGuild:1332490264073211914>",
+    SOFTBAN: "<:RedCross:1332490731511742516>",
+    BAN: "<:Ban:1330256578682818662>",
+    UNBAN: "<:GreenUnlockedLeft:1332493186035355739>",
+    VMUTE: "<:MicMute:1330257705964797994>",
+    VUNMUTE: "<:MicOn:1330257681306488842>",
+    DEAFEN: "<:SoundMute:1330257693541269655>",
+    UNDEAFEN: "<:SoundOn:1330257670359486484>",
+    DISCONNECT: "<:Disconnect:1332467641973211267>",
+    MOVE: "<:4729startvoicecalldark:1332490875254734889>",
+  };
+
+  // Get the emoji for the action type
+  const actionEmoji = actionEmojis[type.toUpperCase()] || "⚠️";
+
+
+  const embed = new EmbedBuilder()
+  .setFooter({
     text: `By ${issuer.displayName} • ${issuer.id}`,
     iconURL: issuer.displayAvatarURL(),
-  });
+  })
+  .setTimestamp(); // This will automatically add the current timestamp to the footer
 
   const fields = [];
   switch (type.toUpperCase()) {
     case "PURGE":
-      embed.setAuthor({ name: `Moderation - ${type}` });
+      embed.setAuthor({ name: `${actionEmoji} Moderation - ${type}` });
       fields.push(
         { name: "Purge Type", value: data.purgeType, inline: true },
         { name: "Messages", value: data.deletedCount.toString(), inline: true },
@@ -101,7 +176,7 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
   }
 
   if (type.toUpperCase() !== "PURGE") {
-    embed.setAuthor({ name: `Moderation - ${type}` }).setThumbnail(target.displayAvatarURL());
+    embed.setAuthor({ name: `${actionEmoji} Moderation - ${type}` }).setThumbnail(target.displayAvatarURL());
 
     if (target instanceof GuildMember) {
       fields.push({ name: "Member", value: `${target.displayName} [${target.id}]`, inline: false });
@@ -109,7 +184,10 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
       fields.push({ name: "User", value: `${target.tag} [${target.id}]`, inline: false });
     }
 
-    fields.push({ name: "Reason", value: reason || "No reason provided", inline: false });
+    fields.push(
+      { name: "Reason", value: reason || "No reason provided", inline: false },
+      { name: "Case Number", value: `#${caseNumber}`, inline: true }
+    );
 
     if (type.toUpperCase() === "TIMEOUT") {
       fields.push({
@@ -124,8 +202,16 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
   }
 
   embed.setFields(fields);
-  await addModLogToDb(issuer, target, reason, type.toUpperCase());
-  if (logChannel) logChannel.safeSend({ embeds: [embed] });
+
+  await addModLogToDb(issuer, target, reason, type.toUpperCase(), caseNumber);
+  
+  if (logChannel) {
+    try { logChannel.safeSend({ embeds: [embed] });
+    } catch (error) {
+      console.error("Error sending moderation log:", error);
+    }
+  }
+  return caseNumber; // Ensure caseNumber is returned
 };
 
 module.exports = class ModUtils {
@@ -241,7 +327,9 @@ module.exports = class ModUtils {
     if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     try {
-      logModeration(issuer, target, reason, "Warn");
+
+      const caseNumber = await logModeration(issuer, target, reason, "Warn");
+
       const memberDb = await getMember(issuer.guild.id, target.id);
       memberDb.warnings += 1;
       const settings = await getSettings(issuer.guild);
@@ -252,6 +340,7 @@ module.exports = class ModUtils {
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${reason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` },
           
         )
         .setTimestamp()
@@ -263,11 +352,14 @@ module.exports = class ModUtils {
           dmSent = true; // DM sent successfully
         } catch (ex) {
           if (ex.code === 50007) { // Discord API Error: Cannot send messages to this user
+            console.warn(`Failed to send DM to ${target.user.tag}: DMs are disabled.`);
             /*return "DM_DISABLED"; // Return early if DM can't be sent*/
             dmSent = false; // DM can't be sent
-          }
+          } else {
           /*throw ex; // Unexpected error, rethrow it*/
           console.error("Error sending DM:", ex);
+          dmSent = false; // Unexpected error also prevents DM
+          }
         }
 
       //await target.user.send(`⚠️ You have been warned!\n Reason: ${reason}`).catch((ex) => {});
@@ -315,7 +407,7 @@ module.exports = class ModUtils {
 
       const tt = `<t:${Math.round(target.communicationDisabledUntilTimestamp / 1000)}:R>`
 
-      logModeration(issuer, target, dmReason, "Timeout");
+      const caseNumber = await logModeration(issuer, target, dmReason, "Timeout");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Timedout!" })
@@ -324,6 +416,7 @@ module.exports = class ModUtils {
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
         {name:`Expires:`, value: `${tt}`},
+        { name: `Case Number:`, value: `#${caseNumber}` }
         )
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
@@ -374,13 +467,14 @@ module.exports = class ModUtils {
   
       console.log(dmReason); // Output: "This is a message ."
 
-      logModeration(issuer, target, dmReason, "UnTimeout");
+      const caseNumber = await logModeration(issuer, target, dmReason, "UnTimeout");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Untimedout!" })
         .setColor(MODERATION.EMBED_COLORS.UNTIMEOUT)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -429,13 +523,14 @@ module.exports = class ModUtils {
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
 
-      logModeration(issuer, target, dmReason, "Kick");
+      const caseNumber = await logModeration(issuer, target, dmReason, "Kick");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Kicked!" })
         .setColor(MODERATION.EMBED_COLORS.KICK)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -486,13 +581,14 @@ module.exports = class ModUtils {
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
 
-      logModeration(issuer, target, dmReason, "Softban");
+      const caseNumber = await logModeration(issuer, target, dmReason, "Softban");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Softbanned!" })
         .setColor(MODERATION.EMBED_COLORS.SOFTBAN)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -563,7 +659,7 @@ module.exports = class ModUtils {
       let dmReason = reason.replace(/\[.*\]/, "");
 
       // Log the moderation action
-      logModeration(issuer, target, dmReason, "Ban");
+      const caseNumber = await logModeration(issuer, target, dmReason, "Ban");
 
       // Attempt to send a DM notification
       const dmEmbed = new EmbedBuilder()
@@ -571,6 +667,7 @@ module.exports = class ModUtils {
         .setColor(MODERATION.EMBED_COLORS.BAN)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -628,13 +725,14 @@ module.exports = class ModUtils {
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
 
-      logModeration(issuer, target, dmReason, "UnBan");
+      const caseNumber = await logModeration(issuer, target, dmReason, "UnBan");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Unbanned!" })
         .setColor(MODERATION.EMBED_COLORS.UNBAN)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -684,7 +782,7 @@ module.exports = class ModUtils {
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
 
-      logModeration(issuer, target, dmReason, "Vmute");
+      const caseNumber = await logModeration(issuer, target, dmReason, "Vmute");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Muted!" })
@@ -692,6 +790,7 @@ module.exports = class ModUtils {
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -742,13 +841,14 @@ module.exports = class ModUtils {
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
 
-      logModeration(issuer, target, dmReason, "Vunmute");
+      const caseNumber = await logModeration(issuer, target, dmReason, "Vunmute");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Unmuted!" })
         .setColor(MODERATION.EMBED_COLORS.VUNMUTE)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -797,7 +897,7 @@ module.exports = class ModUtils {
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
 
-      logModeration(issuer, target, dmReason, "Deafen");
+      const caseNumber = await logModeration(issuer, target, dmReason, "Deafen");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Deafened!" })
@@ -805,6 +905,7 @@ module.exports = class ModUtils {
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -855,13 +956,14 @@ module.exports = class ModUtils {
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
 
-      logModeration(issuer, target, dmReason, "unDeafen");
+      const caseNumber = await logModeration(issuer, target, dmReason, "unDeafen");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Undeafened!" })
         .setColor(MODERATION.EMBED_COLORS.UNDEAFEN)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -911,7 +1013,7 @@ module.exports = class ModUtils {
       // Remove a section based on a pattern
       let dmReason = reason.replace(/\[.*\]/, "");
 
-      logModeration(issuer, target, dmReason, "Disconnect");
+      const caseNumber = await logModeration(issuer, target, dmReason, "Disconnect");
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Disconnected!" })
@@ -919,6 +1021,7 @@ module.exports = class ModUtils {
         .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
           
         )
         .setTimestamp()
@@ -974,7 +1077,11 @@ module.exports = class ModUtils {
   
       console.log(dmReason); // Output: "This is a message ."
 
-      logModeration(issuer, target, dmReason, "Move", { channel });
+      const caseNumber = await logModeration(issuer, target, dmReason, "Move", { channel });
+
+      if (!caseNumber) {
+        console.error("Failed to retrieve case number from logModeration");
+      }
 
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Moved!" })
@@ -982,6 +1089,7 @@ module.exports = class ModUtils {
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
           {name:`Channel:`, value: `${channel}`},
+          { name: `Case Number:`, value: `#${caseNumber}` }
         )
         .setTimestamp()
         .setFooter({text: `This has been sent on behalf of the ${issuer.guild.name}\'s moderation team`});
@@ -1011,4 +1119,11 @@ module.exports = class ModUtils {
       return "ERROR";
     }
   }
+}
+
+module.exports = {
+  //ModUtils,
+  incrementCaseCount,
+  //getModerationStats,
 };
+

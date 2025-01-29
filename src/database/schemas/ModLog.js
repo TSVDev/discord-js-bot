@@ -10,6 +10,10 @@ const Schema = new mongoose.Schema(
     guild_id: reqString,
     member_id: String,
     reason: String,
+    case_number: {
+      type: Number,
+      required: true, // Ensure it's always provided
+    },
     admin: {
       id: reqString,
       tag: reqString,
@@ -50,7 +54,7 @@ const Model = mongoose.model("mod-logs", Schema);
 module.exports = {
   model: Model,
 
-  addModLogToDb: async (admin, target, reason, type) =>
+  addModLogToDb: async (admin, target, reason, type, caseNumber) =>
     await new Model({
       guild_id: admin.guild.id,
       member_id: target.id,
@@ -60,6 +64,7 @@ module.exports = {
         tag: admin.user.tag,
       },
       type,
+      case_number: caseNumber, // Include the case number
     }).save(),
 
   getWarningLogs: async (guildId, targetId) =>

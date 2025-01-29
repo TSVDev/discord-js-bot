@@ -23,6 +23,7 @@ const Schema = new mongoose.Schema({
       owner: String,       // Owner role ID
       admin: String,       // Admin role ID
       moderator: String,   // Moderator role ID
+      staff_ping: String,   // Staff ping role ID
     },
   },
   stats: {
@@ -35,6 +36,7 @@ const Schema = new mongoose.Schema({
   ticket: {
     log_channel: String,
     limit: { type: Number, default: 10 },
+    ticket_count: { type: Number, default: 0 },
     categories: [
       {
         _id: false,
@@ -71,6 +73,7 @@ const Schema = new mongoose.Schema({
     enabled: Boolean,
   },
   modlog_channel: String,
+  moderation_case_count: { type: Number, default: 0 },
   max_warn: {
     action: {
       type: String,

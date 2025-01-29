@@ -23,25 +23,26 @@ client.loadEvents("src/events");
 process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
 
 (async () => {
-  // check for updates
+  
+  // Check for updates (optional)
   await checkForUpdates();
 
-  // start the dashboard
+  // Start the dashboard (optional)
   if (client.config.DASHBOARD.enabled) {
     client.logger.log("Launching dashboard");
     try {
       const { launch } = require("@root/dashboard/app");
 
-      // let the dashboard initialize the database
+      // Let the dashboard initialize the database
       await launch(client);
     } catch (ex) {
       client.logger.error("Failed to launch dashboard", ex);
     }
   } else {
-    // initialize the database
+    // Initialize the database if no dashboard
     await initializeMongoose();
   }
 
-  // start the client
+  // Start the client
   await client.login(process.env.BOT_TOKEN);
 })();
