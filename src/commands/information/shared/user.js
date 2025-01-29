@@ -312,20 +312,55 @@ module.exports = async (member, message) => {
          .map((activity) => {
           switch (activity.type) {
             case 0: // Playing an activity (ActivityType.PLAYING)
-              return `Playing: **${activity.name}**`;
+              if (activity.applicationId === "1174056436666482849") { // Unique ID for VS Code 
+                let fileSection = "";
+
+                // Check if VS Code is idle
+                const isIdle = ( 
+                  activity.details?.toLowerCase() === "idling" || 
+                  activity.assets?.largeText?.toLowerCase() === "idling" || 
+                  activity.assets?.smallText === "zZz" ||
+                  activity.state === null
+                )
+                if (isIdle) {
+                fileSection = "Status: **Idling**";
+
+                } else {
+                  // Extract file name and problems found (if available)
+                  const fileMatch = activity.state?.match(/Working on (.+):(\d+):(\d+)/);
+                  const problemsMatch = activity.details?.match(/(\d+) problems found/);
+
+                  const file = fileMatch ? fileMatch[1] : "Unknown File";
+                  const line = fileMatch ? fileMatch[2] : "??";
+                  const column = fileMatch ? fileMatch[3] : "??";
+                  const problems = problemsMatch ? problemsMatch[1] : "Unknown";
+
+                  fileSection = `In file: **${file}** (Line: ${line}, Column: ${column}) with **${problems}** problems found`;
+                }
+
+                // Format timestamp if available
+                const startTime = activity.timestamps?.start
+                   ? `<t:${Math.floor(new Date(activity.timestamps.start).getTime() / 1000)}:R>` // Discord relative timestamp
+                   : "Unknown Time";
+
+              return `<:VSCode:1334280762090061834> Coding in: **${activity.name}**\n${fileSection}\nSince: ${startTime}`;
+            }
+              return `<:XboxController:1334280791714304091> Playing: **${activity.name}**`;
             case 2: // Listening to an activity (ActivityType.LISTENING)
               if (activity.name === "Spotify") {
                // Check if the activity is from Spotify
-               return `Listening to: __${activity.details}__ by __${activity.state}__ on ${activity.name}`;
+               const spotifyId = activity.party.id.split(":")[1]; // Extract Spotify track ID
+               const spotifyLink = `https://open.spotify.com/track/${spotifyId}`;
+               return `<:Spotify:1334280723921637378> Listening to: [__${activity.details}__ by __${activity.state}__](${spotifyLink}) on Spotify`;
               } else {
-               return `Listening to: **${activity.name}**`;
+               return `<:Music:1334280740476817500> Listening to: **${activity.name}**`;
               }
             case 3: // Watching an activity (ActivityType.WATCHING)
-              return `Watching: **${activity.name}**`;
+              return `<:TV:1334280867937517639> Watching: **${activity.name}**`;
             case 1: // Streaming an activity (ActivityType.STREAMING)
-              return `Streaming: **${activity.name}**`;
+              return `<:StatusStreaming:1334280837822283787> Streaming: **${activity.name}**`;
             case 5: // Competing in an activity (ActivityType.COMPETING)
-              return `Competing in: **${activity.name}**`;
+              return `<:XboxController:1334280791714304091> Competing in: **${activity.name}**`;
             case 4: // Custom Status (ActivityType.CUSTOM_STATUS)
               let emojiType = '';
               let emojiText = '';
@@ -345,8 +380,11 @@ module.exports = async (member, message) => {
               return `Extra **${activity.name}**`;
           }
         });
-        activityStatus = activities.join("\n");
-        statusAndDevice += ` \n${activityStatus}`;
+        activityStatus = activities.join("\n\n");
+        statusAndDevice += ` \n\n${activityStatus}`;
+        console.log("Raw Activity:", member.presence.activities);
+        console.log("Activity:", activities);
+        console.log("Status & Device:", statusAndDevice);
       }
     }
 
@@ -376,7 +414,7 @@ module.exports = async (member, message) => {
         },
         {
           name: "Status:",
-          value: statusAndDevice,
+          value: `${statusAndDevice}\n`,
         },
         {
           name: "Discord Registered:",
