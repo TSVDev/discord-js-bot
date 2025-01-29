@@ -153,7 +153,7 @@ module.exports = async (member, message) => {
     if (dangerousFlags.length > 0) {
       const formattedFlags = dangerousFlags.map((perm) => `- ${perm}`).join("\n");
       dynamicFlags.push(
-        `${flagNames.dangerPerm.emoji} ${flagNames.dangerPerm.name}\n[\n${formattedFlags}\n]`
+        `${flagNames.dangerPerm.emoji} ${flagNames.dangerPerm.name}\n\`\`\`diff\n${formattedFlags}\n\`\`\``
       );
     }
   }
@@ -382,9 +382,6 @@ module.exports = async (member, message) => {
         });
         activityStatus = activities.join("\n\n");
         statusAndDevice += ` \n\n${activityStatus}`;
-        console.log("Raw Activity:", member.presence.activities);
-        console.log("Activity:", activities);
-        console.log("Status & Device:", statusAndDevice);
       }
     }
 
