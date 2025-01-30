@@ -334,10 +334,16 @@ module.exports = class ModUtils {
       memberDb.warnings += 1;
       const settings = await getSettings(issuer.guild);
 
+      // ✅ Get the correct rules channel dynamically
+      let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
+      if (settings.moderation.rules_channel) {
+          rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
+      }
+
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Warned!" })
         .setColor(MODERATION.EMBED_COLORS.TIMEOUT)
-        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .setDescription(`Please review our ${rulesChannelMention} and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${reason}`},
           { name: `Case Number:`, value: `#${caseNumber}` },
@@ -409,10 +415,18 @@ module.exports = class ModUtils {
 
       const caseNumber = await logModeration(issuer, target, dmReason, "Timeout");
 
+      const settings = await getSettings(issuer.guild);
+
+      // ✅ Get the correct rules channel dynamically
+      let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
+      if (settings.moderation.rules_channel) {
+          rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
+      }
+
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Timedout!" })
         .setColor(MODERATION.EMBED_COLORS.TIMEOUT)
-        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .setDescription(`Please review our ${rulesChannelMention} and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
         {name:`Expires:`, value: `${tt}`},
@@ -525,9 +539,16 @@ module.exports = class ModUtils {
 
       const caseNumber = await logModeration(issuer, target, dmReason, "Kick");
 
+      // Get the correct rules channel dynamically
+      let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
+      if (settings.moderation.rules_channel) {
+          rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
+      }
+
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Kicked!" })
         .setColor(MODERATION.EMBED_COLORS.KICK)
+        .setDescription(`Please review our ${rulesChannelMention} and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
           { name: `Case Number:`, value: `#${caseNumber}` }
@@ -583,9 +604,16 @@ module.exports = class ModUtils {
 
       const caseNumber = await logModeration(issuer, target, dmReason, "Softban");
 
+      // :white_check_mark: Get the correct rules channel dynamically
+      let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
+      if (settings.moderation.rules_channel) {
+          rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
+      }
+
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Softbanned!" })
         .setColor(MODERATION.EMBED_COLORS.SOFTBAN)
+        .setDescription(`Please review our ${rulesChannelMention} and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
           { name: `Case Number:`, value: `#${caseNumber}` }
@@ -784,10 +812,18 @@ module.exports = class ModUtils {
 
       const caseNumber = await logModeration(issuer, target, dmReason, "Vmute");
 
+      const settings = await getSettings(issuer.guild);
+
+      // Get the correct rules channel dynamically
+      let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
+      if (settings.moderation.rules_channel) {
+          rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
+      }
+
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Muted!" })
         .setColor(MODERATION.EMBED_COLORS.VMUTE)
-        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .setDescription(`Please review our ${rulesChannelMention} and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
           { name: `Case Number:`, value: `#${caseNumber}` }
@@ -899,10 +935,18 @@ module.exports = class ModUtils {
 
       const caseNumber = await logModeration(issuer, target, dmReason, "Deafen");
 
+      const settings = await getSettings(issuer.guild);
+
+      // Get the correct rules channel dynamically
+      let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
+      if (settings.moderation.rules_channel) {
+          rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
+      }
+
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Deafened!" })
         .setColor(MODERATION.EMBED_COLORS.DEAFEN)
-        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .setDescription(`Please review our ${rulesChannelMention} and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
           { name: `Case Number:`, value: `#${caseNumber}` }
@@ -1015,10 +1059,18 @@ module.exports = class ModUtils {
 
       const caseNumber = await logModeration(issuer, target, dmReason, "Disconnect");
 
+      const settings = await getSettings(issuer.guild);
+
+      // Get the correct rules channel dynamically
+      let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
+      if (settings.moderation.rules_channel) {
+          rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
+      }
+
       const dmEmbed = new EmbedBuilder()
         .setAuthor({ name: "You Have Been Disconnected!" })
         .setColor(MODERATION.EMBED_COLORS.DISCONNECT)
-        .setDescription(`Please review our <#1144357039301214239> and make sure you're familiar with them!`)
+        .setDescription(`Please review our ${rulesChannelMention} and make sure you're familiar with them!`)
         .addFields(
           {name:`Reason:`, value: `${dmReason}`},
           { name: `Case Number:`, value: `#${caseNumber}` }
@@ -1121,9 +1173,9 @@ module.exports = class ModUtils {
   }
 }
 
-module.exports = {
-  //ModUtils,
+/*module.exports = {
+  ModUtils,
   incrementCaseCount,
   //getModerationStats,
-};
+};*/
 
