@@ -101,11 +101,17 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
     DEAFEN: "<:SoundMute:1330257693541269655>",
     UNDEAFEN: "<:SoundOn:1330257670359486484>",
     DISCONNECT: "<:Disconnect:1332467641973211267>",
-    MOVE: "<:4729startvoicecalldark:1332490875254734889>",
+    MOVE: "<:StartVoiceCallDark:1332490875254734889>",
   };
 
   // Get the emoji for the action type
   const actionEmoji = actionEmojis[type.toUpperCase()] || "⚠️";
+
+  // Extract just the emoji ID from the emoji string
+  const actionEmojiId = actionEmoji.match(/\d+/)?.[0];
+
+  // If an emoji ID is found, construct the URL
+  const emojiUrl = actionEmojiId ? `https://cdn.discordapp.com/emojis/${actionEmojiId}.png` : null;
 
 
   const embed = new EmbedBuilder()
@@ -118,7 +124,8 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
   const fields = [];
   switch (type.toUpperCase()) {
     case "PURGE":
-      embed.setAuthor({ name: `${actionEmoji} Moderation - ${type}` });
+      //embed.setAuthor({ name: `${actionEmoji} Moderation - ${type}` });
+      embed.setAuthor({ name: `Moderation - ${type}`, iconURL: emojiUrl });
       fields.push(
         { name: "Purge Type", value: data.purgeType, inline: true },
         { name: "Messages", value: data.deletedCount.toString(), inline: true },
@@ -176,7 +183,7 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
   }
 
   if (type.toUpperCase() !== "PURGE") {
-    embed.setAuthor({ name: `${actionEmoji} Moderation - ${type}` }).setThumbnail(target.displayAvatarURL());
+    embed.setAuthor({ name:`Moderation - ${type}`, iconURL: emojiUrl }).setThumbnail(target.displayAvatarURL());
 
     if (target instanceof GuildMember) {
       fields.push({ name: "Member", value: `${target.displayName} [${target.id}]`, inline: false });
