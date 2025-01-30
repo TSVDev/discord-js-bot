@@ -334,7 +334,7 @@ module.exports = class ModUtils {
       memberDb.warnings += 1;
       const settings = await getSettings(issuer.guild);
 
-      // ✅ Get the correct rules channel dynamically
+      //Get the correct rules channel dynamically
       let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
       if (settings.moderation.rules_channel) {
           rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
@@ -417,7 +417,7 @@ module.exports = class ModUtils {
 
       const settings = await getSettings(issuer.guild);
 
-      // ✅ Get the correct rules channel dynamically
+      //Get the correct rules channel dynamically
       let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
       if (settings.moderation.rules_channel) {
           rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
@@ -539,6 +539,8 @@ module.exports = class ModUtils {
 
       const caseNumber = await logModeration(issuer, target, dmReason, "Kick");
 
+      const settings = await getSettings(issuer.guild);
+
       // Get the correct rules channel dynamically
       let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
       if (settings.moderation.rules_channel) {
@@ -603,6 +605,8 @@ module.exports = class ModUtils {
       let dmReason = reason.replace(/\[.*\]/, "");
 
       const caseNumber = await logModeration(issuer, target, dmReason, "Softban");
+
+      const settings = await getSettings(issuer.guild);
 
       // :white_check_mark: Get the correct rules channel dynamically
       let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
