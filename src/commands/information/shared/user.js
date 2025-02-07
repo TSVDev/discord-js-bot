@@ -92,6 +92,7 @@ module.exports = async (member, message) => {
       dangerPerm: { name: "**USER HAS DANGEROUS PERMISSIONS**", emoji: "<:Warning:1330256481077166203>" },
 
       Booster: { name: "Server Booster", emoji: "<a:EvolvingBadgeNitroScaling:1332472964204986442>" },
+      NewUser: { name: "New User", emoji: "<:NewMember:1334345594189123645>" },
 
       IsTimedout: { name: "Timed Out", emoji: "<:Timeout:1330256600732008602>" },
       IsBanned: { name: "Banned", emoji: "<:Ban:1330256578682818662>" },
@@ -99,6 +100,9 @@ module.exports = async (member, message) => {
       WarningCount: { name: "Warnings", emoji: "<:Warning:1330256481077166203>" },
 
       VerifiedEmail: { name: "Verified Email", emoji: "<:VerifiedEmail:1330256436242027520>" },
+
+      Spammer: { name: "Likely Spammer", emoji: "<:LikelySpammer:1336069839122595903>" },
+      Quarantined: { name: "Quarantined", emoji: "<:Quarantine:1336071728735977512>" },
 
       /*
       Add 
@@ -157,6 +161,17 @@ module.exports = async (member, message) => {
       );
     }
   }
+
+    /*// Calculate if the user is a "new user"
+    const joinDate = member.joinedAt.getTime();
+    const currentDate = Date.now();
+    const oneWeek = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
+    const isNewUser = currentDate - joinDate <= oneWeek;
+
+    // Add "New User" flag if applicable
+    if (isNewUser) {
+      flags.push(`${flagNames.NewUser.emoji} ${flagNames.NewUser.name} (Joined in the last week)`);
+    } */
 
     if (member.premiumSince) {
       const boostingDuration = getBoostingDuration(member);
@@ -248,11 +263,16 @@ module.exports = async (member, message) => {
     const readableStaticFlags = staticFlags
       .map(flag => {
         const flagData = flagNames[flag];
+        console.log("Dynamic Flags:", dynamicFlags);
+        console.log("Flag Data:", flagData);
+        console.log("Flag:", flag);
         return flagData ? `${flagData.emoji} ${flagData.name}` : `${flag}`; // If the flag doesn't exist in the map, just show the raw flag name
       });
 
     const allFlags = [...dynamicFlags, ...readableStaticFlags];
     const flagsList = allFlags.length ? allFlags.join("\n") : "None";
+
+    console.log("Static Flags:", readableStaticFlags);
 
     // Status and device specific emojis
     const statusDeviceEmojis = {

@@ -20,7 +20,7 @@ const IDLE_TIMEOUT = 30;
  */
 module.exports = {
   name: "help",
-  description: "command help menu",
+  description: "Command help menu",
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
   command: {
@@ -32,7 +32,7 @@ module.exports = {
     options: [
       {
         name: "command",
-        description: "name of the command",
+        description: "Name of the command",
         required: false,
         type: ApplicationCommandOptionType.String,
       },

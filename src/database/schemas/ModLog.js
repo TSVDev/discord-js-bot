@@ -44,7 +44,7 @@ const Schema = new mongoose.Schema(
     autoIndex: false,
     timestamps: {
       createdAt: "created_at",
-      updatedAt: false,
+      updatedAt: "updated_at",
     },
   }
 );

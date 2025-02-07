@@ -1,5 +1,7 @@
 const { ApplicationCommandOptionType } = require("discord.js");
 const { EmbedBuilder } = require("discord.js");
+const { getSettings } = require("@schemas/Guild");
+const Report = require("@schemas/Report"); 
 
 /**
  * @type {import("@structures/Command")}
@@ -8,9 +10,10 @@ module.exports = {
     name: "report",
     description: "Reports a user to staff",
     category: "MODERATION",
+    botPermissions: ["EmbedLinks"],
     command: {
       enabled: true,
-      aliases: ["r"],
+      aliases: ["r", "reportuser", "ru"],
       usage: "<ID|@member> [reason]",
       minArgsCount: 2,
     },
@@ -65,15 +68,69 @@ module.exports = {
     
       async handleReport(guild, channel, reporter, reportedUser, reason, messageId, interaction = null) {
 
-       //Report channel
-       const reportChannelId = "1331105725941809173";
-       const staffPing = `<@&1259329386289565727>`
+        // Fetch guild settings
+        const settings = await getSettings(guild);
+
+        // Dynamically get the report channel
+        let reportChannelId = settings.moderation.report_channel;
+        if (!reportChannelId) {
+          console.error("Report channel is not set in the guild settings.");
+          return;
+        }
+
+        // Dynamically get the staff ping role
+        let staffPingRoleId = settings.moderation.roles.staff_ping;
+        let staffPing = staffPingRoleId ? `<@&${staffPingRoleId}>` : "@Staff"; // Default to "@Staff" if not set
+
+        const emojiUrl = "https://cdn.discordapp.com/emojis/1336233660969652257.png"; // Discord emoji URL
+
+        // Increment report ID
+        const incrementReportCount = async (guild) => {
+          try {
+              const settings = await getSettings(guild);
+              settings.moderation_report_count = (settings.moderation_report_count || 0) + 1;
+              await settings.save();
+              return settings.moderation_report_count;
+          } catch (error) {
+              console.error("Error incrementing report count:", error);
+              throw new Error("Failed to increment report count.");
+          }
+        };
+      
+        const reportId = await incrementReportCount(guild);
+
+        // Save report to MongoDB
+        const newReport = new Report({
+            reportId,
+            reporterId: reporter.id,
+            reporterUser: {
+                id: reporter.id,
+                username: reporter.username || reporter.user?.username,
+                avatar: reporter.displayAvatarURL()
+            },
+            reportedUserId: reportedUser.id,
+            reportedUser: {
+                id: reportedUser.id,
+                username: reportedUser.username || reportedUser.user?.username,
+                avatar: reportedUser.displayAvatarURL()
+            },
+            reason,
+            status: "Open",
+            tags: [],
+            votes: {},
+            timestamp: Date.now(),
+            guildId: guild.id
+        });
+        await newReport.save();
+
+       
     
         const embed = new EmbedBuilder()
-         .setThumbnail(reportedUser.user.displayAvatarURL())
+          .setAuthor({ name: `Moderation - Report`, iconURL: emojiUrl })
+          .setThumbnail(reportedUser.user.displayAvatarURL())
           .setColor("#ff0000")
           .setTitle("**User Reported**")
-          .setDescription(`🚨 A user has been reported to staff`)
+          .setDescription(`🚨 A user has been reported to staff!`)
           .addFields(
             {
               name: `User Reported:`,
@@ -88,6 +145,10 @@ module.exports = {
             {
               name: `Reason:`,
               value: `${reason}`,
+            },
+            {
+              name: `Report Number:`,
+              value: `#${reportId}`,
             },
             {
               name: `Channel Link:`,
@@ -112,11 +173,12 @@ module.exports = {
 
       // Create the DM embed for the reporter
       const dmEmbed = new EmbedBuilder()
-       .setAuthor({ name: "Your Report Has Been Submitted!" })
+       .setAuthor({ name: `Your Report Has Been Submitted!`, iconURL: emojiUrl })
        .setColor("#FF4500")  // You can customize the color to fit your theme
        .addFields(
           { name: `Reported User:`, value: `${reportedUser.user.username} (${reportedUser.id})` },
           { name: `Reason:`, value: `${reason}` },
+          { name: `Report Number:`, value: `#${reportId}` },
           { name: `Channel:`, value: `<#${channel.id}>` },
           { 
             name: `Message Link:`, 

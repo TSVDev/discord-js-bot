@@ -615,7 +615,7 @@ module.exports = class ModUtils {
 
       const settings = await getSettings(issuer.guild);
 
-      // :white_check_mark: Get the correct rules channel dynamically
+      //Get the correct rules channel dynamically
       let rulesChannelMention = "our server rules"; // Default text if no rules channel is set
       if (settings.moderation.rules_channel) {
           rulesChannelMention = `<#${settings.moderation.rules_channel}>`; // Mention the channel if it exists
@@ -647,7 +647,7 @@ module.exports = class ModUtils {
         }
 
       await target.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason });
-      await issuer.guild.members.unban(target.user);
+      await issuer.guild.members.unban(target.user, `Softbanned by ${issuer.user} [${issuer.user.id}] - Case #${caseNumber}`);
       
       //await target.user.send(`<:Ban:1330256578682818662> You have been softbanned!\n Reason: ${dmReason}`).catch((ex) => {});
       if (dmSent === true) {

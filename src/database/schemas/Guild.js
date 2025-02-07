@@ -74,6 +74,7 @@ const Schema = new mongoose.Schema({
   },
   modlog_channel: String,
   moderation_case_count: { type: Number, default: 0 },
+  moderation_report_count: { type: Number, default: 0 },
   max_warn: {
     action: {
       type: String,
