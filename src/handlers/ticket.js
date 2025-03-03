@@ -97,7 +97,7 @@ async function closeTicket(channel, closedBy, reason) {
 
     if (channel.deletable) await channel.delete();
 
-    const embed = new EmbedBuilder().setAuthor({ name: "<:Ticket:1328782536800735304> Ticket Closed" }).setColor(TICKET.CLOSE_EMBED);
+    const embed = new EmbedBuilder().setAuthor({ name: "Ticket Closed", iconURL: `https://cdn.discordapp.com/emojis/1328782536800735304.png` }).setColor(TICKET.CLOSE_EMBED);
     const fields = [];
 
     if (reason) fields.push({ name: "Reason", value: reason, inline: false });
@@ -227,7 +227,14 @@ async function handleTicketOpen(interaction) {
    }
 
   try {
-    const ticketNumber = (existing + 1).toString();
+    const settings = await getSettings(interaction.guild);
+    const ticketNumber = settings.ticket_count + 1;
+
+    // Update the ticket count in the database
+    await GuildSchema.findOneAndUpdate(
+      { guildId: interaction.guild.id },
+      { $inc: { ticket_count: 1 } }
+    );
     const permissionOverwrites = [
       {
         id: guild.roles.everyone.id,
@@ -271,7 +278,7 @@ async function handleTicketOpen(interaction) {
     }
 
     const tktChannel = await guild.channels.create({
-      name: `<:Ticket:1328782536800735304>︱tіcket-${ticketNumber}`,
+      name: `🎟︱tіcket-${ticketNumber}`,
       type: ChannelType.GuildText,
       topic: `Tіcket | ${user.id} | ${catName || "Default"}`,
       permissionOverwrites,
@@ -299,11 +306,11 @@ async function handleTicketOpen(interaction) {
         .setStyle(ButtonStyle.Primary)
     );
 
-    const sent = await tktChannel.send({ content: user.toString(), embeds: [embed], components: [buttonsRow] });
+    const sent = await tktChannel.send({ content: `${user.toString()} ${staffRolesPing}`() , embeds: [embed], components: [buttonsRow] });
 
     const dmEmbed = new EmbedBuilder()
       .setColor(TICKET.CREATE_EMBED)
-      .setAuthor({ name: "<:Ticket:1328782536800735304> Ticket Created" })
+      .setAuthor({ name: "Ticket Created", iconURL: `https://cdn.discordapp.com/emojis/1328782536800735304.png` })
       .setThumbnail(guild.iconURL())
       .setDescription(
         `**Server:** ${guild.name}
