@@ -11,7 +11,7 @@ const { initializeMongoose } = require("@src/database/mongoose");
 const { BotClient } = require("@src/structures");
 const { validateConfiguration } = require("@helpers/Validator");
 
-const { startReminderHandler } = require("@handlers/reminderHandler");
+//const { startReminderHandler } = require("@handlers/reminderHandler");
 
 // Add Express for HTTP monitoring
 const express = require("express");
