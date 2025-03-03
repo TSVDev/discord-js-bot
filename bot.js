@@ -61,7 +61,7 @@ process.on("unhandledRejection", (err) => client.logger.error(`Unhandled excepti
     await initializeMongoose();
   }
 
-  startReminderHandler(client);
+  //startReminderHandler(client);
 
   // Start the client
   await client.login(process.env.BOT_TOKEN);
