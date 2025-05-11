@@ -72,7 +72,7 @@ module.exports = {
     //
     else if (sub === "text") {
       if (args.length < 2) return message.channel.send("<:Info:1330256387959164928> Please enter a text");
-      const input = args.join(" ");
+      const input = args.slice(1).join(" ");
       const response = await flipText(input);
       await message.safeReply(response);
     }

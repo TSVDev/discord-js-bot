@@ -176,6 +176,7 @@ module.exports = class BotClient extends Client {
     const files = recursiveReadDirSync(directory);
     for (const file of files) {
       try {
+        delete require.cache[require.resolve(file)];
         const cmd = require(file);
         if (typeof cmd !== "object") continue;
         validateCommand(cmd);
@@ -199,6 +200,7 @@ module.exports = class BotClient extends Client {
     const files = recursiveReadDirSync(directory);
     for (const file of files) {
       try {
+        delete require.cache[require.resolve(file)];
         const ctx = require(file);
         if (typeof ctx !== "object") continue;
         validateContext(ctx);
